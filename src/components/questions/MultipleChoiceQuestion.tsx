@@ -21,7 +21,7 @@ export const MultipleChoiceQuestion: React.FC<BaseQuestionProps> = ({
   return (
     <div className="grid gap-3">
       <TimeToResponse onTimerEnd={() => setIsAbleToRespond(true)} />
-      <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 p-4 rounded-lg font-mono text-sm border  flex flex-col gap-2">
+      <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 p-4 rounded-lg font-mono border  flex flex-col gap-2">
         {data.opcoes?.map((opt, index) => (
           <button
             key={opt}

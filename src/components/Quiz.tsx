@@ -135,10 +135,10 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
     );
 
   return (
-    <div className="min-h-screen p-6 flex flex-col items-center">
+    <div className="min-h-screen p-0 lg:p-6 flex flex-col items-center">
       <ProgressBar atual={questoesRealizadas} total={questoes.length} />
       <div
-        className="w-full max-w-2xl p-8 rounded-2xl shadow-xl border transition-colors duration-300
+        className="w-full max-w-2xl p-4 lg:p-8 rounded-2xl shadow-xl border transition-colors duration-300
     bg-white border-slate-200 text-slate-900 
     dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
       >
@@ -147,7 +147,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
             <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase">
               {quizData.tema.nome}
             </span>
-            <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-widest">
+            <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-widest hidden lg:visible">
               {getTipoQuestaoPorExtenso(questoes[atual].tipo)}
             </span>
           </div>
@@ -159,7 +159,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
           </span>
         </header>
 
-        <h2 className="text-2xl font-bold mb-8 text-gray-700 dark:text-slate-200">
+        <h2 className="text-xl font-bold mb-8 text-gray-700 dark:text-slate-200">
           <MarkdownSyntax>{questoes[atual].pergunta}</MarkdownSyntax>
         </h2>
 

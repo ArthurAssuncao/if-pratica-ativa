@@ -17,7 +17,7 @@ export const FlowchartQuestion = ({ data, aoResponder }: BaseQuestionProps) => {
   return (
     <div className="flex flex-col gap-6 items-center">
       <TimeToResponse onTimerEnd={() => setIsAbleToRespond(true)} />
-      <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-blue-300 border p-4 rounded-lg text-sm  w-full flex flex-col gap-1">
+      <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-blue-300 border p-4 rounded-lg  w-full flex flex-col gap-1">
         {data.codigo && (
           <>
             <strong>Código base:</strong>
@@ -30,14 +30,16 @@ export const FlowchartQuestion = ({ data, aoResponder }: BaseQuestionProps) => {
       {/* Representação visual simplificada do IF */}
       <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 border p-8 relative flex flex-col items-center gap-4 rounded-xl w-full">
         <div className="text-slate-700 dark:text-blue-300 border-olive-400 dark:border-slate-700 bg-yellow-50 dark:bg-blue-500/10 border p-4 rotate-45 w-32 h-32 flex items-center justify-center text-center">
-          <span className="-rotate-45 text-sm font-bold font-mono text-center">
+          <span className="-rotate-45 font-bold font-mono text-center">
             <SyntaxHighlighterCustom showLineNumbers={false}>
               {data.condicao || ""}
             </SyntaxHighlighterCustom>
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-20 mt-4 w-full">
+        <div
+          className={`gap-4 mt-8 w-full flex flex-col ${data.ramos?.length && data.ramos?.length > 2 ? "lg:flex-col" : "lg:flex-row lg:gap-20"}`}
+        >
           {data.ramos?.map((ramo) => (
             <button
               key={ramo.id}

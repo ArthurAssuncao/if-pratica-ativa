@@ -35,30 +35,32 @@ export const Navbar = ({ onOpenMenu }: NavbarProps) => {
       </div>
 
       {/* Lado Direito: Botão de Tema */}
-      <button
-        onClick={alternarTema}
-        className="group p-2 rounded-full border border-slate-700 hover:bg-slate-800 transition-all text-slate-300 hover:cursor-pointer dark:hover:bg-white ease-in-out duration-500"
-        title={tema === "light" ? "Ativar Modo Escuro" : "Ativar Modo Claro"}
-      >
-        {tema === "light" ? (
-          <Moon
-            size={20}
-            className="text-black group-hover:text-white transition-all ease-in-out duration-500"
-          />
-        ) : (
-          <Sun
-            size={20}
-            className="text-yellow-200 group-hover:text-yellow-800 transition-all ease-in-out duration-500"
-          />
-        )}
-      </button>
-      <button
-        onClick={onOpenMenu}
-        className="group p-2 rounded-full border border-slate-700 hover:bg-slate-800 transition-all text-slate-300 hover:cursor-pointer dark:hover:bg-white ease-in-out duration-500"
-        title="Abrir Menu"
-      >
-        <Menu size={24} />
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={alternarTema}
+          className="group p-2 rounded-full border border-slate-700 hover:bg-slate-800 transition-all text-slate-300 hover:cursor-pointer dark:hover:bg-white ease-in-out duration-500"
+          title={tema === "light" ? "Ativar Modo Escuro" : "Ativar Modo Claro"}
+        >
+          {tema === "light" ? (
+            <Moon
+              size={20}
+              className="text-black group-hover:text-white transition-all ease-in-out duration-500"
+            />
+          ) : (
+            <Sun
+              size={20}
+              className="text-yellow-200 group-hover:text-yellow-800 transition-all ease-in-out duration-500"
+            />
+          )}
+        </button>
+        <button
+          onClick={onOpenMenu}
+          className="group p-2 rounded-full border border-slate-700 hover:bg-slate-800 transition-all text-slate-300 hover:cursor-pointer dark:hover:bg-white ease-in-out duration-500"
+          title="Abrir Menu"
+        >
+          <Menu size={24} />
+        </button>
+      </div>
     </nav>
   );
 };

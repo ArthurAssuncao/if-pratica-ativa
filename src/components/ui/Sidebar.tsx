@@ -85,7 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50 w-72 transition-transform duration-300 ease-in-out transform
+          fixed inset-y-0 left-0 z-50 w-80 max-w-full transition-transform duration-300 ease-in-out transform
           bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800
           lg:translate-x-0 lg:static lg:h-[calc(100vh-64px)] overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -145,7 +145,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div key={item.tema.id} className="rounded-lg overflow-hidden">
                   <button
                     onClick={() => toggleTema(item.tema.id, item.tema)}
-                    className={`w-full flex items-center justify-between p-2 transition-colors text-sm font-medium rounded-md hover:cursor-pointer ${
+                    className={`text-slate-700 dark:text-blue-300 w-full flex items-center justify-between p-2 transition-colors lg:text-sm font-medium rounded-md hover:cursor-pointer ${
                       idTemaAtivo === item.tema.id
                         ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
                         : "hover:bg-slate-200 dark:hover:bg-slate-900"
@@ -159,7 +159,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       )}
                       {item.tema.nome}
                     </div>
-                    <span className="text-[10px] bg-slate-200 dark:bg-slate-800 px-1.5 rounded text-slate-500">
+                    <span className="lg:text-sm bg-slate-200 dark:bg-slate-800 px-1.5 rounded text-slate-500">
                       {item.questoes.length}
                     </span>
                   </button>
@@ -174,7 +174,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             // Opcional: fechar ao selecionar no mobile
                             if (window.innerWidth < 1024) onClose();
                           }}
-                          className="w-full flex items-center gap-3 p-2 text-xs hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors text-left hover:cursor-pointer"
+                          className="text-slate-700 dark:text-blue-300 w-full flex items-center gap-3 p-2 lg:text-xs hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors text-left hover:cursor-pointer"
                         >
                           {getIconStatus(q.infoQuestao?.status || "pendente")}
                           <span className="truncate">{q.pergunta}</span>

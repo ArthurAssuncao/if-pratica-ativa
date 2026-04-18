@@ -48,7 +48,7 @@ export const TimeToResponse: React.FC<TimeToResponseProps> = ({
         <Timer size={20} className="animate-spin-slow" />
       )}
 
-      <span className="font-mono font-bold text-sm">
+      <span className="font-mono font-bold lg:text-sm">
         {liberado
           ? "Questão Liberada!"
           : `Aguarde ${tempoRestante}s para responder...`}

@@ -24,7 +24,7 @@ export const OutputQuestion: React.FC<BaseQuestionProps> = ({
   return (
     <div className="flex flex-col gap-4">
       <TimeToResponse onTimerEnd={() => setIsAbleToRespond(true)} />
-      <pre className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 p-4 rounded-lg  font-mono text-sm leading-relaxed overflow-x-auto border">
+      <pre className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 p-4 rounded-lg  font-mono leading-relaxed overflow-x-auto border">
         <SyntaxHighlighterCustom showLineNumbers={false}>
           {data.codigo || ""}
         </SyntaxHighlighterCustom>

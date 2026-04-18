@@ -60,7 +60,7 @@ export const RearrangeQuestion: React.FC<BaseQuestionProps> = ({
         bg-olive-50 dark:bg-slate-900 border-slate-300  dark:border-slate-700"
       >
         {selecionadas.length === 0 && (
-          <p className="text-slate-400 text-sm italic m-auto">
+          <p className="text-slate-400 lg:text-sm italic m-auto">
             Clique nas linhas abaixo para construir o código...
           </p>
         )}
@@ -73,7 +73,7 @@ export const RearrangeQuestion: React.FC<BaseQuestionProps> = ({
           return (
             <div
               key={`sel-${index}`}
-              className="p-2 rounded border font-mono text-sm shadow-sm animate-in slide-in-from-left-2 flex items-center
+              className="p-2 rounded border font-mono shadow-sm animate-in slide-in-from-left-2 flex items-center
         text-slate-700 dark:text-blue-300 border-olive-400 dark:border-slate-700 bg-yellow-50 dark:bg-blue-500/10 justify-between"
             >
               <div className="flex items-center">
@@ -104,14 +104,14 @@ export const RearrangeQuestion: React.FC<BaseQuestionProps> = ({
         <button
           onClick={removerUltima}
           disabled={selecionadas.length === 0}
-          className="text-sm flex items-center gap-1 text-slate-500 hover:text-red-500 cursor-pointer disabled:opacity-30"
+          className="lg:text-sm flex items-center gap-1 text-slate-500 hover:text-red-500 cursor-pointer disabled:opacity-30"
         >
           <Trash2 size={14} /> Apagar última
         </button>
         <button
           onClick={resetar}
           disabled={selecionadas.length === 0}
-          className="text-sm flex items-center gap-1 text-slate-500 hover:text-orange-500 cursor-pointer disabled:opacity-30"
+          className="lg:text-sm flex items-center gap-1 text-slate-500 hover:text-orange-500 cursor-pointer disabled:opacity-30"
         >
           <RotateCcw size={14} /> Limpar tudo
         </button>
@@ -129,7 +129,7 @@ export const RearrangeQuestion: React.FC<BaseQuestionProps> = ({
               <button
                 key={`opt-${index}`}
                 onClick={() => adicionarLinha(linha)}
-                className="p-2 rounded-lg border font-mono text-xs transition-all cursor-pointer
+                className="p-2 rounded-lg border font-mono transition-all cursor-pointer
                 bg-white border-slate-200 hover:border-blue-500 text-slate-700 dark:text-blue-300
                 dark:bg-slate-800 dark:border-slate-700 dark:hover:border-blue-400 "
               >

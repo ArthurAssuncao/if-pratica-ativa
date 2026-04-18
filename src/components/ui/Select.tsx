@@ -51,7 +51,7 @@ export const Select = ({
           ${isOpen ? "ring-2 ring-olive-400 dark:ring-blue-500/50 border-transparent" : ""}
         `}
       >
-        <span className="text-sm font-medium text-slate-700 dark:text-blue-300 truncate">
+        <span className="lg:text-sm font-medium text-slate-700 dark:text-blue-300 truncate">
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <ChevronDown
@@ -76,7 +76,7 @@ export const Select = ({
                   setIsOpen(false);
                 }}
                 className={`
-                  px-4 py-2.5 rounded-lg text-sm transition-colors cursor-pointer mb-1 last:mb-0
+                  px-4 py-2.5 rounded-lg lg:text-sm transition-colors cursor-pointer mb-1 last:mb-0
                   ${
                     value === option.value
                       ? "bg-olive-200/50 dark:bg-blue-500/20 font-bold"
