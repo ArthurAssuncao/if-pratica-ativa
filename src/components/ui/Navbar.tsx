@@ -1,7 +1,11 @@
-import { Laptop, Moon, Sun } from "lucide-react";
+import { Laptop, Menu, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export const Navbar = () => {
+interface NavbarProps {
+  onOpenMenu: () => void;
+}
+
+export const Navbar = ({ onOpenMenu }: NavbarProps) => {
   const [tema, setTema] = useState<"light" | "dark">("dark");
 
   // Lógica para alternar o tema no HTML/Body
@@ -47,6 +51,13 @@ export const Navbar = () => {
             className="text-yellow-200 group-hover:text-yellow-800 transition-all ease-in-out duration-500"
           />
         )}
+      </button>
+      <button
+        onClick={onOpenMenu}
+        className="group p-2 rounded-full border border-slate-700 hover:bg-slate-800 transition-all text-slate-300 hover:cursor-pointer dark:hover:bg-white ease-in-out duration-500"
+        title="Abrir Menu"
+      >
+        <Menu size={24} />
       </button>
     </nav>
   );

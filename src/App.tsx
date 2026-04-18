@@ -12,6 +12,7 @@ export default function App() {
   const [temas] = useState<Tema[]>(temasData);
   const [quizAtual, setQuizAtual] = useState<QuizData>(quizes[temas[0].id]);
   const [idQuestaoAtual, setIdQuestaoAtual] = useState(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const onChangeTema = (tema: Tema) => {
     setQuizAtual(quizes[tema.id]);
@@ -29,7 +30,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
-      <Navbar />
+      <Navbar onOpenMenu={() => setIsSidebarOpen((prev) => !prev)} />
       <div className="flex">
         {/* Sidebar fixa lateralmente */}
         <Sidebar
@@ -37,6 +38,8 @@ export default function App() {
           idTemaAtivo={0}
           onSelecionarQuestao={onChangeQuestao}
           onChangeTema={onChangeTema}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
         />
 
         {/* Área do Conteúdo Principal */}
