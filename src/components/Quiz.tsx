@@ -136,7 +136,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
 
   return (
     <div className="min-h-screen p-6 flex flex-col items-center">
-      <ProgressBar atual={atual} total={questoes.length} />
+      <ProgressBar atual={questoesRealizadas} total={questoes.length} />
       <div
         className="w-full max-w-2xl p-8 rounded-2xl shadow-xl border transition-colors duration-300
     bg-white border-slate-200 text-slate-900 
