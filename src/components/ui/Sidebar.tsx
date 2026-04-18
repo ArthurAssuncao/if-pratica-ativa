@@ -94,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50 w-80 max-w-full transition-transform duration-300 ease-in-out transform
+          fixed inset-y-0 left-0 z-49 w-80 max-w-full transition-transform duration-300 ease-in-out transform
           bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800
           lg:translate-x-0 lg:static lg:h-[calc(100vh-64px)] overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
