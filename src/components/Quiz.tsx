@@ -185,7 +185,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
             Continuar <ArrowRight size={20} />
           </button>
         )}
-        <span className="text-xs text-slate-400 dark:text-slate-500 flex items-center justify-between">
+        <span className="lg:text-xs text-slate-400 dark:text-slate-500 flex items-center justify-between">
           <span className="text-green-500 dark:text-green-400 hover:cursor-pointer hover:text-green-700 dark:hover:text-green-300 transition-all">
             <ChevronLeft size={32} onClick={() => questaoAnterior()} />
           </span>

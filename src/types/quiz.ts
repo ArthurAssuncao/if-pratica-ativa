@@ -40,6 +40,7 @@ export interface Questao {
   sufixo?: string | string[];
   codigo?: string;
   infoQuestao?: InfoQuestao;
+  nivel: Nivel;
 }
 
 export interface Tema {

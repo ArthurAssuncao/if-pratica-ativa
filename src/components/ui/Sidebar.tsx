@@ -17,23 +17,32 @@ interface SidebarProps {
   quizes: Quizes;
   idTemaAtivo: number;
   isOpen: boolean; // Controla se está aberto no mobile
+  filterTipo: string;
+  filterConteudo: string;
+  filterNivel: string;
   onClose: () => void; // Função para fechar
   onSelecionarQuestao: (id: number) => void;
   onChangeTema: (tema: Tema) => void;
+  onFilterTipoChange: (tipo: string) => void;
+  onFilterConteudoChange: (conteudo: string) => void;
+  onFilterNivelChange: (nivel: string) => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   quizes,
   idTemaAtivo,
   isOpen,
+  filterTipo,
+  filterConteudo,
+  filterNivel,
   onClose,
   onSelecionarQuestao,
   onChangeTema,
+  onFilterTipoChange,
+  onFilterConteudoChange,
+  onFilterNivelChange,
 }) => {
   const [expandidos, setExpandidos] = useState<number[]>([idTemaAtivo]);
-  const [filtroTipo, setFiltroTipo] = useState("todos");
-  const [filtroConteudo, setFiltroConteudo] = useState("todos");
-  const [filtroNivel, setFiltroNivel] = useState("todos");
 
   const listaQuizes: QuizData[] = Object.values(quizes);
 
@@ -115,20 +124,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {/* Espaçamento entre os selects */}
               <Select
                 options={opcoesTipos}
-                value={filtroTipo}
-                onChange={setFiltroTipo}
+                value={filterTipo}
+                onChange={onFilterTipoChange}
                 label="Tipo"
               />
               <Select
                 options={opcoesConteudos}
-                value={filtroConteudo}
-                onChange={setFiltroConteudo}
+                value={filterConteudo}
+                onChange={onFilterConteudoChange}
                 label="Conteúdo"
               />
               <Select
                 options={opcoesNiveis}
-                value={filtroNivel}
-                onChange={setFiltroNivel}
+                value={filterNivel}
+                onChange={onFilterNivelChange}
                 label="Nível"
               />
             </div>

@@ -13,7 +13,7 @@ export const FillQuestion: React.FC<BaseQuestionProps> = ({
 
   const handleConfirmar = () => {
     if (isAbleToRespond && valor.trim()) {
-      aoResponder(valor.trim());
+      aoResponder(valor.trim().toLocaleLowerCase());
       return;
     }
     toast.error("Você não pode responder ainda!");

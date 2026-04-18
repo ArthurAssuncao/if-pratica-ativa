@@ -50,7 +50,7 @@ export const TimeToResponse: React.FC<TimeToResponseProps> = ({
 
       <span className="font-mono font-bold lg:text-sm">
         {liberado
-          ? "Questão Liberada!"
+          ? "Questão liberada para ser respondida."
           : `Aguarde ${tempoRestante}s para responder...`}
       </span>
     </div>

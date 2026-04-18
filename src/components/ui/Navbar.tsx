@@ -55,7 +55,7 @@ export const Navbar = ({ onOpenMenu }: NavbarProps) => {
         </button>
         <button
           onClick={onOpenMenu}
-          className="group p-2 rounded-full border border-slate-700 hover:bg-slate-800 transition-all text-slate-300 hover:cursor-pointer dark:hover:bg-white ease-in-out duration-500"
+          className="visible lg:hidden group p-2 rounded-full border border-slate-700 hover:bg-slate-500 transition-all text-slate-700 hover:text-slate-200 dark:text-slate-300 dark:hover:text-slate-700 hover:cursor-pointer dark:hover:bg-slate-300 ease-in-out duration-500"
           title="Abrir Menu"
         >
           <Menu size={24} />
