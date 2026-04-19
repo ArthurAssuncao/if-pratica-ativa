@@ -2,6 +2,7 @@ import { BaseQuestionProps } from "types/question";
 import { ClickOnErrorQuestion } from "./ClickOnErrorQuestion";
 import { FillQuestion } from "./FillQuestion";
 import { FlowchartQuestion } from "./FlowchartQuestion";
+import { FlowchartQuestionNew } from "./FlowchartQuestionNew";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { OutputQuestion } from "./OutputQuestion";
 import { RearrangeQuestion } from "./RearrangeQuestion";
@@ -21,6 +22,8 @@ export const QuestionSelector = ({ data, aoResponder }: BaseQuestionProps) => {
       return <ClickOnErrorQuestion data={data} aoResponder={aoResponder} />;
     case "fluxograma":
       return <FlowchartQuestion data={data} aoResponder={aoResponder} />;
+    case "fluxograma_novo":
+      return <FlowchartQuestionNew data={data} aoResponder={aoResponder} />;
     default:
       return null;
   }

@@ -8,6 +8,7 @@ export const MAPA_TIPOS_QUESTAO: Record<TipoQuestao, string> = {
   clique_erro: "Encontrar o Erro",
   ordenacao: "Ordenação de Código",
   fluxograma: "Fluxograma",
+  fluxograma_novo: "Fluxograma (Novo)",
 };
 
 // Transformando em lista para o Select

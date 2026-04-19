@@ -1,3 +1,17 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+.react-syntax-highlighter-line-number {
+  border-right: 1px solid #a2a186;
+  color: #a2a186;
+  margin-right: 1em;
+  padding-right: 1em !important;
+}
+
+.dark {
+  .react-syntax-highlighter-line-number {
+    border-right: 1px solid #8989b7;
+    color: #8989b7;
+  }
+}

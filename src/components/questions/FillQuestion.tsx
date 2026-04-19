@@ -1,3 +1,4 @@
+import { ButtonConfirm } from "components/ui/ButtonConfirm";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -35,12 +36,7 @@ export const FillQuestion: React.FC<BaseQuestionProps> = ({
         onChange={(e) => setValor(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleConfirmar()}
       />
-      <button
-        onClick={handleConfirmar}
-        className="bg-green-600 hover:bg-green-500 p-3 rounded-lg font-bold text-white transition-colors"
-      >
-        Confirmar
-      </button>
+      <ButtonConfirm onClick={handleConfirmar} disabled={!isAbleToRespond} />
     </div>
   );
 };

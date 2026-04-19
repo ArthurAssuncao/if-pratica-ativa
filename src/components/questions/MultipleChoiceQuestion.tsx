@@ -1,3 +1,4 @@
+import { ButtonConfirm } from "components/ui/ButtonConfirm";
 import React from "react";
 import toast from "react-hot-toast";
 import { BaseQuestionProps } from "types/question";
@@ -9,10 +10,11 @@ export const MultipleChoiceQuestion: React.FC<BaseQuestionProps> = ({
   aoResponder,
 }) => {
   const [isAbleToRespond, setIsAbleToRespond] = React.useState(false);
+  const [optionSelected, setOptionSelected] = React.useState("");
 
-  const handleClick = (opt: string) => {
+  const handleConfirmar = () => {
     if (isAbleToRespond) {
-      aoResponder(opt);
+      aoResponder(optionSelected);
       return;
     }
     toast.error("Você não pode responder ainda!");
@@ -25,14 +27,15 @@ export const MultipleChoiceQuestion: React.FC<BaseQuestionProps> = ({
         {data.opcoes?.map((opt, index) => (
           <button
             key={opt}
-            onClick={() => handleClick(opt)}
-            className="p-4 text-left border text-slate-700 dark:text-blue-300 border-olive-400 dark:border-slate-700 bg-yellow-50 dark:bg-blue-500/10 rounded-xl hover:bg-green-500/10 hover:border-green-500 transition-colors  hover:cursor-pointer"
+            onClick={() => setOptionSelected(opt)}
+            className={`p-4 text-left border text-slate-700 dark:text-blue-300 border-olive-400 dark:border-slate-700  rounded-xl hover:bg-green-500/10 hover:border-green-500 transition-colors  hover:cursor-pointer ${optionSelected === opt ? "bg-green-500/20" : "bg-yellow-50 dark:bg-blue-500/10"}`}
           >
             {getLetraByIndex(index) + ") "}
             {opt}
           </button>
         ))}
       </div>
+      <ButtonConfirm onClick={handleConfirmar} disabled={!isAbleToRespond} />
     </div>
   );
 };

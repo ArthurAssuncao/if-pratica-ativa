@@ -14,7 +14,8 @@ export type TipoQuestao =
   | "predicao"
   | "clique_erro"
   | "ordenacao"
-  | "fluxograma";
+  | "fluxograma"
+  | "fluxograma_novo";
 
 export type OrdenacaoLinha = { texto: string; identationLevel: number };
 
@@ -41,6 +42,7 @@ export interface Questao {
   codigo?: string;
   infoQuestao?: InfoQuestao;
   nivel: Nivel;
+  explicacao?: string;
 }
 
 export interface Tema {

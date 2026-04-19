@@ -55,11 +55,15 @@ export const SyntaxHighlighterCustom = ({
       language="python"
       style={appTheme === "dark" ? nord : nnfx}
       customStyle={{
-        background: "inherit",
+        background: "trasnparent",
         paddingLeft: "0px",
         padding: padding ? `${padding}px !important` : "0px !important",
       }}
       showLineNumbers={showLineNumbers}
+      showInlineLineNumbers={showLineNumbers}
+      lineNumberContainerStyle={{
+        borderRight: "1px solid #ccc",
+      }}
       wrapLongLines
       {...syntaxHighlighterProps}
     >

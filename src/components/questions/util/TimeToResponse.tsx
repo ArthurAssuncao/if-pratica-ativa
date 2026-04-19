@@ -7,7 +7,7 @@ interface TimeToResponseProps {
 }
 
 export const TimeToResponse: React.FC<TimeToResponseProps> = ({
-  segundos = 10,
+  segundos = 3,
   onTimerEnd,
 }) => {
   const [tempoRestante, setTempoRestante] = useState(segundos);
