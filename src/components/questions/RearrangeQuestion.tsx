@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 import { BaseQuestionProps } from "types/question";
 import { OrdenacaoLinha, QuestionRearrange } from "types/quiz";
 import { createQuestion } from "./QuestionFactory";
-import { TimeToResponse } from "./util/TimeToResponse";
 
 interface RearrangeQuestionProps extends BaseQuestionProps {
   data: QuestionRearrange;
@@ -15,14 +14,13 @@ export const RearrangeQuestion = createQuestion<
   RearrangeQuestionProps,
   QuestionRearrange
 >({
-  validarResposta: ({ resposta, data }) => {
+  validateAnswer: ({ resposta, data }) => {
     return resposta === data.respostaCorreta.toString();
   },
 
-  Component: ({ data, aoResponder, validarResposta }) => {
+  Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
     // Guardamos o objeto completo para ter acesso à indentação na renderização
     const [selecionadas, setSelecionadas] = useState<OrdenacaoLinha[]>([]);
-    const [isAbleToRespond, setIsAbleToRespond] = useState(false);
 
     // Filtramos as opções comparando o texto ou ID para saber o que sobra
     const opcoesDisponiveis = useMemo(() => {
@@ -49,27 +47,23 @@ export const RearrangeQuestion = createQuestion<
     const resetar = () => setSelecionadas([]);
 
     const handleConfirmar = () => {
-      if (!isAbleToRespond) {
+      if (!isAbleToAnswer) {
         toast.error("Você não pode responder ainda!");
         return;
       }
 
       const respostaFinal = selecionadas.map((s) => s.texto).join("\n");
 
-      const acertou = validarResposta({
+      const acertou = validateAnswer({
         resposta: respostaFinal,
         data,
       });
 
-      aoResponder(acertou);
+      onAnswer(acertou);
     };
 
     return (
       <div className="flex flex-col gap-6 w-full">
-        {/* Timer de segurança */}
-        <TimeToResponse onTimerEnd={() => setIsAbleToRespond(true)} />
-
-        {/* Área de Construção do Código */}
         <div
           className="flex flex-col gap-2 min-h-37.5 p-4 rounded-xl border-2 border-dashed 
         bg-olive-50 dark:bg-slate-900 border-slate-300  dark:border-slate-700"

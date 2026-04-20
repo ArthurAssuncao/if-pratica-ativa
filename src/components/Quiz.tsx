@@ -93,7 +93,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
     }
   };
 
-  const validarResposta = (acertou: boolean) => {
+  const validateAnswer = (acertou: boolean) => {
     if (!questoes) return;
 
     if (acertou) {
@@ -153,8 +153,9 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
         <div className="mb-8 flex flex-col gap-4">
           <QuestionSelector
             data={questoes[atual]}
-            aoResponder={validarResposta}
-            respondido={feedback !== null}
+            onAnswer={validateAnswer}
+            isAbleToAnswer={false}
+            disabled={feedback !== null}
           />
           {feedback && (
             <Feedback

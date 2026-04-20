@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { BaseQuestionProps } from "types/question";
 import { QuestionClickOnError } from "types/quiz";
 import { createQuestion } from "./QuestionFactory";
-import { TimeToResponse } from "./util/TimeToResponse";
+import { TimeToAnswer } from "./util/TimeToAnswer";
 
 interface ClickOnErrorQuestionProps extends BaseQuestionProps {
   data: QuestionClickOnError;
@@ -14,12 +14,12 @@ export const ClickOnErrorQuestion = createQuestion<
   ClickOnErrorQuestionProps,
   QuestionClickOnError
 >({
-  validarResposta: ({ resposta, data }) => {
+  validateAnswer: ({ resposta, data }) => {
     return resposta === data.respostaCorreta.toString();
   },
 
-  Component: ({ data, aoResponder, validarResposta }) => {
-    const [isAbleToRespond, setIsAbleToRespond] = React.useState(false);
+  Component: ({ data, onAnswer, validateAnswer }) => {
+    const [isAbleToAnswer, setisAbleToAnswer] = React.useState(false);
     const [opcaoSelecionada, setOpcaoSelecionada] = React.useState(-1);
 
     const handleClick = (index: number) => {
@@ -27,22 +27,22 @@ export const ClickOnErrorQuestion = createQuestion<
     };
 
     const handleConfirmar = () => {
-      if (!isAbleToRespond) {
+      if (!isAbleToAnswer) {
         toast.error("Você não pode responder ainda!");
         return;
       }
 
-      const acertou = validarResposta({
+      const acertou = validateAnswer({
         resposta: opcaoSelecionada.toString(),
         data,
       });
 
-      aoResponder(acertou);
+      onAnswer(acertou);
     };
 
     return (
       <div className="flex flex-col gap-4">
-        <TimeToResponse onTimerEnd={() => setIsAbleToRespond(true)} />
+        <TimeToAnswer onTimerEnd={() => setisAbleToAnswer(true)} />
 
         <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 rounded-lg font-mono border">
           <div className="bg-yellow-50 dark:bg-blue-500/10 flex flex-col gap-2 p-4">

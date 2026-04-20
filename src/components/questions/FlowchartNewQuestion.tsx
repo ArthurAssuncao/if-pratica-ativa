@@ -15,7 +15,6 @@ import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { BaseQuestionProps } from "types/question";
 import { QuestionFlowchartnNew } from "types/quiz";
 import { createQuestion } from "./QuestionFactory";
-import { TimeToResponse } from "./util/TimeToResponse";
 
 interface FlowchartNewQuestionProps extends BaseQuestionProps {
   data: QuestionFlowchartnNew;
@@ -25,40 +24,39 @@ export const FlowchartNewQuestion = createQuestion<
   FlowchartNewQuestionProps,
   QuestionFlowchartnNew
 >({
-  validarResposta: ({ resposta, data }) => {
+  validateAnswer: ({ resposta, data }) => {
     return resposta === data.respostaCorreta.toString();
   },
 
-  Component: ({ data, aoResponder, validarResposta }) => {
-    const [isAbleToRespond, setIsAbleToRespond] = useState(false);
+  Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
     const [nodeSelected, setNodeSelected] = useState<string>("");
 
     const handleClick = useCallback(
       (label: string) => {
-        if (isAbleToRespond) {
+        if (isAbleToAnswer) {
           setNodeSelected(label);
           return;
         }
         toast.error("Aguarde o tempo de leitura!");
       },
-      [isAbleToRespond],
+      [isAbleToAnswer],
     );
 
     const handleConfirmar = useCallback(() => {
-      if (!isAbleToRespond) {
+      if (!isAbleToAnswer) {
         toast.error("Você não pode responder ainda!");
         return;
       }
 
-      const acertou = validarResposta({
+      const acertou = validateAnswer({
         resposta: nodeSelected,
         data,
       });
 
-      aoResponder(acertou);
-    }, [aoResponder, data, isAbleToRespond, nodeSelected, validarResposta]);
+      onAnswer(acertou);
+    }, [onAnswer, data, isAbleToAnswer, nodeSelected, validateAnswer]);
 
     // Construção do fluxo com auto-layout
     useEffect(() => {
@@ -163,12 +161,10 @@ export const FlowchartNewQuestion = createQuestion<
           return node;
         }),
       );
-    }, [isAbleToRespond, setNodes, handleClick]);
+    }, [isAbleToAnswer, setNodes, handleClick]);
 
     return (
       <div className="flex flex-col gap-6 w-full items-center">
-        <TimeToResponse onTimerEnd={() => setIsAbleToRespond(true)} />
-
         <div className="w-full text-center mb-2">
           <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">
             {data.pergunta}
@@ -200,7 +196,7 @@ export const FlowchartNewQuestion = createQuestion<
 
         <ButtonConfirm
           onClick={handleConfirmar}
-          disabled={!isAbleToRespond || nodeSelected === ""}
+          disabled={!isAbleToAnswer || nodeSelected === ""}
           label={
             nodeSelected
               ? `Confirmar: ${nodeSelected}`

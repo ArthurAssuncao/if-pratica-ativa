@@ -5,7 +5,6 @@ import { BaseQuestionProps } from "types/question";
 import { QuestionMultipleChoice } from "types/quiz";
 import { getLetraByIndex } from "util/Quiz";
 import { createQuestion } from "./QuestionFactory";
-import { TimeToResponse } from "./util/TimeToResponse";
 
 interface MultipleChoiceQuestionProps extends BaseQuestionProps {
   data: QuestionMultipleChoice;
@@ -15,31 +14,29 @@ export const MultipleChoiceQuestion = createQuestion<
   MultipleChoiceQuestionProps,
   QuestionMultipleChoice
 >({
-  validarResposta: ({ resposta, data }) => {
+  validateAnswer: ({ resposta, data }) => {
     return resposta === data.respostaCorreta.toString();
   },
 
-  Component: ({ data, aoResponder, validarResposta }) => {
-    const [isAbleToRespond, setIsAbleToRespond] = React.useState(false);
+  Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
     const [optionSelected, setOptionSelected] = React.useState("");
 
     const handleConfirmar = () => {
-      if (!isAbleToRespond) {
+      if (!isAbleToAnswer) {
         toast.error("Você não pode responder ainda!");
         return;
       }
 
-      const acertou = validarResposta({
+      const acertou = validateAnswer({
         resposta: optionSelected.toString(),
         data,
       });
 
-      aoResponder(acertou);
+      onAnswer(acertou);
     };
 
     return (
       <div className="grid gap-3">
-        <TimeToResponse onTimerEnd={() => setIsAbleToRespond(true)} />
         <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 p-4 rounded-lg font-mono border  flex flex-col gap-2">
           {data.opcoes?.map((opt, index) => (
             <button
@@ -52,7 +49,7 @@ export const MultipleChoiceQuestion = createQuestion<
             </button>
           ))}
         </div>
-        <ButtonConfirm onClick={handleConfirmar} disabled={!isAbleToRespond} />
+        <ButtonConfirm onClick={handleConfirmar} disabled={!isAbleToAnswer} />
       </div>
     );
   },

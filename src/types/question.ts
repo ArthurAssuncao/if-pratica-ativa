@@ -1,10 +1,12 @@
 // Interface base compartilhada
 export interface BaseQuestionProps {
-  aoResponder: (correto: boolean) => void;
+  onAnswer: (correto: boolean) => void;
+  isAbleToAnswer: boolean;
+  disabled: boolean;
 }
 
 export type QuestionComponent<T extends BaseQuestionProps> = {
-  validarResposta: () => boolean;
+  validateAnswer: () => boolean;
   Component: React.FC<T>;
 };
 
