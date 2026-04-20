@@ -35,32 +35,6 @@ export type ConexaoRamo = {
 
 export type TipoQuiz = "automatico" | "manual";
 
-// export interface Questao extends BaseQuestion {
-//   id: number;
-//   tipo: TipoQuestao;
-//   nivel: Nivel;
-//   infoQuestao?: InfoQuestao;
-//   pergunta: string;
-//   explicacao: string;
-
-//   linhas?: OrdenacaoLinha[];
-//   indexErro?: number;
-
-//   // Para fluxograma
-//   condicao?: string;
-//   ramos?: FluxogramaRamo[];
-
-//   resposta_correta: string | number;
-//   opcoes?: string[];
-//   prefixo?: string;
-//   sufixo?: string | string[];
-//   codigo?: string;
-
-//   raiz?: string;
-//   nos?: FluxogramaRamo[];
-//   conexoes?: ConexaoRamo[];
-// }
-
 export interface BaseQuestion {
   id: number;
   tipo: TipoQuestao;
