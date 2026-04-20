@@ -1,27 +1,11 @@
-import { Laptop, Menu, Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Laptop, Menu } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface NavbarProps {
   onOpenMenu: () => void;
 }
 
 export const Navbar = ({ onOpenMenu }: NavbarProps) => {
-  const [tema, setTema] = useState<"light" | "dark">("dark");
-
-  // Lógica para alternar o tema no HTML/Body
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (tema === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-  }, [tema]);
-
-  const alternarTema = () => {
-    setTema(tema === "light" ? "dark" : "light");
-  };
-
   return (
     <nav className="w-full h-16 border-b  bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-600 flex items-center justify-between px-6 sticky top-0 z-50 transition-colors duration-300">
       {/* Lado Esquerdo: Logo e Nome */}
@@ -36,26 +20,10 @@ export const Navbar = ({ onOpenMenu }: NavbarProps) => {
 
       {/* Lado Direito: Botão de Tema */}
       <div className="flex items-center gap-3">
-        <button
-          onClick={alternarTema}
-          className="group p-2 rounded-full border border-slate-700 hover:bg-slate-800 transition-all text-slate-300 hover:cursor-pointer dark:hover:bg-white ease-in-out duration-500"
-          title={tema === "light" ? "Ativar Modo Escuro" : "Ativar Modo Claro"}
-        >
-          {tema === "light" ? (
-            <Moon
-              size={20}
-              className="text-black group-hover:text-white transition-all ease-in-out duration-500"
-            />
-          ) : (
-            <Sun
-              size={20}
-              className="text-yellow-200 group-hover:text-yellow-800 transition-all ease-in-out duration-500"
-            />
-          )}
-        </button>
+        <ThemeToggle />
         <button
           onClick={onOpenMenu}
-          className="visible lg:hidden group p-2 rounded-full border border-slate-700 hover:bg-slate-500 transition-all text-slate-700 hover:text-slate-200 dark:text-slate-300 dark:hover:text-slate-700 hover:cursor-pointer dark:hover:bg-slate-300 ease-in-out duration-500"
+          className="visible md:hidden group p-2 rounded-full border border-slate-700 hover:bg-slate-500 transition-all text-slate-700 hover:text-slate-200 dark:text-slate-300 dark:hover:text-slate-700 hover:cursor-pointer dark:hover:bg-slate-300 ease-in-out duration-500"
           title="Abrir Menu"
         >
           <Menu size={24} />

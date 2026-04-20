@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 import {
   Nivel,
-  Questao,
+  QuestionTypes,
   QuizData,
   StatusQuestao,
   TipoQuestao,
@@ -41,14 +41,14 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
 
   const fim = questoesRealizadas === quizData.questoes.length;
 
-  const [questoes] = useState<Questao[]>(() => {
+  const [questoes] = useState<QuestionTypes[]>(() => {
     if (tipo === "automatico") {
       return [...quizData.questoes].sort(() => 0.5 - Math.random()).slice(0, 5);
     }
     return quizData.questoes;
   });
   const indexQuestao = questoes.findIndex((q) => q.id === idQuestaoAtual);
-  console.log(idQuestaoAtual, indexQuestao, questoes);
+
   const [atual, setAtual] = useState(indexQuestao > -1 ? indexQuestao : 0);
 
   useEffect(() => {
@@ -93,21 +93,8 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
     }
   };
 
-  const validarResposta = (respostaUsuario: string) => {
+  const validarResposta = (acertou: boolean) => {
     if (!questoes) return;
-    const questaoAtual = questoes[atual];
-    let acertou = false;
-
-    const limpar = (str: string | number) =>
-      str.toString().replace(/\s+/g, "").toLowerCase().trim();
-
-    if (questaoAtual.tipo === "clique_erro") {
-      acertou = respostaUsuario === questaoAtual.indexErro?.toString();
-    } else {
-      // A lógica de "limpar" funciona para ordenação, lacuna e múltipla escolha
-      acertou =
-        limpar(respostaUsuario) === limpar(questaoAtual.resposta_correta);
-    }
 
     if (acertou) {
       setFeedback("correto");
@@ -163,16 +150,16 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
           <MarkdownSyntax>{questoes[atual].pergunta}</MarkdownSyntax>
         </h2>
 
-        <div className="mb-8">
-          {!feedback ? (
-            <QuestionSelector
-              data={questoes[atual]}
-              aoResponder={validarResposta}
-            />
-          ) : (
+        <div className="mb-8 flex flex-col gap-4">
+          <QuestionSelector
+            data={questoes[atual]}
+            aoResponder={validarResposta}
+            respondido={feedback !== null}
+          />
+          {feedback && (
             <Feedback
               status={feedback}
-              respostaCorreta={questoes[atual].resposta_correta}
+              respostaCorreta={questoes[atual].respostaCorreta}
             />
           )}
         </div>

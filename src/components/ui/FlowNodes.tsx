@@ -14,6 +14,13 @@ export const DecisionNode = memo(({ data }: NodeProps<DecisionNodeData>) => {
         {data.label}
       </div>
 
+      {/* ADICIONE ESTA LINHA: Entrada (Topo) */}
+      <Handle
+        type="target"
+        position={Position.Top}
+        className="bg-yellow-500!"
+      />
+
       {/* Saída Esquerda */}
       <Handle
         type="source"

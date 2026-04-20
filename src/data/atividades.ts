@@ -84,149 +84,31 @@ const quizesData: QuizData[] = [
         nivel: "iniciante",
       },
       {
-        id: 11,
+        id: 10,
         tipo: "fluxograma_novo",
         nivel: "iniciante",
-        pergunta:
-          "Se o usuário digitar o valor 20, qual será o destino do fluxo?",
-        codigo: "idade = int(input('Digite sua idade: '))",
-        condicao: "if idade >= 18:",
-        ramos: [
+        pergunta: "Se um aluno tirar nota 5.5, qual será o caminho percorrido?",
+        codigo: "nota = float(input('Nota: '))",
+        raiz: "decisao_1",
+        nos: [
+          { id: "decisao_1", tipo: "decisao", texto: "if nota >= 7:" },
+          { id: "decisao_2", tipo: "decisao", texto: "elif nota >= 5:" },
+          { id: "aprovado", tipo: "terminal", texto: "Aluno Aprovado" },
           {
-            id: "ramo_c",
-            label: "True (Entra no bloco)",
+            id: "recuperacao",
+            tipo: "terminal",
+            texto: "Aluno em Recuperação",
             correta: true,
           },
+          { id: "reprovado", tipo: "terminal", texto: "Aluno Reprovado" },
         ],
-        resposta_correta: "True (Entra no bloco)",
-        explicacao:
-          "Como 20 é maior ou igual a 18, a condição do IF é verdadeira.",
-      },
-      {
-        id: 8,
-        tipo: "fluxograma_novo",
-        nivel: "iniciante",
-        pergunta:
-          "Se o usuário digitar o valor 20, qual será o destino do fluxo?",
-        codigo: "idade = int(input('Digite sua idade: '))",
-        condicao: "if idade >= 18:",
-        ramos: [
-          {
-            id: "ramo_a",
-            label: "True (Entra no bloco)",
-            correta: true,
-          },
-          {
-            id: "ramo_b",
-            label: "False (Pula o bloco)",
-            correta: false,
-          },
+        conexoes: [
+          { de: "decisao_1", para: "aprovado", label: "Sim" },
+          { de: "decisao_1", para: "decisao_2", label: "Não" },
+          { de: "decisao_2", para: "recuperacao", label: "Sim" },
+          { de: "decisao_2", para: "reprovado", label: "Não" },
         ],
-        resposta_correta: "True (Entra no bloco)",
-        explicacao:
-          "Como 20 é maior ou igual a 18, a condição do IF é verdadeira.",
-      },
-      {
-        id: 9,
-        tipo: "fluxograma_novo",
-        nivel: "intermediário",
-        pergunta:
-          "Para uma nota igual a 7.5, qual caminho o algoritmo seguirá?",
-        codigo: "nota = 7.5",
-        condicao: "if nota >= 9.0:",
-        ramos: [
-          {
-            id: "r1",
-            label: "Excelente (IF)",
-            correta: false,
-          },
-          {
-            id: "r2",
-            label: "Bom (ELIF nota >= 7)",
-            correta: true,
-          },
-          {
-            id: "r3",
-            label: "Recuperação (ELSE)",
-            correta: false,
-          },
-        ],
-        resposta_correta: "Bom (ELIF nota >= 7)",
-        explicacao:
-          "A primeira condição falha (7.5 < 9), mas a segunda (ELIF) é verdadeira.",
-      },
-      {
-        id: 12,
-        tipo: "fluxograma_novo",
-        nivel: "intermediário",
-        pergunta:
-          "Para uma nota igual a 7.5, qual caminho o algoritmo seguirá?",
-        codigo: "nota = 7.5",
-        condicao: "if nota >= 9.0:",
-        ramos: [
-          {
-            id: "r1",
-            label: "Excelente (IF)",
-            correta: false,
-          },
-          {
-            id: "r2",
-            label: "Bom (ELIF nota >= 7)",
-            correta: true,
-          },
-          {
-            id: "r3",
-            label: "Recuperação (ELSE)",
-            correta: false,
-          },
-          {
-            id: "r4",
-            label: "Não sei 1",
-            correta: false,
-          },
-        ],
-        resposta_correta: "Bom (ELIF nota >= 7)",
-        explicacao:
-          "A primeira condição falha (7.5 < 9), mas a segunda (ELIF) é verdadeira.",
-      },
-      {
-        id: 13,
-        tipo: "fluxograma_novo",
-        nivel: "intermediário",
-        pergunta:
-          "Para uma nota igual a 7.5, qual caminho o algoritmo seguirá?",
-        codigo: "nota = 7.5",
-        condicao: "if nota >= 9.0:",
-        ramos: [
-          {
-            id: "r1",
-            label: "Excelente (IF)",
-            correta: false,
-          },
-          {
-            id: "r2",
-            label: "Bom (ELIF nota >= 7)",
-            correta: true,
-          },
-          {
-            id: "r3",
-            label: "Recuperação (ELSE)",
-            correta: false,
-          },
-          {
-            id: "r4",
-            label: "Não sei 1",
-            correta: false,
-          },
-          {
-            id: "r5",
-            label: "Não sei 2",
-            correta: false,
-          },
-        ],
-        resposta_correta: "Bom (ELIF nota >= 7)",
-        explicacao:
-          "A primeira condição falha (7.5 < 9), mas a segunda (ELIF) é verdadeira.",
+        resposta_correta: "Aluno em Recuperação",
       },
     ],
   },

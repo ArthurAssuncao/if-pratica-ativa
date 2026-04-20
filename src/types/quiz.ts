@@ -19,31 +19,93 @@ export type TipoQuestao =
 
 export type OrdenacaoLinha = { texto: string; identationLevel: number };
 
-export type FluxogramaRamo = { id: string; label: string; correta: boolean };
+export type FluxogramaRamo = {
+  id: string;
+  label?: string;
+  correta?: boolean;
+  tipo?: "terminal" | "decisao";
+  texto?: string;
+};
+
+export type ConexaoRamo = {
+  de: string;
+  para: string;
+  label: string;
+};
 
 export type TipoQuiz = "automatico" | "manual";
 
-export interface Questao {
+// export interface Questao extends BaseQuestion {
+//   id: number;
+//   tipo: TipoQuestao;
+//   nivel: Nivel;
+//   infoQuestao?: InfoQuestao;
+//   pergunta: string;
+//   explicacao: string;
+
+//   linhas?: OrdenacaoLinha[];
+//   indexErro?: number;
+
+//   // Para fluxograma
+//   condicao?: string;
+//   ramos?: FluxogramaRamo[];
+
+//   resposta_correta: string | number;
+//   opcoes?: string[];
+//   prefixo?: string;
+//   sufixo?: string | string[];
+//   codigo?: string;
+
+//   raiz?: string;
+//   nos?: FluxogramaRamo[];
+//   conexoes?: ConexaoRamo[];
+// }
+
+export interface BaseQuestion {
   id: number;
   tipo: TipoQuestao;
-
-  // Para clique_erro e ordenacao
-  linhas?: OrdenacaoLinha[];
-  indexErro?: number;
-
-  // Para fluxograma
-  condicao?: string;
-  ramos?: FluxogramaRamo[];
-  pergunta: string;
-  resposta_correta: string | number;
-  opcoes?: string[];
-  prefixo?: string;
-  sufixo?: string | string[];
-  codigo?: string;
-  infoQuestao?: InfoQuestao;
   nivel: Nivel;
-  explicacao?: string;
+  infoQuestao?: InfoQuestao;
+  pergunta: string;
+  explicacao: string;
+  respostaCorreta: string | number;
 }
+
+export interface QuestionClickOnError extends BaseQuestion {
+  linhas: OrdenacaoLinha[];
+}
+
+export interface QuestionFillQuestion extends BaseQuestion {
+  codigo: string;
+}
+
+export interface QuestionMultipleChoice extends BaseQuestion {
+  opcoes: string[];
+}
+
+export interface QuestionOutput extends BaseQuestion {
+  codigo: string;
+}
+
+export interface QuestionRearrange extends BaseQuestion {
+  linhas: OrdenacaoLinha[];
+}
+
+export interface QuestionFlowchartnNew extends BaseQuestion {
+  codigo: string;
+  raiz: string;
+  nos: FluxogramaRamo[];
+  conexoes: ConexaoRamo[];
+  respostaCorreta: string;
+}
+
+export type QuestionTypes =
+  | QuestionClickOnError
+  | QuestionFillQuestion
+  | QuestionMultipleChoice
+  | QuestionOutput
+  | QuestionRearrange
+  | QuestionFlowchartnNew;
 
 export interface Tema {
   id: number;
@@ -53,7 +115,7 @@ export interface Tema {
 
 export interface QuizData {
   tema: Tema;
-  questoes: Questao[];
+  questoes: QuestionTypes[];
 }
 
 // a chave será QuizData.tema.id e o valor será QuizData

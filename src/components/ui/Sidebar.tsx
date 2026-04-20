@@ -87,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Overlay para Mobile: Só aparece quando isOpen é true e em telas menores que LG */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden transition-opacity"
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden transition-opacity"
           onClick={onClose}
         />
       )}
@@ -101,7 +101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         `}
       >
         {/* Header da Sidebar (Visível apenas no Mobile) */}
-        <div className="flex items-center justify-between p-4 lg:hidden border-b dark:border-slate-800 mb-4">
+        <div className="flex items-center justify-between p-4 md:hidden border-b dark:border-slate-800 mb-4">
           <span className="font-bold text-slate-700 dark:text-slate-200">
             Filtros e Temas
           </span>

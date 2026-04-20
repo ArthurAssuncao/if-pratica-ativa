@@ -39,3 +39,6 @@ export const getTipoQuestaoPorExtenso = (tipo: TipoQuestao) => {
 export const getLetraByIndex = (index: number) => {
   return "abcdefghijklmnopqrstuvwxyz".charAt(index);
 };
+
+export const ajustarResposta = (str: string | number) =>
+  str.toString().replace(/\s+/g, "").toLowerCase().trim();
