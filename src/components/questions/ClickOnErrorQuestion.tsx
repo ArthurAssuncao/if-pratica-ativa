@@ -1,10 +1,11 @@
+import { ButtonConfirm } from "components/ui/ButtonConfirm";
+import { QuestionHint } from "components/ui/QuestionHint";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import React from "react";
 import toast from "react-hot-toast";
 import { BaseQuestionProps } from "types/question";
 import { QuestionClickOnError } from "types/quiz";
 import { createQuestion } from "./QuestionFactory";
-import { TimeToAnswer } from "./util/TimeToAnswer";
 
 interface ClickOnErrorQuestionProps extends BaseQuestionProps {
   data: QuestionClickOnError;
@@ -18,8 +19,7 @@ export const ClickOnErrorQuestion = createQuestion<
     return resposta === data.respostaCorreta.toString();
   },
 
-  Component: ({ data, onAnswer, validateAnswer }) => {
-    const [isAbleToAnswer, setisAbleToAnswer] = React.useState(false);
+  Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
     const [opcaoSelecionada, setOpcaoSelecionada] = React.useState(-1);
 
     const handleClick = (index: number) => {
@@ -42,15 +42,13 @@ export const ClickOnErrorQuestion = createQuestion<
 
     return (
       <div className="flex flex-col gap-4">
-        <TimeToAnswer onTimerEnd={() => setisAbleToAnswer(true)} />
-
         <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 rounded-lg font-mono border">
           <div className="bg-yellow-50 dark:bg-blue-500/10 flex flex-col gap-2 p-4">
             {data.linhas?.map((linha, index) => (
               <button
                 key={index}
                 onClick={() => handleClick(index)}
-                className={`text-slate-700 dark:text-blue-300 w-full text-left px-2 py-1 rounded hover:bg-green-500/20 hover:text-red-400 ${
+                className={`text-slate-700 dark:text-blue-300 w-full text-left px-2 py-1 rounded hover:bg-green-500/20 hover:text-red-400 hover:cursor-pointer ${
                   opcaoSelecionada === index
                     ? "bg-green-500/10 text-red-400"
                     : ""
@@ -63,9 +61,7 @@ export const ClickOnErrorQuestion = createQuestion<
                 <SyntaxHighlighterCustom
                   showLineNumbers={false}
                   padding={0}
-                  customStyle={{
-                    paddingLeft: `${linha.identationLevel * 8}px`,
-                  }}
+                  customStyle={{}}
                   className="group-hover:text-white"
                 >
                   {linha.texto}
@@ -75,23 +71,19 @@ export const ClickOnErrorQuestion = createQuestion<
           </div>
         </div>
 
-        <p className="lg:text-sm text-slate-500 italic">
-          Dica: Clique na linha que contém um erro de sintaxe ou lógica.
-        </p>
+        <QuestionHint>
+          Clique na linha que contém um erro de sintaxe ou lógica.
+        </QuestionHint>
 
-        <button
-          disabled={opcaoSelecionada < 0}
+        <ButtonConfirm
           onClick={handleConfirmar}
-          className={`border-olive-400 dark:border-slate-700 border w-full p-3 rounded-lg font-bold transition-all ${
+          disabled={!isAbleToAnswer || opcaoSelecionada < 0}
+          label={
             opcaoSelecionada >= 0
-              ? "bg-green-600 text-white hover:bg-green-500 shadow-lg"
-              : "bg-slate-200 text-slate-400 dark:bg-slate-800 cursor-not-allowed"
-          }`}
-        >
-          {opcaoSelecionada >= 0
-            ? "Confirmar resposta"
-            : "Você ainda não indicou o erro"}
-        </button>
+              ? "Confirmar resposta"
+              : "Você ainda não indicou o erro"
+          }
+        />
       </div>
     );
   },

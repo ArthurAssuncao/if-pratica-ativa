@@ -1,4 +1,5 @@
 import { ButtonConfirm } from "components/ui/ButtonConfirm";
+import { QuestionHint } from "components/ui/QuestionHint";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -20,7 +21,7 @@ export const OutputQuestion = createQuestion<
   },
 
   Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
-    const [valor, setValor] = useState("");
+    const [resposta, setResposta] = useState("");
 
     const handleConfirmar = () => {
       if (!isAbleToAnswer) {
@@ -29,7 +30,7 @@ export const OutputQuestion = createQuestion<
       }
 
       const acertou = validateAnswer({
-        resposta: valor,
+        resposta: resposta,
         data,
       });
 
@@ -46,12 +47,18 @@ export const OutputQuestion = createQuestion<
         <input
           placeholder="Digite a saída do console..."
           className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 p-3 rounded-lg border outline-none focus:border-green-500 "
-          value={valor}
-          onChange={(e) => setValor(e.target.value)}
+          value={resposta}
+          onChange={(e) => setResposta(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleConfirmar()}
         />
-
-        <ButtonConfirm onClick={handleConfirmar} disabled={!isAbleToAnswer} />
+        <QuestionHint>
+          A resposta não diferencia maiúsculas de minúsculas.
+        </QuestionHint>
+        <ButtonConfirm
+          onClick={handleConfirmar}
+          disabled={!isAbleToAnswer || resposta === ""}
+          disabledText="Digite uma resposta"
+        />
       </div>
     );
   },

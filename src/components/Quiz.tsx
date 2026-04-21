@@ -24,7 +24,6 @@ import { ProgressBar } from "components/ui/ProgressBar";
 import { ResultScreen } from "components/ui/ResultScreen";
 import { Toaster } from "react-hot-toast";
 import { getTipoQuestaoPorExtenso } from "util/Quiz";
-import { MarkdownSyntax } from "./ui/MarkdownSyntax";
 
 interface QuizProps {
   quizData: QuizData;
@@ -122,14 +121,15 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
     );
 
   return (
-    <div className="min-h-screen p-0 lg:p-6 flex flex-col items-center">
+    <div className="w-full h-full p-0 lg:p-6 flex flex-col items-center">
       <ProgressBar atual={questoesRealizadas} total={questoes.length} />
+
       <div
-        className="w-full max-w-2xl p-4 lg:p-8 rounded-2xl shadow-xl border transition-colors duration-300
-    bg-white border-slate-200 text-slate-900 
-    dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
+        className="flex-1 w-full max-w-2xl p-4 lg:p-8 rounded-2xl shadow-xl border transition-colors duration-300
+      bg-white border-slate-200 text-slate-900 
+      dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
       >
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex justify-between items-center">
           <div className="flex gap-2">
             <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase">
               {quizData.tema.nome}
@@ -146,50 +146,48 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
           </span>
         </header>
 
-        <h2 className="text-xl font-bold mb-8 text-gray-700 dark:text-slate-200">
-          <MarkdownSyntax>{questoes[atual].pergunta}</MarkdownSyntax>
-        </h2>
-
-        <div className="mb-8 flex flex-col gap-4">
-          <QuestionSelector
-            data={questoes[atual]}
-            onAnswer={validateAnswer}
-            isAbleToAnswer={false}
-            disabled={feedback !== null}
-          />
-          {feedback && (
-            <Feedback
-              status={feedback}
-              respostaCorreta={questoes[atual].respostaCorreta}
+        <div className="mb-4 flex flex-col gap-4 justify-between min-h-full">
+          <div className="flex flex-col gap-4">
+            <QuestionSelector
+              data={questoes[atual]}
+              onAnswer={validateAnswer}
+              isAbleToAnswer={false}
+              disabled={feedback !== null}
             />
-          )}
-        </div>
+            {feedback && (
+              <Feedback
+                status={feedback}
+                respostaCorreta={questoes[atual].respostaCorreta}
+              />
+            )}
+            {feedback && (
+              <button
+                onClick={() => (setAtual(atual + 1), setFeedback(null))}
+                className="bg-green-500 dark:bg-green-500 border-olive-300 dark:border-slate-600 text-slate-50 dark:text-slate-800 border w-full flex items-center justify-center gap-2  p-4 mb-2 rounded-xl font-bold hover:bg-green-600 dark:hover:bg-green-400 hover:text-slate-50 dark:hover:text-slate-900 transition-colors hover:cursor-pointer"
+              >
+                Continuar <ArrowRight size={20} />
+              </button>
+            )}
+          </div>
 
-        {feedback && (
-          <button
-            onClick={() => (setAtual(atual + 1), setFeedback(null))}
-            className="bg-green-500 dark:bg-green-500 border-olive-300 dark:border-slate-600 text-slate-200 dark:text-slate-800 border w-full flex items-center justify-center gap-2  p-4 mb-2 rounded-xl font-bold hover:bg-green-600 dark:hover:bg-green-400 hover:text-slate-50 dark:hover:text-slate-900 transition-colors hover:cursor-pointer"
-          >
-            Continuar <ArrowRight size={20} />
-          </button>
-        )}
-        <span className="lg:text-xs text-slate-400 dark:text-slate-500 flex items-center justify-between">
-          <span className="text-green-500 dark:text-green-400 hover:cursor-pointer hover:text-green-700 dark:hover:text-green-300 transition-all">
-            <ChevronLeft size={32} onClick={() => questaoAnterior()} />
-          </span>
-          <div className="flex flex-col items-center gap-2">
-            <span>
-              Questão {atual + 1} de {quizData.questoes.length}
+          <div className="lg:text-xs text-slate-400 dark:text-slate-500 flex items-center justify-between mb-6">
+            <span className="text-green-500 dark:text-green-400 hover:cursor-pointer hover:text-green-700 dark:hover:text-green-300 transition-all">
+              <ChevronLeft size={32} onClick={() => questaoAnterior()} />
             </span>
-            <span>
-              Foram realizadas {questoesRealizadas} de{" "}
-              {quizData.questoes.length}
+            <div className="flex flex-col items-center gap-2">
+              <span>
+                Questão {atual + 1} de {quizData.questoes.length}
+              </span>
+              <span>
+                Foram realizadas {questoesRealizadas} de{" "}
+                {quizData.questoes.length}
+              </span>
+            </div>
+            <span className="text-green-500 dark:text-green-400 hover:cursor-pointer hover:text-green-700 dark:hover:text-green-300 transition-all">
+              <ChevronRight size={32} onClick={() => questaoProxima()} />
             </span>
           </div>
-          <span className="text-green-500 dark:text-green-400 hover:cursor-pointer hover:text-green-700 dark:hover:text-green-300 transition-all">
-            <ChevronRight size={32} onClick={() => questaoProxima()} />
-          </span>
-        </span>
+        </div>
       </div>
       <div>
         <Toaster position="bottom-right" />

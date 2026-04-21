@@ -1,3 +1,4 @@
+import { MarkdownSyntax } from "components/ui/MarkdownSyntax";
 import { useState } from "react";
 import { BaseQuestionProps } from "types/question";
 import {
@@ -103,38 +104,46 @@ export const QuestionSelector = ({
     }
   };
 
+  const isBlocked = !isCurrentUnlocked && !isAbleToAnswer;
+
   const componente = getQuestionComponent(data, onAnswer);
 
   if (!componente) return null;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col relative">
       <TimeToAnswer
         key={data.id}
         onTimerEnd={() => handleTimerEnd()}
         countTimer={!isCurrentUnlocked}
       />
 
+      <h2 className="text-xl font-bold text-gray-700 dark:text-slate-200 mb-4">
+        <MarkdownSyntax>{data.pergunta}</MarkdownSyntax>
+      </h2>
+
       {/* Container do componente */}
       <div className="relative group">
         {/* O Componente */}
         <div
           className={
-            !isAbleToAnswer || disabled
-              ? "opacity-50 grayscale transition-all"
-              : "transition-all"
+            isBlocked || disabled
+              ? "opacity-50 grayscale pointer-events-none"
+              : ""
           }
         >
           {componente}
         </div>
 
-        {!isAbleToAnswer ||
-          (disabled && (
-            <div
-              className="absolute inset-0 z-10 cursor-not-allowed bg-white/20 dark:bg-white/20"
-              onClick={(e) => e.stopPropagation()}
-            />
-          ))}
+        {(isBlocked || disabled) && (
+          <div
+            className="absolute inset-0 z-100 cursor-not-allowed bg-white/20"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          />
+        )}
       </div>
     </div>
   );

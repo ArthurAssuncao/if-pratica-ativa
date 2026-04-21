@@ -1,3 +1,4 @@
+import { ButtonConfirm } from "components/ui/ButtonConfirm";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { RotateCcw, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -63,7 +64,7 @@ export const RearrangeQuestion = createQuestion<
     };
 
     return (
-      <div className="flex flex-col gap-6 w-full">
+      <div className="flex flex-col gap-2 w-full">
         <div
           className="flex flex-col gap-2 min-h-37.5 p-4 rounded-xl border-2 border-dashed 
         bg-olive-50 dark:bg-slate-900 border-slate-300  dark:border-slate-700"
@@ -127,7 +128,7 @@ export const RearrangeQuestion = createQuestion<
         </div>
 
         {/* Opções Disponíveis */}
-        <div className="grid gap-2">
+        <div className="grid gap-4">
           <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
             Linhas disponíveis:
           </p>
@@ -154,20 +155,12 @@ export const RearrangeQuestion = createQuestion<
             )}
           </div>
         </div>
-        {/* Botão de Validação Final */}
-        <button
-          disabled={opcoesDisponiveis.length > 0}
+        <ButtonConfirm
           onClick={handleConfirmar}
-          className={`w-full p-3 rounded-lg font-bold transition-all cursor-pointer ${
-            opcoesDisponiveis.length === 0
-              ? "bg-green-600 text-white hover:bg-green-500 shadow-lg"
-              : "bg-slate-200 text-slate-400 dark:bg-slate-800 cursor-not-allowed"
-          }`}
-        >
-          {opcoesDisponiveis.length === 0
-            ? "Validar Algoritmo"
-            : `Faltam ${opcoesDisponiveis.length} linhas`}
-        </button>
+          disabled={!isAbleToAnswer || opcoesDisponiveis.length > 0}
+          disabledText={`Faltam ${opcoesDisponiveis.length} linhas`}
+          className="mt-4"
+        />
       </div>
     );
   },

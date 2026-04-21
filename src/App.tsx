@@ -54,7 +54,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
+    <div className="min-h-screen bg-green-50 dark:bg-slate-950 transition-colors">
       <Navbar onOpenMenu={() => setIsSidebarOpen((prev) => !prev)} />
       <div className="flex">
         <Sidebar
@@ -72,7 +72,7 @@ export default function App() {
           onFilterNivelChange={setFiltroNivel}
         />
 
-        <main className="flex-1 flex justify-center py-6 px-6">
+        <main className="flex-1 flex justify-center py-4 px-4 md:py-6 md:px-6 min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)] overflow-y-auto bg-slate-50 dark:bg-slate-950">
           {quizAtual ? (
             <Quiz
               quizData={quizAtual}

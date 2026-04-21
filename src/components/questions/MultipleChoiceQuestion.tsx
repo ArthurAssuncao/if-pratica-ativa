@@ -49,7 +49,11 @@ export const MultipleChoiceQuestion = createQuestion<
             </button>
           ))}
         </div>
-        <ButtonConfirm onClick={handleConfirmar} disabled={!isAbleToAnswer} />
+        <ButtonConfirm
+          onClick={handleConfirmar}
+          disabled={!isAbleToAnswer || optionSelected === ""}
+          disabledText="Escolha uma opção"
+        />
       </div>
     );
   },

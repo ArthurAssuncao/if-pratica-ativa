@@ -165,15 +165,9 @@ export const FlowchartNewQuestion = createQuestion<
 
     return (
       <div className="flex flex-col gap-6 w-full items-center">
-        <div className="w-full text-center mb-2">
-          <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">
-            {data.pergunta}
-          </h2>
-        </div>
-
         {data.codigo && (
-          <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-blue-300 border p-4 rounded-lg w-full flex flex-col gap-1">
-            <strong>Código base:</strong>
+          <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-blue-300 border p-2 md:p-4 rounded-lg w-full flex flex-col gap-1">
+            <strong className="pl-1">Código base:</strong>
             <SyntaxHighlighterCustom>{data.codigo}</SyntaxHighlighterCustom>
           </div>
         )}
@@ -190,7 +184,7 @@ export const FlowchartNewQuestion = createQuestion<
             zoomOnScroll={false}
             preventScrolling={true}
             nodesConnectable={false}
-            nodesDraggable={true}
+            nodesDraggable={false}
           />
         </div>
 

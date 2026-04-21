@@ -1,5 +1,5 @@
 import { Timer, Unlock } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface TimeToAnswerProps {
   segundos?: number;
@@ -12,56 +12,81 @@ export const TimeToAnswer = ({
   countTimer = true,
   onTimerEnd,
 }: TimeToAnswerProps) => {
-  // Se o countTimer for false, o tempo inicial já é zero
   const [tempoRestante, setTempoRestante] = useState(countTimer ? segundos : 0);
+  const [isHiding, setIsHiding] = useState(false);
+  const hasEnded = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Se não precisa contar ou já acabou, não faz nada
-    if (!countTimer || tempoRestante <= 0) {
-      if (tempoRestante <= 0) onTimerEnd();
+    if (!countTimer) {
+      if (!hasEnded.current) {
+        hasEnded.current = true;
+        setIsHiding(true);
+        setTimeout(() => onTimerEnd(), 800); // Aguarda animação terminar
+      }
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTempoRestante(0);
+      return;
+    }
+
+    if (tempoRestante <= 0) {
+      if (!hasEnded.current) {
+        hasEnded.current = true;
+        setIsHiding(true);
+        setTimeout(() => onTimerEnd(), 800); // Aguarda animação terminar
+      }
       return;
     }
 
     const interval = setInterval(() => {
       setTempoRestante((prev) => {
-        const novoTempo = prev - 1;
-        if (novoTempo <= 0) {
+        if (prev <= 1) {
           clearInterval(interval);
-          onTimerEnd(); // Avisa o pai no momento exato que zera
           return 0;
         }
-        return novoTempo;
+        return prev - 1;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-    // onTimerEnd não deve estar no array para evitar loops se o pai não usar useCallback
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countTimer, segundos]);
+  }, [countTimer, onTimerEnd, tempoRestante]);
 
   const liberado = tempoRestante <= 0;
 
   return (
     <div
-      className={`flex items-center gap-3 p-4 rounded-xl border transition-all duration-500 w-full max-w-md ${
-        liberado
-          ? "border-green-500 bg-green-500/10 text-green-700 dark:text-green-400"
-          : "border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-400"
+      ref={containerRef}
+      className={`overflow-hidden w-full transition-all duration-1000 ease-in-out mt-4 ${
+        isHiding
+          ? "max-h-0 opacity-0 mb-0 scale-y-0"
+          : "max-h-40 opacity-100 mb-4 scale-y-100"
       }`}
-    >
-      <div className="shrink-0">
-        {liberado ? (
-          <Unlock size={20} className="animate-bounce" />
-        ) : (
-          <Timer size={20} className="animate-pulse" />
-        )}
-      </div>
+      style={{
+        transformOrigin: "top",
 
-      <span className="font-medium text-sm lg:text-base">
-        {liberado
-          ? "Agora você pode responder à pergunta."
-          : `Aguarde ${tempoRestante}s para responder...`}
-      </span>
+        transitionDelay: isHiding ? "3000ms" : "0ms",
+      }}
+    >
+      <div
+        className={`flex items-center gap-3 p-4 rounded-xl border transition-colors duration-500 ${
+          liberado
+            ? "border-green-500 bg-green-500/10 text-green-700 dark:text-green-400"
+            : "border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-400"
+        }`}
+      >
+        <div className="shrink-0">
+          {liberado ? (
+            <Unlock size={20} className="animate-bounce" />
+          ) : (
+            <Timer size={20} className="animate-pulse" />
+          )}
+        </div>
+        <span className="font-medium text-sm lg:text-base">
+          {liberado
+            ? "Agora você pode responder à pergunta."
+            : `Aguarde ${tempoRestante}s para responder...`}
+        </span>
+      </div>
     </div>
   );
 };

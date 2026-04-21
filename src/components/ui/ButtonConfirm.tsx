@@ -3,6 +3,7 @@ interface ButtonConfirmProps {
   label?: string; // Opcional: define o texto (padrão "Confirmar")
   disabled?: boolean; // Opcional: desativa o botão
   className?: string; // Opcional: permite adicionar classes extras
+  disabledText?: string; // Opcional: texto que aparece quando o botão está desativado
 }
 
 export const ButtonConfirm = ({
@@ -10,6 +11,7 @@ export const ButtonConfirm = ({
   label = "Confirmar resposta",
   disabled = false,
   className = "",
+  disabledText,
 }: ButtonConfirmProps) => {
   return (
     <button
@@ -24,7 +26,7 @@ export const ButtonConfirm = ({
         ${className}
       `}
     >
-      {label}
+      {disabled && disabledText ? disabledText : label}
     </button>
   );
 };

@@ -1,3 +1,4 @@
+import { useIsMobile } from "hook/useIsMobile";
 import { useEffect, useState } from "react";
 import SyntaxHighlighter, {
   SyntaxHighlighterProps,
@@ -25,6 +26,7 @@ export const SyntaxHighlighterCustom = ({
       ? "dark"
       : "light";
   });
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // 1. Se o tema vier por props, ele tem prioridade total
@@ -50,6 +52,10 @@ export const SyntaxHighlighterCustom = ({
     return () => observer.disconnect();
   }, [theme]);
 
+  const textoReduzidoEspacos = Array.isArray(children)
+    ? children.map((t) => t.replaceAll("  ", " "))
+    : children?.replaceAll("  ", " ");
+
   return (
     <SyntaxHighlighter
       language="python"
@@ -60,14 +66,13 @@ export const SyntaxHighlighterCustom = ({
         padding: padding ? `${padding}px !important` : "0px !important",
       }}
       showLineNumbers={showLineNumbers}
-      showInlineLineNumbers={showLineNumbers}
       lineNumberContainerStyle={{
         borderRight: "1px solid #ccc",
       }}
-      wrapLongLines
+      wrapLines
       {...syntaxHighlighterProps}
     >
-      {children}
+      {isMobile ? textoReduzidoEspacos : children}
     </SyntaxHighlighter>
   );
 };

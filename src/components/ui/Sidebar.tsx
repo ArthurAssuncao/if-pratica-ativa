@@ -5,7 +5,9 @@ import {
   ChevronRight,
   Circle,
   Filter,
-  X, // Adicionado para o botão de fechar no mobile
+  Gauge,
+  Library,
+  Shapes, // Adicionado para o botão de fechar no mobile
   XCircle,
 } from "lucide-react";
 import React, { useState } from "react";
@@ -94,32 +96,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-49 w-80 max-w-full transition-transform duration-300 ease-in-out transform
+          fixed inset-y-16 left-0 z-49 w-80 max-w-full transition-transform duration-300 ease-in-out transform
           bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800
-          lg:translate-x-0 lg:static lg:h-[calc(100vh-64px)] overflow-y-auto
+          lg:translate-x-0 lg:static  h-[calc(100vh-64px)] max-h-screen overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {/* Header da Sidebar (Visível apenas no Mobile) */}
-        <div className="flex items-center justify-between p-4 md:hidden border-b dark:border-slate-800 mb-4">
-          <span className="font-bold text-slate-700 dark:text-slate-200">
-            Filtros e Temas
-          </span>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        <div className="p-4">
+        <div className="p-4 max-h-screen overflow-y-auto">
           {/* Filtros */}
-          <div className="mb-8">
+          <div className="mb-2">
             <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
               <Filter size={14} /> Filtros
             </h3>
-            <div className="space-y-4">
+            <div className="relative flex gap-4 flex-wrap">
               {" "}
               {/* Espaçamento entre os selects */}
               <Select
@@ -127,31 +116,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 value={filterTipo}
                 onChange={onFilterTipoChange}
                 label="Tipo"
+                onlyTextIcon
+                icon={Shapes}
               />
               <Select
                 options={opcoesConteudos}
                 value={filterConteudo}
                 onChange={onFilterConteudoChange}
                 label="Conteúdo"
+                onlyTextIcon
+                icon={Library}
               />
               <Select
                 options={opcoesNiveis}
                 value={filterNivel}
                 onChange={onFilterNivelChange}
                 label="Nível"
+                onlyTextIcon
+                icon={Gauge}
               />
             </div>
           </div>
 
           {/* Lista de Temas */}
-          <div>
-            <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
+          <div className="mt-4">
+            <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 mb-4 ">
               <BookOpen size={14} /> Temas
             </h3>
 
             <div className="space-y-2">
               {listaQuizes.map((item) => (
-                <div key={item.tema.id} className="rounded-lg overflow-hidden">
+                <div key={item.tema.id} className="rounded-lg overflow-y-auto">
                   <button
                     onClick={() => toggleTema(item.tema.id, item.tema)}
                     className={`text-slate-700 dark:text-blue-300 w-full flex items-center justify-between p-2 transition-colors lg:text-sm font-medium rounded-md hover:cursor-pointer ${
@@ -174,7 +169,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </button>
 
                   {expandidos.includes(item.tema.id) && (
-                    <div className="ml-4 mt-1 space-y-1 border-l border-slate-200 dark:border-slate-800 pl-2 animate-in slide-in-from-top-2">
+                    <div className="ml-4 mt-1 space-y-1 border-l border-slate-200 dark:border-slate-800 pl-2 animate-in slide-in-from-top-2 overflow-y-auto scroll-auto max-h-96">
                       {item.questoes.map((q) => (
                         <button
                           key={q.id}

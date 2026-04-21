@@ -1,38 +1,104 @@
 import { useTheme } from "hook/useTheme";
+import { ChevronDown } from "lucide-react"; // Opcional: para o ícone de seta
+import { useState } from "react";
+
+interface Theme {
+  id: "light" | "dark" | "system";
+  label: string;
+  icon: string;
+  iconMobile?: string;
+  color: string;
+}
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const themes: Theme[] = [
+    {
+      id: "light",
+      label: "Claro",
+      icon: "☀️",
+      color: "bg-white shadow dark:bg-slate-700",
+    },
+    { id: "dark", label: "Dark", icon: "🌙", color: "bg-slate-700 text-white" },
+    {
+      id: "system",
+      label: "Sistema",
+      icon: "💻",
+      iconMobile: "📱",
+      color: "bg-blue-500 text-white",
+    },
+  ];
+
+  const currentTheme = themes.find((t) => t.id === theme) || themes[2];
 
   return (
-    <div className="flex gap-2 p-2 bg-slate-100 dark:bg-slate-800 rounded-lg">
-      <button
-        onClick={() => setTheme("light")}
-        className={`px-3 py-1 rounded flex gap-1 items-center justify-center ${theme === "light" ? "bg-white shadow" : ""}`}
-      >
-        <span>☀️</span>
-        <span className="text-slate-700 dark:text-slate-200 hidden md:inline-flex">
-          Light
-        </span>
-      </button>
-      <button
-        onClick={() => setTheme("dark")}
-        className={`px-3 py-1 rounded flex gap-1 items-center justify-center ${theme === "dark" ? "bg-slate-700 text-white" : ""}`}
-      >
-        <span>🌙</span>
-        <span className="text-slate-700 dark:text-slate-200 hidden md:inline-flex">
-          Dark
-        </span>
-      </button>
-      <button
-        onClick={() => setTheme("system")}
-        className={`px-3 py-1 rounded flex gap-1 items-center justify-center ${theme === "system" ? "bg-blue-500 text-white" : ""}`}
-      >
-        <span className="hidden md:inline-flex">💻</span>
-        <span className="md:hidden inline-flex">📱</span>
-        <span className="text-slate-700 dark:text-slate-200 hidden md:inline-flex">
-          Sistema
-        </span>
-      </button>
+    <div className="relative">
+      {/* --- VERSÃO MOBILE (Dropdown) --- */}
+      <div className="md:hidden">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-2 p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700"
+        >
+          <span>{theme === "system" ? "📱" : currentTheme.icon}</span>
+          <span className="text-sm font-medium dark:text-white capitalize">
+            {currentTheme.label}
+          </span>
+          <ChevronDown
+            size={16}
+            className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+          />
+        </button>
+
+        {isOpen && (
+          <>
+            {/* Overlay para fechar ao clicar fora */}
+            <div
+              className="fixed inset-0 z-10"
+              onClick={() => setIsOpen(false)}
+            />
+
+            <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl shadow-xl z-20 overflow-hidden">
+              {themes.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => {
+                    setTheme(t.id);
+                    setIsOpen(false);
+                  }}
+                  className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                    theme === t.id
+                      ? "bg-slate-100 dark:bg-slate-700 font-bold"
+                      : "hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                  }`}
+                >
+                  <span>{t.id === "system" ? "📱" : t.icon}</span>
+                  <span className="dark:text-slate-200">{t.label}</span>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* --- VERSÃO DESKTOP (Botões lado a lado) --- */}
+      <div className="hidden md:flex gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border dark:border-slate-700">
+        {themes.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTheme(t.id)}
+            className={`px-3 py-1.5 rounded-lg flex gap-2 items-center transition-all text-sm font-medium ${
+              theme === t.id
+                ? `${t.color} shadow-sm`
+                : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+            }`}
+          >
+            <span>{t.icon}</span>
+            <span>{t.label}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
