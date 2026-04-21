@@ -1,6 +1,6 @@
 // Interface base compartilhada
 export interface BaseQuestionProps {
-  onAnswer: (correto: boolean) => void;
+  onAnswer: (correto: boolean, idQuestao: number) => void;
   isAbleToAnswer: boolean;
   disabled: boolean;
 }

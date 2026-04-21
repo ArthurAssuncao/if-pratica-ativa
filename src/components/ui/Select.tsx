@@ -51,7 +51,7 @@ export const Select = ({
       <div
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          ${onlyTextIcon && !isOpen ? "w-fit" : "w-full"} flex items-center justify-between p-3 rounded-xl border-2 transition-all duration-200
+          ${onlyTextIcon && !isOpen ? "w-fit" : "w-full"} flex items-center justify-between p-3 rounded-lg border-2 transition-all duration-200
           hover:cursor-pointer shadow-sm group
           bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600
           ${isOpen ? "ring-2 ring-olive-400 dark:ring-blue-500/50 border-transparent" : ""}
@@ -87,7 +87,7 @@ export const Select = ({
       {/* Lista de Opções (Dropdown) */}
       {isOpen && (
         <div
-          className="absolute z-50 w-full left-0 min-w-60 mt-2 rounded-xl border-2 shadow-xl animate-in fade-in zoom-in-95 duration-200
+          className="absolute z-50 w-full left-0 min-w-60 mt-2 rounded-lg border-2 shadow-xl animate-in fade-in zoom-in-95 duration-200
           text-slate-700 dark:text-blue-300 border-olive-400 dark:border-slate-700 bg-yellow-50 dark:bg-slate-800"
         >
           <div className="p-1 max-h-60 overflow-auto scrollbar-thin scrollbar-thumb-olive-300 dark:scrollbar-thumb-slate-600">

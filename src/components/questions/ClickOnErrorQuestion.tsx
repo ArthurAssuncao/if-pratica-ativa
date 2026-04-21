@@ -37,7 +37,7 @@ export const ClickOnErrorQuestion = createQuestion<
         data,
       });
 
-      onAnswer(acertou);
+      onAnswer(acertou, data.id);
     };
 
     return (

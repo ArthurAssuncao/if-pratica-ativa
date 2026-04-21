@@ -42,9 +42,9 @@ export function ThemeToggle() {
           className="flex items-center gap-2 p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700"
         >
           <span>{theme === "system" ? "📱" : currentTheme.icon}</span>
-          <span className="text-sm font-medium dark:text-white capitalize">
+          {/* <span className="text-sm font-medium dark:text-white capitalize">
             {currentTheme.label}
-          </span>
+          </span> */}
           <ChevronDown
             size={16}
             className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
@@ -59,7 +59,7 @@ export function ThemeToggle() {
               onClick={() => setIsOpen(false)}
             />
 
-            <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl shadow-xl z-20 overflow-hidden">
+            <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-lg shadow-xl z-20 overflow-hidden">
               {themes.map((t) => (
                 <button
                   key={t.id}
@@ -83,7 +83,7 @@ export function ThemeToggle() {
       </div>
 
       {/* --- VERSÃO DESKTOP (Botões lado a lado) --- */}
-      <div className="hidden md:flex gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border dark:border-slate-700">
+      <div className="hidden md:flex gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg border dark:border-slate-700">
         {themes.map((t) => (
           <button
             key={t.id}

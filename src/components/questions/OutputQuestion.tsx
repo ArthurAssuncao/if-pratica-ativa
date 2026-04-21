@@ -34,7 +34,7 @@ export const OutputQuestion = createQuestion<
         data,
       });
 
-      onAnswer(acertou);
+      onAnswer(acertou, data.id);
     };
 
     return (

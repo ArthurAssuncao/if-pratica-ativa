@@ -14,7 +14,7 @@ export const ResultScreen = ({
     </div>
     <button
       onClick={() => window.location.reload()}
-      className="flex items-center justify-center gap-2 w-full bg-slate-700 p-4 rounded-xl text-white hover:bg-slate-600 transition"
+      className="flex items-center justify-center gap-2 w-full bg-slate-700 p-4 rounded-lg text-white hover:bg-slate-600 transition"
     >
       <RotateCcw size={20} /> Reiniciar Desafio
     </button>

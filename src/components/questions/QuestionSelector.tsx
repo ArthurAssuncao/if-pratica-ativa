@@ -118,7 +118,7 @@ export const QuestionSelector = ({
         countTimer={!isCurrentUnlocked}
       />
 
-      <h2 className="text-xl font-bold text-gray-700 dark:text-slate-200 mb-4">
+      <h2 className=" font-bold text-gray-700 dark:text-slate-200 mb-4">
         <MarkdownSyntax>{data.pergunta}</MarkdownSyntax>
       </h2>
 

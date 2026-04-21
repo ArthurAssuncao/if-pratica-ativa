@@ -15,7 +15,7 @@ export const QuestionHint = ({
   return (
     <div
       className={`
-        flex items-center gap-2.5 px-3 py-2 rounded-lg 
+        w-full flex items-center gap-2.5 px-3 py-2 rounded-lg 
         bg-blue-50/50 dark:bg-blue-500/10 
         border border-blue-100 dark:border-blue-400/20
         transition-all duration-300 group 

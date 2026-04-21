@@ -56,7 +56,7 @@ export const OptionNode = memo(({ data }: NodeProps<OptionNodeData>) => {
       onKeyDown={(e) => e.key === "Enter" && data.onClick()}
       role="button"
       tabIndex={0}
-      className="min-w-20 max-w-34 px-4 py-2 shadow-lg rounded-xl border-2 border-olive-400 bg-yellow-50 dark:bg-blue-500/10 
+      className="min-w-20 max-w-34 px-4 py-2 shadow-lg rounded-lg border-2 border-olive-400 bg-yellow-50 dark:bg-blue-500/10 
                   hover:scale-105 transition-all cursor-pointer  text-center "
     >
       <Handle type="target" position={Position.Top} className="bg-olive-400!" />

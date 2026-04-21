@@ -64,6 +64,7 @@ export const SyntaxHighlighterCustom = ({
         background: "trasnparent",
         paddingLeft: "0px",
         padding: padding ? `${padding}px !important` : "0px !important",
+        fontSize: "0.9rem",
       }}
       showLineNumbers={showLineNumbers}
       lineNumberContainerStyle={{

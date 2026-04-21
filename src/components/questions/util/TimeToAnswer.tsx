@@ -68,7 +68,7 @@ export const TimeToAnswer = ({
       }}
     >
       <div
-        className={`flex items-center gap-3 p-4 rounded-xl border transition-colors duration-500 ${
+        className={`flex items-center gap-3 p-4 rounded-lg border transition-colors duration-500 ${
           liberado
             ? "border-green-500 bg-green-500/10 text-green-700 dark:text-green-400"
             : "border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-400"

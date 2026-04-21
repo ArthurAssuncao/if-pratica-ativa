@@ -36,13 +36,13 @@ export const FillQuestion = createQuestion<
         data,
       });
 
-      onAnswer(acertou);
+      onAnswer(acertou, data.id);
     };
 
     return (
       <div className="flex flex-col gap-4">
-        <div className="bg-olive-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 p-6 rounded-lg font-mono flex flex-col">
-          <SyntaxHighlighterCustom showLineNumbers={false}>
+        <div className="bg-olive-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 p-4 rounded-lg font-mono flex flex-col">
+          <SyntaxHighlighterCustom showLineNumbers={true}>
             {data.codigo || ""}
           </SyntaxHighlighterCustom>
         </div>

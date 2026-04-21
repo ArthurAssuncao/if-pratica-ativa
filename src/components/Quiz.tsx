@@ -36,9 +36,11 @@ interface QuizProps {
 export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
   const [pontos, setPontos] = useState(0);
   const [feedback, setFeedback] = useState<"correto" | "errado" | null>(null);
-  const [questoesRealizadas, setQuestoesRealizadas] = useState<number>(0);
+  const [questoesRealizadas, setQuestoesRealizadas] = useState<Set<number>>(
+    new Set(),
+  );
 
-  const fim = questoesRealizadas === quizData.questoes.length;
+  const fim = questoesRealizadas.size === quizData.questoes.length;
 
   const [questoes] = useState<QuestionTypes[]>(() => {
     if (tipo === "automatico") {
@@ -92,7 +94,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
     }
   };
 
-  const validateAnswer = (acertou: boolean) => {
+  const validateAnswer = (acertou: boolean, idQuestao: number) => {
     if (!questoes) return;
 
     if (acertou) {
@@ -101,7 +103,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
     } else {
       setFeedback("errado");
     }
-    setQuestoesRealizadas((q) => q + 1);
+    setQuestoesRealizadas((prev) => new Set([...prev, idQuestao]));
   };
 
   if (questoes && fim)
@@ -122,7 +124,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
 
   return (
     <div className="w-full h-full p-0 lg:p-6 flex flex-col items-center">
-      <ProgressBar atual={questoesRealizadas} total={questoes.length} />
+      <ProgressBar atual={questoesRealizadas.size} total={questoes.length} />
 
       <div
         className="flex-1 w-full max-w-2xl p-4 lg:p-8 rounded-2xl shadow-xl border transition-colors duration-300
@@ -131,10 +133,10 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
       >
         <header className="flex justify-between items-center">
           <div className="flex gap-2">
-            <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase">
+            <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
               {quizData.tema.nome}
             </span>
-            <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-widest hidden lg:visible">
+            <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest hidden md:visible">
               {getTipoQuestaoPorExtenso(questoes[atual].tipo)}
             </span>
           </div>
@@ -163,7 +165,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
             {feedback && (
               <button
                 onClick={() => (setAtual(atual + 1), setFeedback(null))}
-                className="bg-green-500 dark:bg-green-500 border-olive-300 dark:border-slate-600 text-slate-50 dark:text-slate-800 border w-full flex items-center justify-center gap-2  p-4 mb-2 rounded-xl font-bold hover:bg-green-600 dark:hover:bg-green-400 hover:text-slate-50 dark:hover:text-slate-900 transition-colors hover:cursor-pointer"
+                className="bg-green-500 dark:bg-green-500 border-olive-300 dark:border-slate-600 text-slate-50 dark:text-slate-800 border w-full flex items-center justify-center gap-2  p-4 mb-2 rounded-lg font-bold hover:bg-green-600 dark:hover:bg-green-400 hover:text-slate-50 dark:hover:text-slate-900 transition-colors hover:cursor-pointer"
               >
                 Continuar <ArrowRight size={20} />
               </button>

@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 
 import { ButtonConfirm } from "components/ui/ButtonConfirm";
 import { nodeTypes } from "components/ui/FlowNodes";
+import { QuestionHint } from "components/ui/QuestionHint";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { BaseQuestionProps } from "types/question";
 import { QuestionFlowchartnNew } from "types/quiz";
@@ -55,7 +56,7 @@ export const FlowchartNewQuestion = createQuestion<
         data,
       });
 
-      onAnswer(acertou);
+      onAnswer(acertou, data.id);
     }, [onAnswer, data, isAbleToAnswer, nodeSelected, validateAnswer]);
 
     // Construção do fluxo com auto-layout
@@ -90,7 +91,7 @@ export const FlowchartNewQuestion = createQuestion<
                 : undefined,
           },
           className: isSelected
-            ? "ring-4 ring-green-500 rounded-xl transition-all"
+            ? "ring-4 ring-green-500 rounded-lg transition-all"
             : "transition-all",
         });
 
@@ -164,11 +165,13 @@ export const FlowchartNewQuestion = createQuestion<
     }, [isAbleToAnswer, setNodes, handleClick]);
 
     return (
-      <div className="flex flex-col gap-6 w-full items-center">
+      <div className="flex flex-col gap-4 w-full items-center">
         {data.codigo && (
-          <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-blue-300 border p-2 md:p-4 rounded-lg w-full flex flex-col gap-1">
-            <strong className="pl-1">Código base:</strong>
-            <SyntaxHighlighterCustom>{data.codigo}</SyntaxHighlighterCustom>
+          <div className="flex flex-col gap-2 w-full">
+            <strong className="text-sm">Código base:</strong>
+            <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-blue-300 border p-2 md:p-4 rounded-lg w-full flex flex-col gap-1">
+              <SyntaxHighlighterCustom>{data.codigo}</SyntaxHighlighterCustom>
+            </div>
           </div>
         )}
 
@@ -187,6 +190,10 @@ export const FlowchartNewQuestion = createQuestion<
             nodesDraggable={false}
           />
         </div>
+        <QuestionHint>
+          Para visualizar melhor, dê zoom no fluxo. Clique no retângulo que
+          representa a resposta correta.
+        </QuestionHint>
 
         <ButtonConfirm
           onClick={handleConfirmar}

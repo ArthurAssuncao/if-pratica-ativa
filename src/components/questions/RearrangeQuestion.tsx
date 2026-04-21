@@ -60,13 +60,13 @@ export const RearrangeQuestion = createQuestion<
         data,
       });
 
-      onAnswer(acertou);
+      onAnswer(acertou, data.id);
     };
 
     return (
       <div className="flex flex-col gap-2 w-full">
         <div
-          className="flex flex-col gap-2 min-h-37.5 p-4 rounded-xl border-2 border-dashed 
+          className="flex flex-col gap-2 min-h-37.5 p-2 md:p-4 rounded-lg border-2 border-dashed 
         bg-olive-50 dark:bg-slate-900 border-slate-300  dark:border-slate-700"
         >
           {selecionadas.length === 0 && (
@@ -89,7 +89,7 @@ export const RearrangeQuestion = createQuestion<
                 <div className="flex items-center">
                   {" "}
                   {/* Adicionado flex para alinhar o index com o código */}
-                  <span className="text-[12px] opacity-50 w-4 mr-2 font-mono">
+                  <span className="text-sm opacity-50 w-4 font-mono border-r border-slate-700 mr-2">
                     {index + 1}
                   </span>
                   {/* Indentação Dinâmica */}
@@ -149,7 +149,7 @@ export const RearrangeQuestion = createQuestion<
                 </button>
               ))}
             {opcoesDisponiveis.length === 0 && (
-              <p className="text-xs italic text-slate-700 dark:text-blue-300">
+              <p className="text-sm italic text-slate-700 dark:text-blue-300">
                 Nenhuma linha disponível
               </p>
             )}

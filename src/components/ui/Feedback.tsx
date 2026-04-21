@@ -7,7 +7,7 @@ interface FeedbackProps {
 
 export const Feedback = ({ status, respostaCorreta }: FeedbackProps) => (
   <div
-    className={`p-6 rounded-xl flex items-center gap-4 animate-in fade-in zoom-in duration-300 ${
+    className={`p-6 rounded-lg flex items-center gap-4 animate-in fade-in zoom-in duration-300 ${
       status === "correto"
         ? "bg-green-500/10 border border-green-500"
         : "bg-red-500/10 border border-red-500"
