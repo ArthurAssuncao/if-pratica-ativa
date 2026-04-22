@@ -14,7 +14,7 @@ import { nodeTypes } from "components/ui/FlowNodes";
 import { QuestionHint } from "components/ui/QuestionHint";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { BaseQuestionProps } from "types/question";
-import { QuestionFlowchartnNew } from "types/quiz";
+import { QuestionFlowchartnNew } from "types/study";
 import { createQuestion } from "./QuestionFactory";
 
 interface FlowchartNewQuestionProps extends BaseQuestionProps {
@@ -26,7 +26,7 @@ export const FlowchartNewQuestion = createQuestion<
   QuestionFlowchartnNew
 >({
   validateAnswer: ({ resposta, data }) => {
-    return resposta === data.respostaCorreta.toString();
+    return resposta === data.correctAnswer.toString();
   },
 
   Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
@@ -74,20 +74,20 @@ export const FlowchartNewQuestion = createQuestion<
         if (processados.has(noId)) return;
         processados.add(noId);
 
-        const noInfo = data.nos?.find((n) => n.id === noId);
+        const noInfo = data.nodes?.find((n) => n.id === noId);
         if (!noInfo) return;
 
-        const isSelected = nodeSelected === noInfo.texto;
+        const isSelected = nodeSelected === noInfo.text;
 
         initialNodes.push({
           id: noId,
-          type: noInfo.tipo === "decisao" ? "decisao" : "opcao",
+          type: noInfo.type === "decisao" ? "decisao" : "opcao",
           position: { x, y },
           data: {
-            label: noInfo.texto,
+            label: noInfo.text,
             onClick:
-              noInfo.tipo === "terminal"
-                ? () => handleClick(noInfo.texto || "")
+              noInfo.type === "terminal"
+                ? () => handleClick(noInfo.text || "")
                 : undefined,
           },
           className: isSelected
@@ -96,7 +96,7 @@ export const FlowchartNewQuestion = createQuestion<
         });
 
         const conexoesSaindo =
-          data.conexoes?.filter((c) => c.de === noId) || [];
+          data.conections?.filter((c) => c.from === noId) || [];
 
         conexoesSaindo.forEach((conexao) => {
           let multiplicadorX = 0;
@@ -107,12 +107,12 @@ export const FlowchartNewQuestion = createQuestion<
           const novoX = x + multiplicadorX * espacamentoX;
           const novoY = y + espacamentoY;
 
-          const lineEdgeId = `e-${noId}-${conexao.para}`;
+          const lineEdgeId = `e-${noId}-${conexao.to}`;
 
           initialEdges.push({
             id: lineEdgeId,
             source: noId,
-            target: conexao.para,
+            target: conexao.to,
             label: conexao.label,
             type: "smoothstep",
             // O targetHandle por padrão é o topo se você não definir IDs nos targets
@@ -134,12 +134,12 @@ export const FlowchartNewQuestion = createQuestion<
             style: { stroke: "#94a3b8", strokeWidth: 2 },
           });
 
-          posicionarNo(conexao.para, novoX, novoY);
+          posicionarNo(conexao.to, novoX, novoY);
         });
       };
 
-      if (data.raiz) {
-        posicionarNo(data.raiz, centroX, 50);
+      if (data.root) {
+        posicionarNo(data.root, centroX, 50);
       }
 
       setNodes(initialNodes);
@@ -166,11 +166,11 @@ export const FlowchartNewQuestion = createQuestion<
 
     return (
       <div className="flex flex-col gap-4 w-full items-center">
-        {data.codigo && (
+        {data.code && (
           <div className="flex flex-col gap-2 w-full">
             <strong className="text-sm">Código base:</strong>
             <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-blue-300 border p-2 md:p-4 rounded-lg w-full flex flex-col gap-1">
-              <SyntaxHighlighterCustom>{data.codigo}</SyntaxHighlighterCustom>
+              <SyntaxHighlighterCustom>{data.code}</SyntaxHighlighterCustom>
             </div>
           </div>
         )}

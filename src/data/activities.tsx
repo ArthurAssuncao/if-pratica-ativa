@@ -1,0 +1,160 @@
+import { Icon } from "@iconify/react";
+import { Discipline, Question } from "types/study";
+
+const questions: Question[] = [
+  {
+    id: 1,
+    type: "multipla_escolha",
+    level: "iniciante",
+    questionText: "Qual é o tipo de dado da variável `x = [1, 2, 3]`?",
+    explanation: "",
+    correctAnswer: "list (lista)",
+    info: { status: "pendente", attemptCount: 0 },
+    options: [
+      "tuple (tupla)",
+      "set (conjunto)",
+      "list (lista)",
+      "dictionary (dicionário)",
+    ],
+  },
+  {
+    id: 2,
+    type: "verdadeiro_falso",
+    level: "iniciante",
+    questionText: "Em Python, a indentação é opcional.",
+    explanation: "",
+    correctAnswer: "Falso",
+    info: { status: "pendente", attemptCount: 0 },
+    options: ["Verdadeiro", "Falso"],
+  },
+  {
+    id: 3,
+    type: "lacuna",
+    level: "iniciante",
+    questionText: "Complete o código para iterar de 0 a 4:",
+    explanation: "",
+    correctAnswer: "range",
+    info: { status: "pendente", attemptCount: 0 },
+    code: "for i in _______(5):\n    print(i)",
+  },
+  {
+    id: 4,
+    type: "predicao",
+    level: "iniciante",
+    questionText: "Qual será a saída deste código?",
+    explanation: "",
+    correctAnswer: "2",
+    info: { status: "pendente", attemptCount: 0 },
+    code: "x = 10\ny = 5\nprint(x // y)",
+  },
+  {
+    id: 5,
+    type: "ordenacao",
+    level: "iniciante",
+    questionText: "Ordena as linhas para criar um loop que imprime de 0 a 2:",
+    explanation: "",
+    correctAnswer: "for i in range(3):\nprint(i)",
+    info: { status: "pendente", attemptCount: 0 },
+    rows: [
+      { text: "print(i)", identationLevel: 1 },
+      { text: "for i in range(3):", identationLevel: 0 },
+    ],
+  },
+  {
+    id: 6,
+    type: "clique_erro",
+    level: "iniciante",
+    questionText: "Onde está o erro de sintaxe?",
+    explanation: "",
+    correctAnswer: "0",
+    info: { status: "pendente", attemptCount: 0 },
+    rows: [
+      { text: "def somar(a)", identationLevel: 0 },
+      { text: "    return a + b", identationLevel: 1 },
+      { text: "print(somar(2,3))", identationLevel: 0 },
+    ],
+  },
+  {
+    id: 10,
+    type: "fluxograma_novo",
+    level: "iniciante",
+    questionText: "Se um aluno tirar nota 5.5, qual será o caminho percorrido?",
+    explanation: "",
+    correctAnswer: "Aluno em Recuperação",
+    info: { status: "pendente", attemptCount: 0 },
+    code: "nota = float(input('Nota: '))",
+    root: "decisao_1",
+    nodes: [
+      { id: "decisao_1", type: "decisao", text: "if nota >= 7:" },
+      { id: "decisao_2", type: "decisao", text: "elif nota >= 5:" },
+      { id: "aprovado", type: "terminal", text: "Aluno Aprovado" },
+      {
+        id: "recuperacao",
+        type: "terminal",
+        text: "Aluno em Recuperação",
+        isCorrect: true,
+      },
+      { id: "reprovado", type: "terminal", text: "Aluno Reprovado" },
+    ],
+    conections: [
+      { from: "decisao_1", to: "aprovado", label: "Sim" },
+      { from: "decisao_1", to: "decisao_2", label: "Não" },
+      { from: "decisao_2", to: "recuperacao", label: "Sim" },
+      { from: "decisao_2", to: "reprovado", label: "Não" },
+    ],
+  },
+];
+
+export const DISCIPLINES: Discipline[] = [
+  {
+    id: "python",
+    name: "Programação em Python",
+    icon: <Icon icon="devicon:python-wordmark" />,
+    contents: [
+      {
+        id: "geral",
+        name: "Conteúdos gerais",
+        level: "iniciante",
+        questions: questions,
+      },
+      {
+        id: "tipos-basicos",
+        name: "Tipos básicos, variáveis e operadores",
+        level: "iniciante",
+      },
+      { id: "entrada-saida", name: "Entrada e saída", level: "iniciante" },
+      {
+        id: "condicionais",
+        name: "Estruturas Condicionais",
+        level: "iniciante",
+      },
+      { id: "repeticao", name: "Estruturas de Repetição", level: "iniciante" },
+      { id: "funcoes", name: "Funções", level: "iniciante" },
+      {
+        id: "estruturas-dados",
+        name: "Estruturas de Dados",
+        level: "iniciante",
+      },
+    ],
+  },
+  {
+    id: "informatica",
+    name: "Informática Básica",
+    icon: <Icon icon="noto:desktop-computer" />,
+    contents: [
+      { id: "hardware", name: "Hardware", level: "iniciante" },
+      { id: "software", name: "Software", level: "iniciante" },
+      {
+        id: "arquitetura-de-computadores",
+        name: "Arquitetura de Computadores",
+        level: "iniciante",
+      },
+      { id: "redes", name: "Redes", level: "iniciante" },
+      {
+        id: "redes-de-computadores",
+        name: "Redes de Computadores",
+        level: "iniciante",
+      },
+    ],
+  },
+];

@@ -4,7 +4,7 @@ import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import React from "react";
 import toast from "react-hot-toast";
 import { BaseQuestionProps } from "types/question";
-import { QuestionClickOnError } from "types/quiz";
+import { QuestionClickOnError } from "types/study";
 import { createQuestion } from "./QuestionFactory";
 
 interface ClickOnErrorQuestionProps extends BaseQuestionProps {
@@ -16,7 +16,7 @@ export const ClickOnErrorQuestion = createQuestion<
   QuestionClickOnError
 >({
   validateAnswer: ({ resposta, data }) => {
-    return resposta === data.respostaCorreta.toString();
+    return resposta === data.correctAnswer.toString();
   },
 
   Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
@@ -44,7 +44,7 @@ export const ClickOnErrorQuestion = createQuestion<
       <div className="flex flex-col gap-4">
         <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 rounded-lg font-mono border">
           <div className="bg-yellow-50 dark:bg-blue-500/10 flex flex-col gap-2 p-4">
-            {data.linhas?.map((linha, index) => (
+            {data.rows?.map((linha, index) => (
               <button
                 key={index}
                 onClick={() => handleClick(index)}
@@ -64,7 +64,7 @@ export const ClickOnErrorQuestion = createQuestion<
                   customStyle={{}}
                   className="group-hover:text-white"
                 >
-                  {linha.texto}
+                  {linha.text}
                 </SyntaxHighlighterCustom>
               </button>
             ))}

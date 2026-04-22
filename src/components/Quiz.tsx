@@ -1,21 +1,7 @@
-import {
-  ArrowRight,
-  Badge,
-  BadgeCheck,
-  BadgeX,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
-import {
-  Nivel,
-  QuestionTypes,
-  QuizData,
-  StatusQuestao,
-  TipoQuestao,
-  TipoQuiz,
-} from "types/quiz";
+import { Nivel, TipoQuestao } from "types/quiz";
 
 // Importando os componentes extraídos
 import { QuestionSelector } from "components/questions/QuestionSelector";
@@ -23,43 +9,24 @@ import { Feedback } from "components/ui/Feedback";
 import { ProgressBar } from "components/ui/ProgressBar";
 import { ResultScreen } from "components/ui/ResultScreen";
 import { Toaster } from "react-hot-toast";
+import { Quiz } from "types/study";
 import { getTipoQuestaoPorExtenso } from "util/Quiz";
 
 interface QuizProps {
-  quizData: QuizData;
-  nivel?: Nivel;
-  tipoQuestao?: TipoQuestao;
-  tipo: TipoQuiz;
-  idQuestaoAtual?: number;
+  quiz: Quiz;
+  level?: Nivel;
+  questionType?: TipoQuestao;
 }
 
-export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
+export default function Quiz({ quiz }: QuizProps) {
   const [pontos, setPontos] = useState(0);
   const [feedback, setFeedback] = useState<"correto" | "errado" | null>(null);
   const [questoesRealizadas, setQuestoesRealizadas] = useState<Set<number>>(
     new Set(),
   );
+  const [atual, setAtual] = useState(0);
 
-  const fim = questoesRealizadas.size === quizData.questoes.length;
-
-  const [questoes] = useState<QuestionTypes[]>(() => {
-    if (tipo === "automatico") {
-      return [...quizData.questoes].sort(() => 0.5 - Math.random()).slice(0, 5);
-    }
-    return quizData.questoes;
-  });
-  const indexQuestao = questoes.findIndex((q) => q.id === idQuestaoAtual);
-
-  const [atual, setAtual] = useState(indexQuestao > -1 ? indexQuestao : 0);
-
-  useEffect(() => {
-    const novoIndex = questoes.findIndex((q) => q.id === idQuestaoAtual);
-    if (novoIndex > -1) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAtual(novoIndex);
-      setFeedback(null);
-    }
-  }, [idQuestaoAtual, questoes]);
+  const fim = questoesRealizadas.size === quiz.questions.length;
 
   const questaoAnterior = () => {
     if (atual > 0) {
@@ -67,12 +34,12 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
       setFeedback(null);
       return;
     }
-    setAtual(quizData.questoes.length - 1);
+    setAtual(quiz.questions.length - 1);
     setFeedback(null);
   };
 
   const questaoProxima = () => {
-    if (atual < quizData.questoes.length - 1) {
+    if (atual < quiz.questions.length - 1) {
       setAtual(atual + 1);
       setFeedback(null);
       return;
@@ -81,21 +48,21 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
     setFeedback(null);
   };
 
-  const defineIconStatus = (status: StatusQuestao) => {
-    switch (status) {
-      case "correta":
-        return <BadgeCheck size={24} className="text-green-500" />;
-      case "errada":
-        return <BadgeX size={24} className="text-red-500" />;
-      default:
-        return (
-          <Badge size={24} className="text-slate-200 dark:text-slate-600" />
-        );
-    }
-  };
+  // const defineIconStatus = (status: StatusQuestao) => {
+  //   switch (status) {
+  //     case "correta":
+  //       return <BadgeCheck size={24} className="text-green-500" />;
+  //     case "errada":
+  //       return <BadgeX size={24} className="text-red-500" />;
+  //     default:
+  //       return (
+  //         <Badge size={24} className="text-slate-200 dark:text-slate-600" />
+  //       );
+  //   }
+  // };
 
   const validateAnswer = (acertou: boolean, idQuestao: number) => {
-    if (!questoes) return;
+    if (!quiz.questions) return;
 
     if (acertou) {
       setFeedback("correto");
@@ -106,10 +73,10 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
     setQuestoesRealizadas((prev) => new Set([...prev, idQuestao]));
   };
 
-  if (questoes && fim)
-    return <ResultScreen pontos={pontos} total={questoes.length} />;
+  if (quiz.questions && fim)
+    return <ResultScreen pontos={pontos} total={quiz.questions.length} />;
 
-  if (!questoes)
+  if (!quiz.questions)
     return (
       <div className="min-h-screen p-6 flex flex-col items-center">
         <div
@@ -124,7 +91,10 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
 
   return (
     <div className="w-full h-full p-0 lg:p-6 flex flex-col items-center">
-      <ProgressBar atual={questoesRealizadas.size} total={questoes.length} />
+      <ProgressBar
+        atual={questoesRealizadas.size}
+        total={quiz.questions.length}
+      />
 
       <div
         className="flex-1 w-full max-w-2xl p-4 lg:p-8 rounded-2xl shadow-xl border transition-colors duration-300
@@ -134,24 +104,20 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
         <header className="flex justify-between items-center">
           <div className="flex gap-2">
             <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
-              {quizData.tema.nome}
+              {quiz.contentName}
             </span>
             <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest hidden md:visible">
-              {getTipoQuestaoPorExtenso(questoes[atual].tipo)}
+              {getTipoQuestaoPorExtenso(quiz.questions[atual].type)}
             </span>
           </div>
 
-          <span className="text-slate-400 dark:text-slate-500 font-mono">
-            {defineIconStatus(
-              questoes[atual].infoQuestao?.status || "pendente",
-            )}
-          </span>
+          <span className="text-slate-400 dark:text-slate-500 font-mono"></span>
         </header>
 
         <div className="mb-4 flex flex-col gap-4 justify-between min-h-full">
           <div className="flex flex-col gap-4">
             <QuestionSelector
-              data={questoes[atual]}
+              data={quiz.questions[atual]}
               onAnswer={validateAnswer}
               isAbleToAnswer={false}
               disabled={feedback !== null}
@@ -159,7 +125,7 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
             {feedback && (
               <Feedback
                 status={feedback}
-                respostaCorreta={questoes[atual].respostaCorreta}
+                respostaCorreta={quiz.questions[atual].correctAnswer}
               />
             )}
             {feedback && (
@@ -178,11 +144,10 @@ export default function Quiz({ quizData, tipo, idQuestaoAtual }: QuizProps) {
             </span>
             <div className="flex flex-col items-center gap-2">
               <span>
-                Questão {atual + 1} de {quizData.questoes.length}
+                Questão {atual + 1} de {quiz.questions.length}
               </span>
               <span>
-                Foram realizadas {questoesRealizadas} de{" "}
-                {quizData.questoes.length}
+                Foram realizadas {questoesRealizadas} de {quiz.questions.length}
               </span>
             </div>
             <span className="text-green-500 dark:text-green-400 hover:cursor-pointer hover:text-green-700 dark:hover:text-green-300 transition-all">

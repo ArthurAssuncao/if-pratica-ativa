@@ -125,12 +125,24 @@ export const DISCIPLINES: Discipline[] = [
     name: "Programação em Python",
     icon: <Icon icon="devicon:python-wordmark" />,
     contents: [
-      { id: "tipos-basicos", name: "Tipos básicos, variáveis e operadores" },
-      { id: "entrada-saida", name: "Entrada e saída" },
-      { id: "condicionais", name: "Estruturas Condicionais" },
-      { id: "repeticao", name: "Estruturas de Repetição" },
-      { id: "funcoes", name: "Funções" },
-      { id: "estruturas-dados", name: "Estruturas de Dados" },
+      {
+        id: "tipos-basicos",
+        name: "Tipos básicos, variáveis e operadores",
+        level: "iniciante",
+      },
+      { id: "entrada-saida", name: "Entrada e saída", level: "iniciante" },
+      {
+        id: "condicionais",
+        name: "Estruturas Condicionais",
+        level: "iniciante",
+      },
+      { id: "repeticao", name: "Estruturas de Repetição", level: "iniciante" },
+      { id: "funcoes", name: "Funções", level: "iniciante" },
+      {
+        id: "estruturas-dados",
+        name: "Estruturas de Dados",
+        level: "iniciante",
+      },
     ],
   },
   {
@@ -138,14 +150,19 @@ export const DISCIPLINES: Discipline[] = [
     name: "Informática Básica",
     icon: <Icon icon="noto:desktop-computer" />,
     contents: [
-      { id: "hardware", name: "Hardware" },
-      { id: "software", name: "Software" },
+      { id: "hardware", name: "Hardware", level: "iniciante" },
+      { id: "software", name: "Software", level: "iniciante" },
       {
         id: "arquitetura-de-computadores",
         name: "Arquitetura de Computadores",
+        level: "iniciante",
       },
-      { id: "redes", name: "Redes" },
-      { id: "redes-de-computadores", name: "Redes de Computadores" },
+      { id: "redes", name: "Redes", level: "iniciante" },
+      {
+        id: "redes-de-computadores",
+        name: "Redes de Computadores",
+        level: "iniciante",
+      },
     ],
   },
 ];

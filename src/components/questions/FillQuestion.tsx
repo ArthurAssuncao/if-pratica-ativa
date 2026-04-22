@@ -4,7 +4,7 @@ import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { BaseQuestionProps } from "types/question";
-import { QuestionFillQuestion } from "types/quiz";
+import { QuestionFillQuestion } from "types/study";
 import { ajustarResposta } from "util/Quiz";
 import { createQuestion } from "./QuestionFactory";
 
@@ -18,7 +18,7 @@ export const FillQuestion = createQuestion<
 >({
   validateAnswer: ({ resposta, data }) => {
     const isRespostaCorreta =
-      ajustarResposta(data.respostaCorreta) === ajustarResposta(resposta);
+      ajustarResposta(data.correctAnswer) === ajustarResposta(resposta);
     return isRespostaCorreta;
   },
 
@@ -43,7 +43,7 @@ export const FillQuestion = createQuestion<
       <div className="flex flex-col gap-4">
         <div className="bg-olive-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 p-4 rounded-lg font-mono flex flex-col">
           <SyntaxHighlighterCustom showLineNumbers={true}>
-            {data.codigo || ""}
+            {data.code || ""}
           </SyntaxHighlighterCustom>
         </div>
         <input

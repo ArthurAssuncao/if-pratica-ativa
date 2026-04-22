@@ -4,7 +4,7 @@ import { RotateCcw, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { BaseQuestionProps } from "types/question";
-import { OrdenacaoLinha, QuestionRearrange } from "types/quiz";
+import { QuestionRearrange, RearrangeRow } from "types/study";
 import { createQuestion } from "./QuestionFactory";
 
 interface RearrangeQuestionProps extends BaseQuestionProps {
@@ -16,24 +16,24 @@ export const RearrangeQuestion = createQuestion<
   QuestionRearrange
 >({
   validateAnswer: ({ resposta, data }) => {
-    return resposta === data.respostaCorreta.toString();
+    return resposta === data.correctAnswer.toString();
   },
 
   Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
     // Guardamos o objeto completo para ter acesso à indentação na renderização
-    const [selecionadas, setSelecionadas] = useState<OrdenacaoLinha[]>([]);
+    const [selecionadas, setSelecionadas] = useState<RearrangeRow[]>([]);
 
     // Filtramos as opções comparando o texto ou ID para saber o que sobra
     const opcoesDisponiveis = useMemo(() => {
       return (
-        data.linhas?.filter(
+        data.rows?.filter(
           (linhaOriginal) =>
-            !selecionadas.some((s) => s.texto === linhaOriginal.texto),
+            !selecionadas.some((s) => s.text === linhaOriginal.text),
         ) || []
       );
-    }, [data.linhas, selecionadas]);
+    }, [data.rows, selecionadas]);
 
-    const adicionarLinha = (linha: OrdenacaoLinha) => {
+    const adicionarLinha = (linha: RearrangeRow) => {
       setSelecionadas((prev) => [...prev, linha]);
     };
 
@@ -53,7 +53,7 @@ export const RearrangeQuestion = createQuestion<
         return;
       }
 
-      const respostaFinal = selecionadas.map((s) => s.texto).join("\n");
+      const respostaFinal = selecionadas.map((s) => s.text).join("\n");
 
       const acertou = validateAnswer({
         resposta: respostaFinal,
@@ -77,7 +77,7 @@ export const RearrangeQuestion = createQuestion<
           {selecionadas.map((linha, index) => {
             // 1. Definição da lógica (precisa estar dentro das chaves)
             const linhaIdentada =
-              " ".repeat((linha.identationLevel || 0) * 4) + linha.texto;
+              " ".repeat((linha.identationLevel || 0) * 4) + linha.text;
 
             // 2. OBRIGATÓRIO: usar o return para renderizar o componente
             return (
@@ -144,7 +144,7 @@ export const RearrangeQuestion = createQuestion<
                 dark:bg-slate-800 dark:border-slate-700 dark:hover:border-blue-400 "
                 >
                   <SyntaxHighlighterCustom showLineNumbers={false}>
-                    {linha.texto}
+                    {linha.text}
                   </SyntaxHighlighterCustom>
                 </button>
               ))}

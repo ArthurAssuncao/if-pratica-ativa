@@ -2,14 +2,14 @@ import { MarkdownSyntax } from "components/ui/MarkdownSyntax";
 import { useState } from "react";
 import { BaseQuestionProps } from "types/question";
 import {
+  Question,
   QuestionClickOnError,
   QuestionFillQuestion,
   QuestionFlowchartnNew,
   QuestionMultipleChoice,
   QuestionOutput,
   QuestionRearrange,
-  QuestionTypes,
-} from "types/quiz";
+} from "types/study";
 import { ClickOnErrorQuestion } from "./ClickOnErrorQuestion";
 import { FillQuestion } from "./FillQuestion";
 import { FlowchartNewQuestion } from "./FlowchartNewQuestion";
@@ -19,7 +19,7 @@ import { RearrangeQuestion } from "./RearrangeQuestion";
 import { TimeToAnswer } from "./util/TimeToAnswer";
 
 interface QuestionSelectorProps extends BaseQuestionProps {
-  data: QuestionTypes;
+  data: Question;
 }
 
 export const QuestionSelector = ({
@@ -40,10 +40,10 @@ export const QuestionSelector = ({
   };
 
   const getQuestionComponent = (
-    data: QuestionTypes,
+    data: Question,
     onAnswer: BaseQuestionProps["onAnswer"],
   ) => {
-    switch (data.tipo) {
+    switch (data.type) {
       case "multipla_escolha":
       case "verdadeiro_falso":
         return (
@@ -119,7 +119,7 @@ export const QuestionSelector = ({
       />
 
       <h2 className=" font-bold text-gray-700 dark:text-slate-200 mb-4">
-        <MarkdownSyntax>{data.pergunta}</MarkdownSyntax>
+        <MarkdownSyntax>{data.questionText}</MarkdownSyntax>
       </h2>
 
       {/* Container do componente */}

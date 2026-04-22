@@ -1,6 +1,88 @@
+export type Level = "iniciante" | "intermediário" | "avançado";
+
+export type QuestionType =
+  | "multipla_escolha"
+  | "verdadeiro_falso"
+  | "lacuna"
+  | "predicao"
+  | "clique_erro"
+  | "ordenacao"
+  | "fluxograma"
+  | "fluxograma_novo";
+
+export type RearrangeRow = { text: string; identationLevel: number };
+
+export type FlowchartNode = {
+  id: string;
+  label?: string;
+  isCorrect?: boolean;
+  type?: "terminal" | "decisao";
+  text?: string;
+};
+
+export type ConectionNode = {
+  from: string;
+  to: string;
+  label: string;
+};
+
+export type QuestionStatus = "correta" | "errada" | "pendente";
+
+export interface QuestionInfo {
+  status: QuestionStatus;
+  attemptCount: number;
+}
+
+export interface BaseQuestion {
+  id: number;
+  type: QuestionType;
+  level: Level;
+  questionText: string;
+  explanation: string;
+  correctAnswer: string | number;
+  info: QuestionInfo;
+}
+
+export interface QuestionClickOnError extends BaseQuestion {
+  rows: RearrangeRow[];
+}
+
+export interface QuestionFillQuestion extends BaseQuestion {
+  code: string;
+}
+
+export interface QuestionMultipleChoice extends BaseQuestion {
+  options: string[];
+}
+
+export interface QuestionOutput extends BaseQuestion {
+  code: string;
+}
+
+export interface QuestionRearrange extends BaseQuestion {
+  rows: RearrangeRow[];
+}
+
+export interface QuestionFlowchartnNew extends BaseQuestion {
+  code: string;
+  root: string;
+  nodes: FlowchartNode[];
+  conections: ConectionNode[];
+}
+
+export type Question =
+  | QuestionClickOnError
+  | QuestionFillQuestion
+  | QuestionMultipleChoice
+  | QuestionOutput
+  | QuestionRearrange
+  | QuestionFlowchartnNew;
+
 export interface Content {
   id: string;
   name: string;
+  level: Level;
+  questions?: Question[];
 }
 
 export interface Discipline {
@@ -16,4 +98,12 @@ export interface SavedProgress {
   contentId: string;
   contentName: string;
   remaining: number;
+}
+
+export interface Quiz {
+  questions: Question[];
+  contentName: string;
+  discipline: Discipline | null;
+  isReady: boolean;
+  total: number;
 }

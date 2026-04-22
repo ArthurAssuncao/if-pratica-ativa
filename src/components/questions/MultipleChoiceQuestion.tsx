@@ -2,7 +2,7 @@ import { ButtonConfirm } from "components/ui/ButtonConfirm";
 import React from "react";
 import toast from "react-hot-toast";
 import { BaseQuestionProps } from "types/question";
-import { QuestionMultipleChoice } from "types/quiz";
+import { QuestionMultipleChoice } from "types/study";
 import { getLetraByIndex } from "util/Quiz";
 import { createQuestion } from "./QuestionFactory";
 
@@ -15,7 +15,7 @@ export const MultipleChoiceQuestion = createQuestion<
   QuestionMultipleChoice
 >({
   validateAnswer: ({ resposta, data }) => {
-    return resposta === data.respostaCorreta.toString();
+    return resposta === data.correctAnswer.toString();
   },
 
   Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
@@ -38,7 +38,7 @@ export const MultipleChoiceQuestion = createQuestion<
     return (
       <div className="grid gap-4">
         <div className="md:bg-olive-50 md:dark:bg-slate-900 md:p-4 md:border border-olive-300 dark:border-slate-600  rounded-lg font-mono   flex flex-col gap-4">
-          {data.opcoes?.map((opt, index) => (
+          {data.options?.map((opt, index) => (
             <button
               key={opt}
               onClick={() => setOptionSelected(opt)}
