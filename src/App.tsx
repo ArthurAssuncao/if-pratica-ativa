@@ -1,17 +1,20 @@
 import Quiz from "components/Quiz";
+import StudySelectionPage from "components/StudySelectionPage";
+import { Footer } from "components/ui/Footer";
 import { Navbar } from "components/ui/Navbar";
-import { Sidebar } from "components/ui/Sidebar";
 import { quizes } from "data/atividades";
 import { useMemo, useState } from "react";
-import { QuizData, Tema } from "types/quiz";
+import { QuizData } from "types/quiz";
 import "./App.css";
 
 export default function App() {
-  const [idQuestaoAtual, setIdQuestaoAtual] = useState<number | null>(null);
+  const [idQuestaoAtual] = useState<number | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [filtroTipo, setFiltroTipo] = useState("todos");
-  const [filtroConteudo, setFiltroConteudo] = useState("todos");
-  const [filtroNivel, setFiltroNivel] = useState("todos");
+  const [filtroTipo] = useState("todos");
+  const [filtroConteudo] = useState("todos");
+  const [filtroNivel] = useState("todos");
+  const [teste] = useState(1);
 
   // 1. Calculamos a lista filtrada em tempo de execução
   // Usamos useMemo para performance
@@ -45,19 +48,21 @@ export default function App() {
   }, [idQuestaoAtual, quizesFiltered]);
 
   // Funções de alteração
-  const onChangeTema = (tema: Tema) => {
-    // Ao trocar tema, selecionamos a primeira questão desse tema
-    const quiz = quizesFiltered.find((q) => q.tema.id === tema.id);
-    if (quiz && quiz.questoes.length > 0) {
-      setIdQuestaoAtual(quiz.questoes[0].id);
-    }
-  };
+  // const onChangeTema = (tema: Tema) => {
+  //   // Ao trocar tema, selecionamos a primeira questão desse tema
+  //   const quiz = quizesFiltered.find((q) => q.tema.id === tema.id);
+  //   if (quiz && quiz.questoes.length > 0) {
+  //     setIdQuestaoAtual(quiz.questoes[0].id);
+  //   }
+  // };
 
   return (
-    <div className="min-h-screen bg-green-50 dark:bg-slate-950 transition-colors">
-      <Navbar onOpenMenu={() => setIsSidebarOpen((prev) => !prev)} />
+    <div className="min-h-screen bg-blue-50 dark:bg-slate-950 transition-colors">
+      <header>
+        <Navbar onOpenMenu={() => setIsSidebarOpen((prev) => !prev)} />
+      </header>
       <div className="flex">
-        <Sidebar
+        {/* <Sidebar
           quizes={quizesFiltered} // Passa a lista já filtrada
           idTemaAtivo={quizAtual?.tema.id || 0}
           onSelecionarQuestao={setIdQuestaoAtual}
@@ -70,22 +75,27 @@ export default function App() {
           onFilterConteudoChange={setFiltroConteudo}
           filterNivel={filtroNivel}
           onFilterNivelChange={setFiltroNivel}
-        />
+        /> */}
 
-        <main className="flex-1 flex justify-center py-4 px-4 md:py-6 md:px-6 min-h-[calc(100dvh-64px-0px)] max-h-[calc(100dvh-64px-0px)] overflow-y-auto bg-slate-50 dark:bg-slate-950">
-          {quizAtual ? (
-            <Quiz
-              quizData={quizAtual}
-              tipo="manual"
-              idQuestaoAtual={idQuestaoAtual ?? quizAtual.questoes[0].id}
-            />
-          ) : (
-            <div className="text-center mt-20">
-              Nenhum resultado encontrado.
-            </div>
-          )}
-        </main>
+        {teste === 1 && <StudySelectionPage />}
+
+        {teste === 0 && (
+          <main className="flex-1 flex justify-center py-4 px-4 md:py-6 md:px-6 min-h-[calc(100dvh-64px-0px)] max-h-[calc(100dvh-64px-0px)] overflow-y-auto bg-slate-50 dark:bg-slate-950">
+            {quizAtual ? (
+              <Quiz
+                quizData={quizAtual}
+                tipo="manual"
+                idQuestaoAtual={idQuestaoAtual ?? quizAtual.questoes[0].id}
+              />
+            ) : (
+              <div className="text-center mt-20">
+                Nenhum resultado encontrado.
+              </div>
+            )}
+          </main>
+        )}
       </div>
+      <Footer />
     </div>
   );
 }

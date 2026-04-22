@@ -10,11 +10,14 @@ export const Navbar = ({ onOpenMenu }: NavbarProps) => {
     <nav className="w-full h-16 border-b  bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-600 flex items-center justify-between px-6 sticky top-0 z-50 transition-colors duration-300">
       {/* Lado Esquerdo: Logo e Nome */}
       <div className="flex items-center gap-3">
-        <div className="bg-green-600 p-2 rounded-lg">
+        <div className="bg-linear-to-br from-blue-600 to-indigo-700 p-2 rounded-lg">
           <Laptop className="text-white" size={20} />
         </div>
-        <span className="text-xl font-bold tracking-tight text-green-600 dark:text-white">
-          IF <span className="text-green-600">Prática Ativa</span>
+        <span className="text-xl font-bold tracking-tight text-blue-600 dark:text-white">
+          IF{" "}
+          <span className="bg-clip-text text-transparent bg-linear-to-br from-blue-600 to-indigo-700">
+            Prática Ativa
+          </span>
         </span>
       </div>
 

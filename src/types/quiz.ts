@@ -2,6 +2,15 @@ export type StatusQuestao = "correta" | "errada" | "pendente";
 
 export type Nivel = "iniciante" | "intermediário" | "avançado";
 
+export type Amount = number | "Livre";
+
+export interface QuizConfig {
+  disciplineId: string | null;
+  contentId: string | null;
+  level: Nivel;
+  amount: Amount;
+}
+
 export interface InfoQuestao {
   status: StatusQuestao;
   numeroTentativas: number;

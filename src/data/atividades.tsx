@@ -1,4 +1,6 @@
+import { Icon } from "@iconify/react";
 import { QuizData, Quizes } from "types/quiz";
+import { Discipline } from "types/study";
 
 const quizesData: QuizData[] = [
   {
@@ -116,5 +118,36 @@ const generateQuizes = (quizesData: QuizData[]) => {
 
   return quizes;
 };
+
+export const DISCIPLINES: Discipline[] = [
+  {
+    id: "python",
+    name: "Programação em Python",
+    icon: <Icon icon="devicon:python-wordmark" />,
+    contents: [
+      { id: "tipos-basicos", name: "Tipos básicos, variáveis e operadores" },
+      { id: "entrada-saida", name: "Entrada e saída" },
+      { id: "condicionais", name: "Estruturas Condicionais" },
+      { id: "repeticao", name: "Estruturas de Repetição" },
+      { id: "funcoes", name: "Funções" },
+      { id: "estruturas-dados", name: "Estruturas de Dados" },
+    ],
+  },
+  {
+    id: "informatica",
+    name: "Informática Básica",
+    icon: <Icon icon="noto:desktop-computer" />,
+    contents: [
+      { id: "hardware", name: "Hardware" },
+      { id: "software", name: "Software" },
+      {
+        id: "arquitetura-de-computadores",
+        name: "Arquitetura de Computadores",
+      },
+      { id: "redes", name: "Redes" },
+      { id: "redes-de-computadores", name: "Redes de Computadores" },
+    ],
+  },
+];
 
 export const quizes: Quizes = generateQuizes(quizesData);
