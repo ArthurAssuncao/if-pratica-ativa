@@ -1,7 +1,9 @@
 import { DISCIPLINES } from "data/activities";
+import { LESSONS } from "data/lessons/lessons";
 import { useQuizGenerator } from "hook/useQuizGenerator";
 import {
   BarChart3,
+  Book,
   CheckCircle2,
   Layers,
   LayoutGrid,
@@ -11,6 +13,7 @@ import {
 import { useMemo, useState } from "react";
 import { Amount, QuizConfig } from "types/quiz";
 import { Level, SavedProgress } from "types/study";
+import { Textbook } from "./lesson/Textbook";
 import Quiz from "./Quiz";
 import { Breadcrumb } from "./ui/Breadcrumb";
 import { ContinueCard } from "./ui/ContinueCard";
@@ -39,6 +42,7 @@ export default function StudySelectionPage() {
   });
 
   const [isQuizReady, setIsQuizReady] = useState(false);
+  const [isLessonReady, setIsLessonReady] = useState(false);
 
   const discipline = DISCIPLINES.find((d) => d.id === config.disciplineId);
   const quiz = useQuizGenerator({
@@ -62,9 +66,16 @@ export default function StudySelectionPage() {
     (d) => d.id === config.disciplineId,
   )?.contents.find((c) => c.id === config.contentId);
 
+  const lesson = LESSONS.find((l) => l.id === config.contentId);
+
   const handleStart = () => {
     console.log("Iniciando Quiz:", config);
     setIsQuizReady(true);
+  };
+
+  const handleStartLesson = () => {
+    console.log("Iniciando Aula:", config);
+    setIsLessonReady(true);
   };
 
   const handleReset = (level: "all" | "discipline") => {
@@ -94,13 +105,21 @@ export default function StudySelectionPage() {
         contentName={content?.name || ""}
       />
 
+      {isLessonReady && selectedDiscipline && lesson && (
+        <Textbook
+          lesson={lesson}
+          discipline={selectedDiscipline}
+          onLessonChange={() => console.log("onLessonChange")}
+        />
+      )}
+
       {isQuizReady && (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm items-center justify-center">
           <Quiz quiz={quiz} />
         </div>
       )}
 
-      {!isQuizReady && (
+      {!isQuizReady && !isLessonReady && (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm items-center justify-center">
           {/* 2. Breadcrumb */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -248,8 +267,41 @@ export default function StudySelectionPage() {
                   <Play size={20} fill="currentColor" />
                 </button>
               </section>
+              {selectedDiscipline && lesson && (
+                <section
+                  className={`transition-opacity duration-300 ${
+                    config.contentId &&
+                    content?.questions &&
+                    content?.questions?.length > 0
+                      ? "opacity-100"
+                      : "opacity-40 pointer-events-none"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-6">
+                    <Book size={20} className="text-blue-500" />
+                    <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+                      Material de Estudos
+                    </h2>
+                  </div>
+                  <button
+                    disabled={!config.contentId}
+                    onClick={handleStartLesson}
+                    className={`
+                  w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-lg shadow-lg transition-all hover:cursor-pointer
+                  ${
+                    config.contentId
+                      ? "bg-blue-600 hover:bg-blue-700 text-white translate-y-0"
+                      : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"
+                  }
+                `}
+                  >
+                    Ler material
+                    <Book size={20} fill="currentColor" />
+                  </button>
+                </section>
+              )}
             </div>
-          </div>{" "}
+          </div>
         </div>
       )}
     </div>

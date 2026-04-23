@@ -112,7 +112,7 @@ export const DISCIPLINES: Discipline[] = [
     icon: <Icon icon="devicon:python-wordmark" />,
     contents: [
       {
-        id: "geral",
+        id: "python-basico",
         name: "Conteúdos gerais",
         level: "iniciante",
         questions: questions,
