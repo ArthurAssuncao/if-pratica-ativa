@@ -3,8 +3,32 @@ import { LessonContent } from "types/lesson";
 export const LESSONS: LessonContent[] = [
   {
     id: "python-basico",
-    title: "Fundamentos de Python: Do Zero ao `if`",
+    title: "Fundamentos de Python",
     slug: "python-basico",
     order: 1,
+  },
+  {
+    id: "entrada-e-saida",
+    title: "Entrada e Saída",
+    slug: "entrada-e-saida",
+    order: 2,
+  },
+  {
+    id: "operadores",
+    title: "Operadores",
+    slug: "operadores",
+    order: 3,
+  },
+  {
+    id: "estruturas-de-controle",
+    title: "Estruturas de Controle",
+    slug: "estruturas-de-controle",
+    order: 4,
+  },
+  {
+    id: "funcoes",
+    title: "Funções",
+    slug: "funcoes",
+    order: 5,
   },
 ];

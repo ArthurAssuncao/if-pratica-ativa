@@ -296,7 +296,7 @@ export default function StudySelectionPage() {
                 `}
                   >
                     Ler material
-                    <Book size={20} fill="currentColor" />
+                    <Play size={20} fill="currentColor" />
                   </button>
                 </section>
               )}

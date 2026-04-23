@@ -5,17 +5,7 @@ import { useState } from "react";
 import "./App.css";
 
 export default function App() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Funções de alteração
-  // const onChangeTema = (tema: Tema) => {
-  //   // Ao trocar tema, selecionamos a primeira questão desse tema
-  //   const quiz = quizesFiltered.find((q) => q.tema.id === tema.id);
-  //   if (quiz && quiz.questoes.length > 0) {
-  //     setIdQuestaoAtual(quiz.questoes[0].id);
-  //   }
-  // };
+  const [, setIsSidebarOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-blue-50 dark:bg-slate-950 transition-colors">

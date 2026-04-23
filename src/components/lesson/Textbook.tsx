@@ -1,9 +1,10 @@
+import { LESSONS } from "data/lessons/lessons";
 import { BookOpen, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm"; // Suporte a tabelas e listas de tarefas
 import { LessonContent } from "types/lesson";
 import { Discipline } from "types/study";
+import MarkdownRenderer from "./MarkdownRender";
+import "./textBook.css";
 
 interface TextbookProps {
   lesson: LessonContent;
@@ -18,25 +19,29 @@ export function Textbook({
 }: TextbookProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [markdown, setMarkdown] = useState("");
+  const [lessonContent, setLessonContent] = useState<LessonContent>(lesson);
 
   useEffect(() => {
     // Busca o arquivo .md baseado no que está selecionado
     if (discipline.name && lesson) {
-      const url = `/data/lessons/${discipline.id.toLocaleLowerCase()}/${lesson.slug}.md`;
-      console.log("URL:", url);
+      const url = `/data/lessons/${discipline.id.toLocaleLowerCase()}/${lessonContent.slug}.md`;
       fetch(url)
         .then((res) => res.text())
         .then((text) => {
           lesson.markdown = text;
           setMarkdown(text);
           setIsLoading(false);
-          console.log("Texto:", text);
         })
         .catch((err) => {
           console.error("Erro:", err);
         });
     }
-  }, [lesson, discipline]);
+  }, [lesson, discipline, lessonContent.slug]);
+
+  const handleLessonChange = (newLesson: LessonContent) => {
+    onLessonChange(newLesson.id);
+    setLessonContent(newLesson);
+  };
 
   if (isLoading) {
     return <div>Carregando...</div>;
@@ -51,36 +56,32 @@ export function Textbook({
           <span>Sumário</span>
         </div>
         <nav className="flex-1 overflow-y-auto p-4 space-y-2">
-          <button
-            key={lesson.id}
-            onClick={() => onLessonChange(lesson.id)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all  "bg-blue-600 text-white shadow-lg shadow-blue-500/20"
-              }`}
-          >
-            <span className="opacity-50">{lesson.order}.</span>
-            <span className="truncate">{lesson.title}</span>
-          </button>
+          {LESSONS.map((l) => (
+            <button
+              key={l.id}
+              onClick={() => handleLessonChange(l)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-blue-500 text-white shadow-lg shadow-blue-500/20`}
+            >
+              <span className="opacity-90">{l.order}.</span>
+              <span className="truncate">{l.title}</span>
+            </button>
+          ))}
         </nav>
       </aside>
 
       {/* Área do Conteúdo */}
-      <main className="flex-1 overflow-y-auto p-8 md:p-12 scroll-smooth">
-        <article className="max-w-3xl mx-auto prose prose-slate dark:prose-invert prose-headings:font-bold prose-a:text-blue-500 prose-code:text-pink-500">
+      <main className="flex-1 overflow-y-auto p-4 md:p-12 scroll-smooth">
+        <article className="max-w-full mx-auto prose prose-p:text-justify prose-pre:bg-transparent prose-pre:m-0 prose-slate prose-pre:p-2 prose-pre:pe-0 prose-pre:ps-0 dark:prose-invert prose-headings:font-bold prose-a:text-blue-500 prose-code:text-pink-500 prose-h1:prose-code:text-2xl">
           {/* Cabeçalho da Aula */}
           <header className="mb-10 border-b border-slate-100 dark:border-slate-800 pb-8">
             <div className="text-blue-500 font-bold text-xs uppercase tracking-widest mb-2">
               Aula {lesson.order}
             </div>
-            <h1 className="text-4xl font-extrabold text-slate-900 dark:text-white">
-              {lesson.title}
-            </h1>
           </header>
 
           {/* Renderizador de Markdown */}
           {lesson.markdown && markdown && (
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {markdown}
-            </ReactMarkdown>
+            <MarkdownRenderer>{markdown}</MarkdownRenderer>
           )}
 
           {/* Navegação entre aulas */}
