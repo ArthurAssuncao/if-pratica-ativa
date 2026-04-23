@@ -2,3 +2,11 @@
 @import-normalize;
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+button:hover {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

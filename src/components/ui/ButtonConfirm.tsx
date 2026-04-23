@@ -19,7 +19,7 @@ export const ButtonConfirm = ({
       disabled={disabled}
       className={`
         bg-green-600 hover:bg-green-500 hover:cursor-pointer
-        disabled:bg-slate-400 disabled:cursor-not-allowed
+        disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed
         p-3 rounded-lg font-bold text-white 
         transition-colors shadow-sm active:scale-95
         min-w-full

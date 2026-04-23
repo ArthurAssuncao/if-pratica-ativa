@@ -147,7 +147,8 @@ export default function Quiz({ quiz }: QuizProps) {
                 Questão {atual + 1} de {quiz.questions.length}
               </span>
               <span>
-                Foram realizadas {questoesRealizadas} de {quiz.questions.length}
+                Foram realizadas {questoesRealizadas.size} de{" "}
+                {quiz.questions.length}
               </span>
             </div>
             <span className="text-green-500 dark:text-green-400 hover:cursor-pointer hover:text-green-700 dark:hover:text-green-300 transition-all">

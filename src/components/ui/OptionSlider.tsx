@@ -53,7 +53,7 @@ export function OptionSlider<T>({
   return (
     <div
       ref={containerRef}
-      className={`relative p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 ${className}`}
+      className={`relative flex gap-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 ${className}`}
       style={{
         display: "grid",
         // Ajuste dinâmico para qualquer quantidade de opções
@@ -89,7 +89,7 @@ export function OptionSlider<T>({
               ${
                 isActive
                   ? "text-blue-600 dark:text-blue-400"
-                  : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                  : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-500"
               }
             `}
           >

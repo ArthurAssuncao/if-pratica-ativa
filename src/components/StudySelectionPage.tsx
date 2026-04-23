@@ -38,7 +38,7 @@ export default function StudySelectionPage() {
     amount: "Livre",
   });
 
-  const [isReady, setIsReady] = useState(false);
+  const [isQuizReady, setIsQuizReady] = useState(false);
 
   const discipline = DISCIPLINES.find((d) => d.id === config.disciplineId);
   const quiz = useQuizGenerator({
@@ -64,24 +64,29 @@ export default function StudySelectionPage() {
 
   const handleStart = () => {
     console.log("Iniciando Quiz:", config);
-    setIsReady(true);
+    setIsQuizReady(true);
   };
 
   const handleReset = (level: "all" | "discipline") => {
-    if (level === "all")
+    if (level === "all") {
       setConfig((prev) => ({ ...prev, disciplineId: null, contentId: null }));
-    else setConfig((prev) => ({ ...prev, contentId: null }));
+    } else {
+      setConfig((prev) => ({ ...prev, contentId: null }));
+    }
+    setIsQuizReady(false);
   };
 
   return (
-    <div className="max-w-full mx-auto p-4 md:p-8 animate-in fade-in duration-500">
+    <div className="max-w-full min-w-[50vw] mx-auto p-4 md:p-8 animate-in fade-in duration-500 flex flex-col">
       {/* 1. Continue Section */}
-      {MOCK_PROGRESS && (
+
+      {MOCK_PROGRESS && !isQuizReady && (
         <ContinueCard
           progress={MOCK_PROGRESS}
           onContinue={() => console.log("Continuando...", MOCK_PROGRESS)}
         />
       )}
+
       <Breadcrumb
         config={config}
         onReset={handleReset}
@@ -89,14 +94,14 @@ export default function StudySelectionPage() {
         contentName={content?.name || ""}
       />
 
-      {isReady && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm">
+      {isQuizReady && (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm items-center justify-center">
           <Quiz quiz={quiz} />
         </div>
       )}
 
-      {!isReady && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm">
+      {!isQuizReady && (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm items-center justify-center">
           {/* 2. Breadcrumb */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-7">
@@ -114,13 +119,15 @@ export default function StudySelectionPage() {
                       key={discipline.id}
                       discipline={discipline}
                       isSelected={config.disciplineId === discipline.id}
-                      onSelect={(id) =>
+                      onSelect={(id) => {
+                        const isSame = id === config.disciplineId;
+
                         setConfig({
                           ...config,
-                          disciplineId: id,
-                          contentId: null, // Reseta o conteúdo ao trocar de disciplina
-                        })
-                      }
+                          disciplineId: isSame ? null : id,
+                          contentId: null,
+                        });
+                      }}
                     />
                   ))}
                 </div>
@@ -191,7 +198,7 @@ export default function StudySelectionPage() {
                 <div className="flex items-center gap-2 mb-6">
                   <Settings2 size={20} className="text-blue-500" />
                   <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-                    Configurações
+                    Configurações do Quiz
                   </h2>
                 </div>
 
@@ -242,13 +249,6 @@ export default function StudySelectionPage() {
                 </button>
               </section>
             </div>
-          </div>
-          {/* 7. Inline Questions Placeholder */}
-          <div className="mt-12 pt-8 border-t border-dashed border-slate-200 dark:border-slate-800 text-center">
-            <p className="text-slate-400 text-sm italic">
-              Selecione uma disciplina e conteúdo para visualizar a prévia das
-              questões abaixo.
-            </p>
           </div>{" "}
         </div>
       )}
