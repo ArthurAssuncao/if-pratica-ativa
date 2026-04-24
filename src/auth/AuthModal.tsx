@@ -38,9 +38,9 @@ export default function AuthModal({
         } else if (result.type === "recovery") {
           window.location.href = "/reset-password";
         } else {
-          window.location.href = "/dashboard";
+          window.location.href = "/";
+          onLoginSuccess();
         }
-        onLoginSuccess();
       })
       .catch((err) => {
         setError(err instanceof Error ? err.message : "Callback failed");
@@ -69,9 +69,9 @@ export default function AuthModal({
       oauthLogin("google");
     } catch (err) {
       console.error("Erro durante o login OAuth:", err);
-      setError(
-        "Falha na conexão com o Google. Verifique se o provedor está habilitado no Netlify.",
-      );
+      // setError(
+      //   "Falha na conexão com o Google. Verifique se o provedor está habilitado no Netlify.",
+      // );
     } finally {
       setProcessing(false);
     }
