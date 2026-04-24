@@ -25,7 +25,10 @@
       "*": ["./src/*"],
       "@data/*": ["./src/data/*"],
       "@components/*": ["./src/components/*"],
-      "@types/*": ["./src/types/*"]
+      "@types/*": ["./src/types/*"],
+      "@context/*": ["./src/context/*"],
+      "@hook/*": ["./src/hook/*"],
+      "@util/*": ["./src/util/*"]
     }
   },
   "include": ["src"]

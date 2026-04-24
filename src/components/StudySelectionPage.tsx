@@ -29,10 +29,6 @@ const MOCK_PROGRESS: SavedProgress = {
   remaining: 12,
 };
 
-// --- Components ---
-
-// --- Main Component ---
-
 export default function StudySelectionPage() {
   const [config, setConfig] = useState<QuizConfig>({
     disciplineId: null,
@@ -72,6 +68,12 @@ export default function StudySelectionPage() {
 
   const lesson = LESSONS.find((l) => l.id === config.contentId);
 
+  const sectionEnabled =
+    (config.contentId &&
+      content?.questions &&
+      content?.questions?.length > 0) ||
+    false;
+
   const handleStart = () => {
     console.log("Iniciando Quiz:", config);
     setIsQuizReady(true);
@@ -96,7 +98,7 @@ export default function StudySelectionPage() {
   };
 
   return (
-    <div className="max-w-full min-w-[50vw] mx-auto p-4 md:p-8 animate-in fade-in duration-500 flex flex-col gap-4">
+    <div className="max-w-full p-4 md:p-8 animate-in fade-in duration-500 flex flex-col gap-4">
       {/* 1. Continue Section */}
 
       {MOCK_PROGRESS && !isQuizReady && (
@@ -240,11 +242,9 @@ export default function StudySelectionPage() {
               {/* 5. Filters */}
               <section
                 className={`transition-opacity duration-300 ${
-                  config.contentId &&
-                  content?.questions &&
-                  content?.questions?.length > 0
-                    ? "opacity-100"
-                    : "opacity-40 pointer-events-none"
+                  sectionEnabled
+                    ? "opacity-100 **:cursor-auto"
+                    : "opacity-40 **:pointer-not-allowed"
                 }`}
               >
                 <div className="flex items-center gap-2 mb-6">
@@ -262,6 +262,7 @@ export default function StudySelectionPage() {
                   <OptionSlider
                     options={["Fácil", "Médio", "Difícil", "Todas"]}
                     value={config.level || "Todas"}
+                    disabled={!sectionEnabled}
                     onChange={(novoValor) =>
                       setConfig({ ...config, level: novoValor as Level })
                     }
@@ -276,6 +277,7 @@ export default function StudySelectionPage() {
                   <OptionSlider
                     options={[10, 20, "Livre"]}
                     value={config.amount || "Livre"}
+                    disabled={!sectionEnabled}
                     onChange={(novoValor) =>
                       setConfig({ ...config, amount: novoValor as Amount })
                     }
@@ -284,16 +286,16 @@ export default function StudySelectionPage() {
 
                 {/* 6. Action Button */}
                 <button
-                  disabled={!config.contentId}
                   onClick={handleStart}
+                  disabled={!sectionEnabled}
                   className={`
-                  w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-lg shadow-lg transition-all hover:cursor-pointer
+                  w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-lg shadow-lg transition-all
                   ${
-                    config.contentId
-                      ? "bg-blue-600 hover:bg-blue-700 text-white translate-y-0"
-                      : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"
+                    sectionEnabled
+                      ? "bg-blue-600 hover:bg-blue-700 text-white translate-y-0 hover:cursor-pointer"
+                      : "bg-slate-200 dark:bg-slate-800 text-slate-400 hover:cursor-not-allowed"
                   }
-                `}
+                    `}
                 >
                   Começar {config.amount === "Livre" ? "" : config.amount}{" "}
                   questões
@@ -303,11 +305,9 @@ export default function StudySelectionPage() {
               {selectedDiscipline && lesson && (
                 <section
                   className={`transition-opacity duration-300 ${
-                    config.contentId &&
-                    content?.questions &&
-                    content?.questions?.length > 0
-                      ? "opacity-100"
-                      : "opacity-40 pointer-events-none"
+                    sectionEnabled
+                      ? "opacity-100 **:cursor-auto"
+                      : "opacity-40 **:cursor-not-allowed"
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-6">
@@ -317,14 +317,15 @@ export default function StudySelectionPage() {
                     </h2>
                   </div>
                   <button
-                    disabled={!config.contentId}
                     onClick={handleStartLesson}
+                    disabled={!sectionEnabled}
                     className={`
-                  w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-lg shadow-lg transition-all hover:cursor-pointer
+                  w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-lg shadow-lg transition-all 
+                
                   ${
-                    config.contentId
-                      ? "bg-blue-600 hover:bg-blue-700 text-white translate-y-0"
-                      : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"
+                    sectionEnabled
+                      ? "bg-blue-600 hover:bg-blue-700 text-white translate-y-0 hover:cursor-pointer"
+                      : "bg-slate-200 dark:bg-slate-800 text-slate-400 hover:cursor-not-allowed"
                   }
                 `}
                   >

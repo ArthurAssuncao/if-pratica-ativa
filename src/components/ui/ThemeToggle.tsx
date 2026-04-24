@@ -83,7 +83,7 @@ export function ThemeToggle() {
       </div>
 
       {/* --- VERSÃO DESKTOP (Botões lado a lado) --- */}
-      <div className="hidden md:flex gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg border dark:border-slate-700">
+      <div className="hidden md:flex gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg border border-indigo-200 dark:border-slate-700">
         {themes.map((t) => (
           <button
             key={t.id}

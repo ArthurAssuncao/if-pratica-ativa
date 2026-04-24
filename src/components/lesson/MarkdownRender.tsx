@@ -33,7 +33,7 @@ export default function MarkdownRenderer({ children }: MarkdownRendererProps) {
 
       // Verifica se é um bloco de código (com linguagem definida) ou código inline
       return !inline && match ? (
-        <div className="relative  rounded-lg overflow-hidden border border-slate-300 dark:border-slate-800 shadow-md">
+        <div className="relative  rounded-lg border border-slate-300 dark:border-slate-800 shadow-md">
           {/* Badge da linguagem no topo do bloco de código */}
           <div className="flex justify-between items-center px-4 py-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-400 text-xs font-mono">
             <span>{match[1]}</span>
@@ -65,7 +65,7 @@ export default function MarkdownRenderer({ children }: MarkdownRendererProps) {
   };
 
   return (
-    <article className="prose prose-slate dark:prose-invert max-w-none">
+    <article className="prose prose-slate dark:prose-invert max-w-full">
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
         {children}
       </ReactMarkdown>

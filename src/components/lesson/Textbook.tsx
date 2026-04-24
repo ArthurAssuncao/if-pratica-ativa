@@ -1,3 +1,4 @@
+import { Sidebar } from "components/ui/Sidebar";
 import { LESSONS } from "data/lessons/lessons";
 import { BookOpen, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -5,6 +6,33 @@ import { LessonContent } from "types/lesson";
 import { Discipline } from "types/study";
 import MarkdownRenderer from "./MarkdownRender";
 import "./textBook.css";
+
+interface SidebarSumarioProps {
+  handleLessonChange: (lesson: LessonContent) => void;
+}
+
+const SidebarSumario = ({ handleLessonChange }: SidebarSumarioProps) => {
+  return (
+    <>
+      <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
+        <BookOpen size={20} className="text-blue-500" />
+        <span>Sumário</span>
+      </div>
+      <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+        {LESSONS.map((l) => (
+          <button
+            key={l.id}
+            onClick={() => handleLessonChange(l)}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-blue-500 text-white shadow-lg shadow-blue-500/20 hover:cursor-pointer hover:bg-blue-600`}
+          >
+            <span className="opacity-90">{l.order}.</span>
+            <span className="truncate">{l.title}</span>
+          </button>
+        ))}
+      </nav>
+    </>
+  );
+};
 
 interface TextbookProps {
   lesson: LessonContent;
@@ -60,37 +88,24 @@ export function Textbook({
   }
 
   return (
-    <div className="flex h-[calc(100vh-120px)] bg-white dark:bg-slate-950 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800">
-      {/* Sidebar - Índice */}
+    <div className="w-full flex bg-white dark:bg-slate-950 rounded-3xl border border-slate-200 dark:border-slate-800">
+      <Sidebar>
+        <SidebarSumario handleLessonChange={handleLessonChange} />
+      </Sidebar>
+
       <aside className="w-64 border-r border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 hidden md:flex flex-col">
-        <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
-          <BookOpen size={20} className="text-blue-500" />
-          <span>Sumário</span>
-        </div>
-        <nav className="flex-1 overflow-y-auto p-4 space-y-2">
-          {LESSONS.map((l) => (
-            <button
-              key={l.id}
-              onClick={() => handleLessonChange(l)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-blue-500 text-white shadow-lg shadow-blue-500/20`}
-            >
-              <span className="opacity-90">{l.order}.</span>
-              <span className="truncate">{l.title}</span>
-            </button>
-          ))}
-        </nav>
+        <SidebarSumario handleLessonChange={handleLessonChange} />
       </aside>
 
       {/* Área do Conteúdo */}
-      <main className="flex-1 p-4 md:p-12 w-full">
-        <article className="max-w-full mx-auto prose prose-p:text-justify prose-pre:bg-transparent prose-pre:m-0 prose-slate prose-pre:p-2 prose-pre:pe-0 prose-pre:ps-0 dark:prose-invert prose-headings:font-bold prose-a:text-blue-500 prose-code:text-pink-500 prose-h1:prose-code:text-2xl prose-h1:mt-1 prose-h1:mb-2 prose-h2:mt-2 prose-h2:mb-2">
+      <main className="flex-1 p-4 md:p-8 min-w-0">
+        <section className="w-full prose prose-p:text-justify prose-pre:bg-transparent prose-pre:m-0 prose-slate prose-pre:p-2 prose-pre:pe-0 prose-pre:ps-0 dark:prose-invert prose-headings:font-bold prose-a:text-blue-500 prose-code:text-pink-500 prose-h1:prose-code:text-2xl prose-h1:mt-1 prose-h1:mb-2 prose-h2:mt-2 prose-h2:mb-2">
           {/* Cabeçalho da Aula */}
           <header className="mb-4 border-b border-slate-100 dark:border-slate-800 pb-4">
             <div className="text-blue-500 font-bold text-xs uppercase tracking-widest">
               Aula {lesson.order}
             </div>
           </header>
-
           {/* Renderizador de Markdown */}
           {lesson.markdown && markdown && (
             <MarkdownRenderer>{markdown}</MarkdownRenderer>
@@ -100,7 +115,7 @@ export function Textbook({
           <footer className="mt-16 pt-8 border-t border-slate-100 dark:border-slate-800 flex justify-between">
             <button
               className="text-slate-400 hover:text-slate-900 font-medium flex items-center gap-2"
-              onclick={handlePreviousLesson}
+              onClick={handlePreviousLesson}
             >
               <ChevronRight size={20} className="rotate-180" /> Anterior
             </button>
@@ -111,7 +126,7 @@ export function Textbook({
               Próxima Aula
             </button>
           </footer>
-        </article>
+        </section>
       </main>
     </div>
   );

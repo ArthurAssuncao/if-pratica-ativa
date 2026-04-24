@@ -3,6 +3,7 @@ import { ReactNode, useLayoutEffect, useRef, useState } from "react";
 interface OptionSliderProps<T> {
   options: T[];
   value: T;
+  disabled: boolean;
   onChange: (value: T) => void;
   renderOption?: (option: T) => ReactNode;
   className?: string;
@@ -11,6 +12,7 @@ interface OptionSliderProps<T> {
 export function OptionSlider<T>({
   options,
   value,
+  disabled,
   onChange,
   renderOption,
   className = "",
@@ -82,15 +84,16 @@ export function OptionSlider<T>({
             ref={(el) => {
               buttonRefs.current[index] = el;
             }}
-            onClick={() => onChange(option)}
+            onClick={() => (disabled ? null : onChange(option))}
             type="button"
             className={`
-              relative z-10 py-2.5 text-sm font-bold rounded-xl transition-colors duration-200 cursor-pointer
+              relative z-10 py-2.5 text-sm font-bold rounded-xl transition-colors duration-200 
               ${
                 isActive
                   ? "text-blue-600 dark:text-blue-400"
                   : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-500"
               }
+              ${disabled ? "**:cursor-not-allowed" : "**:cursor-pointer"}
             `}
           >
             {renderOption ? renderOption(option) : String(option)}

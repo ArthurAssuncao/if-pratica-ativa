@@ -1,11 +1,9 @@
+import { useSidebar } from "@hook/useSidebar";
 import { Laptop, Menu } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
-interface NavbarProps {
-  onOpenMenu: () => void;
-}
-
-export const Navbar = ({ onOpenMenu }: NavbarProps) => {
+export const Navbar = () => {
+  const { toggleSidebar } = useSidebar();
   return (
     <nav className="w-full h-16 border-b  bg-blue-700  border-slate-300 dark:border-slate-600 flex items-center justify-between px-6 sticky top-0 z-50 transition-colors duration-300">
       {/* Lado Esquerdo: Logo e Nome */}
@@ -22,8 +20,8 @@ export const Navbar = ({ onOpenMenu }: NavbarProps) => {
       <div className="flex items-center gap-3">
         <ThemeToggle />
         <button
-          onClick={onOpenMenu}
-          className="visible md:hidden group p-2 rounded-full border border-slate-700 hover:bg-slate-500 transition-all text-slate-700 hover:text-slate-200 dark:text-slate-300 dark:hover:text-slate-700 hover:cursor-pointer dark:hover:bg-slate-300 ease-in-out duration-500"
+          onClick={() => toggleSidebar()}
+          className="visible md:hidden group p-2 rounded-full border border-slate-700 bg-slate-50 hover:bg-slate-500 transition-all text-slate-700 hover:text-slate-200 dark:text-slate-300 dark:hover:text-slate-700 hover:cursor-pointer dark:hover:bg-slate-300 ease-in-out duration-500"
           title="Abrir Menu"
         >
           <Menu size={24} />
