@@ -28,7 +28,8 @@
       "@types/*": ["./src/types/*"],
       "@context/*": ["./src/context/*"],
       "@hook/*": ["./src/hook/*"],
-      "@util/*": ["./src/util/*"]
+      "@util/*": ["./src/util/*"],
+      "@auth/*": ["./src/auth/*"]
     }
   },
   "include": ["src"]
