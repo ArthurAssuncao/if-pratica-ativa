@@ -29,7 +29,8 @@
       "@context/*": ["./src/context/*"],
       "@hook/*": ["./src/hook/*"],
       "@util/*": ["./src/util/*"],
-      "@auth/*": ["./src/auth/*"]
+      "@auth/*": ["./src/auth/*"],
+      "@service/*": ["./src/service/*"]
     }
   },
   "include": ["src"]
