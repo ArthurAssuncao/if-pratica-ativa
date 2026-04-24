@@ -43,6 +43,18 @@ export function Textbook({
     setLessonContent(newLesson);
   };
 
+  const handlePreviousLesson = () => {
+    const newLesson = LESSONS.find((l) => l.order === lesson.order - 1);
+    if (!newLesson) return;
+    handleLessonChange(newLesson);
+  };
+
+  const handleNextLesson = () => {
+    const newLesson = LESSONS.find((l) => l.order === lesson.order + 1);
+    if (!newLesson) return;
+    handleLessonChange(newLesson);
+  };
+
   if (isLoading) {
     return <div>Carregando...</div>;
   }
@@ -70,11 +82,11 @@ export function Textbook({
       </aside>
 
       {/* Área do Conteúdo */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-12 scroll-smooth">
-        <article className="max-w-full mx-auto prose prose-p:text-justify prose-pre:bg-transparent prose-pre:m-0 prose-slate prose-pre:p-2 prose-pre:pe-0 prose-pre:ps-0 dark:prose-invert prose-headings:font-bold prose-a:text-blue-500 prose-code:text-pink-500 prose-h1:prose-code:text-2xl">
+      <main className="flex-1 p-4 md:p-12 w-full">
+        <article className="max-w-full mx-auto prose prose-p:text-justify prose-pre:bg-transparent prose-pre:m-0 prose-slate prose-pre:p-2 prose-pre:pe-0 prose-pre:ps-0 dark:prose-invert prose-headings:font-bold prose-a:text-blue-500 prose-code:text-pink-500 prose-h1:prose-code:text-2xl prose-h1:mt-1 prose-h1:mb-2 prose-h2:mt-2 prose-h2:mb-2">
           {/* Cabeçalho da Aula */}
-          <header className="mb-10 border-b border-slate-100 dark:border-slate-800 pb-8">
-            <div className="text-blue-500 font-bold text-xs uppercase tracking-widest mb-2">
+          <header className="mb-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div className="text-blue-500 font-bold text-xs uppercase tracking-widest">
               Aula {lesson.order}
             </div>
           </header>
@@ -86,10 +98,16 @@ export function Textbook({
 
           {/* Navegação entre aulas */}
           <footer className="mt-16 pt-8 border-t border-slate-100 dark:border-slate-800 flex justify-between">
-            <button className="text-slate-400 hover:text-slate-900 font-medium flex items-center gap-2">
+            <button
+              className="text-slate-400 hover:text-slate-900 font-medium flex items-center gap-2"
+              onclick={handlePreviousLesson}
+            >
               <ChevronRight size={20} className="rotate-180" /> Anterior
             </button>
-            <button className="bg-slate-900 dark:bg-blue-600 text-white px-6 py-2 rounded-full font-bold">
+            <button
+              className="bg-slate-900 dark:bg-blue-600 text-white px-6 py-2 rounded-full font-bold"
+              onClick={handleNextLesson}
+            >
               Próxima Aula
             </button>
           </footer>

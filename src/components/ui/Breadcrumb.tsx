@@ -13,7 +13,7 @@ export const Breadcrumb = ({
   contentName: string;
 }) => {
   return (
-    <nav className="flex items-center gap-2 text-sm text-slate-500 mb-6 overflow-x-auto whitespace-nowrap pb-2">
+    <nav className="flex items-center gap-2 text-sm text-slate-500 overflow-x-auto whitespace-nowrap pb-2 flex-wrap">
       <button
         onClick={() => onReset("all")}
         className="hover:text-blue-600 transition-colors font-medium hover:cursor-pointer"

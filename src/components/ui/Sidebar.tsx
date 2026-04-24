@@ -102,7 +102,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="p-4 max-h-screen overflow-y-auto">
+        <div className="p-4">
           {/* Filtros */}
           <div className="mb-2">
             <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">

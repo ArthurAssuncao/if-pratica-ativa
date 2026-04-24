@@ -106,7 +106,7 @@ export default function Quiz({ quiz }: QuizProps) {
             <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
               {quiz.contentName}
             </span>
-            <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest hidden md:visible">
+            <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest hidden md:block">
               {getTipoQuestaoPorExtenso(quiz.questions[atual].type)}
             </span>
           </div>

@@ -5,6 +5,7 @@ import {
   BarChart3,
   Book,
   CheckCircle2,
+  ChevronDown,
   Layers,
   LayoutGrid,
   Play,
@@ -43,6 +44,9 @@ export default function StudySelectionPage() {
 
   const [isQuizReady, setIsQuizReady] = useState(false);
   const [isLessonReady, setIsLessonReady] = useState(false);
+  const [hasContentSelected, setHasContentSelected] = useState(false);
+  useState(false);
+  const [isContentOptionsVisible, setIsContentOptionsVisible] = useState(true);
 
   const discipline = DISCIPLINES.find((d) => d.id === config.disciplineId);
   const quiz = useQuizGenerator({
@@ -87,8 +91,12 @@ export default function StudySelectionPage() {
     setIsQuizReady(false);
   };
 
+  const handleOpenCloseContentOptions = () => {
+    setIsContentOptionsVisible((prev) => !prev);
+  };
+
   return (
-    <div className="max-w-full min-w-[50vw] mx-auto p-4 md:p-8 animate-in fade-in duration-500 flex flex-col">
+    <div className="max-w-full min-w-[50vw] mx-auto p-4 md:p-8 animate-in fade-in duration-500 flex flex-col gap-4">
       {/* 1. Continue Section */}
 
       {MOCK_PROGRESS && !isQuizReady && (
@@ -146,6 +154,8 @@ export default function StudySelectionPage() {
                           disciplineId: isSame ? null : id,
                           contentId: null,
                         });
+                        setHasContentSelected(false);
+                        setIsContentOptionsVisible(true);
                       }}
                     />
                   ))}
@@ -167,9 +177,11 @@ export default function StudySelectionPage() {
                       return (
                         <button
                           key={content.id}
-                          onClick={() =>
-                            setConfig({ ...config, contentId: content.id })
-                          }
+                          onClick={() => {
+                            setConfig({ ...config, contentId: content.id });
+                            setHasContentSelected(true);
+                            setIsContentOptionsVisible(false);
+                          }}
                           className={`
                           w-full flex items-center justify-between gap-2 p-4 rounded-xl border-2 transition-all hover:cursor-pointer
                           ${
@@ -177,6 +189,7 @@ export default function StudySelectionPage() {
                               ? "border-blue-500 bg-blue-50 dark:bg-blue-500/10"
                               : "border-transparent bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800"
                           }
+                          ${!isSelected && hasContentSelected && !isContentOptionsVisible ? "hidden" : "block"}
                         `}
                         >
                           <div className="flex items-center gap-2">
@@ -198,6 +211,26 @@ export default function StudySelectionPage() {
                         </button>
                       );
                     })}
+                    {hasContentSelected && (
+                      <div className="flex items-center justify-center gap-2 mb-4">
+                        <button
+                          onClick={handleOpenCloseContentOptions}
+                          className="text-blue-600 hover:text-blue-700 flex gap-2 items-center p-2 px-4 transition-colors font-medium hover:cursor-pointer"
+                        >
+                          {isContentOptionsVisible ? (
+                            <>
+                              <ChevronDown size={20} className="rotate-180" />
+                              <span>Esconder conteúdos</span>
+                            </>
+                          ) : (
+                            <>
+                              <ChevronDown size={20} />
+                              <span>Esconder conteúdos</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </section>
               )}
