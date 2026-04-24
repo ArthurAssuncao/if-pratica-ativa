@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLoginSuccess?: () => void;
+  onLoginSuccess: () => void;
 }
 
 const AUTH_HASH_PATTERN =
@@ -40,12 +40,13 @@ export default function AuthModal({
         } else {
           window.location.href = "/dashboard";
         }
+        onLoginSuccess();
       })
       .catch((err) => {
         setError(err instanceof Error ? err.message : "Callback failed");
         setProcessing(false);
       });
-  }, []);
+  }, [onLoginSuccess]);
 
   // Fecha o modal ao pressionar a tecla ESC para melhor acessibilidade
   useEffect(() => {
@@ -65,13 +66,7 @@ export default function AuthModal({
 
     try {
       // Abre a janela de autorização do Google
-      await oauthLogin("google");
-
-      // Se a página não recarregar automaticamente, executamos o sucesso
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
-      onClose();
+      oauthLogin("google");
     } catch (err) {
       console.error("Erro durante o login OAuth:", err);
       setError(
