@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import { QuizConfig } from "types/quiz";
+import type { QuizConfig } from "types/quiz";
 
 export const Breadcrumb = ({
   config,

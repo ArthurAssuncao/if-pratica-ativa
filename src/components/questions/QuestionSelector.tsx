@@ -1,7 +1,7 @@
 import { MarkdownSyntax } from "components/ui/MarkdownSyntax";
 import { useState } from "react";
-import { BaseQuestionProps } from "types/question";
-import {
+import type { BaseQuestionProps } from "types/question";
+import type {
   Question,
   QuestionClickOnError,
   QuestionFillQuestion,

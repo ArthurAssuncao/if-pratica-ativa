@@ -33,14 +33,6 @@ export interface QuestionInfo {
   attemptCount: number;
 }
 
-export interface QuestionMetadata {
-  options?: string[]; // Para múltipla escolha e verdadeiro/falso
-  rows?: RearrangeRow; // Para ordenação e clique no erro
-  nodes?: FlowchartNode; // Para fluxogramas
-  connections?: ConectionNode; // Para fluxogramas
-  root?: string; // Para o nó raiz do fluxograma
-}
-
 export interface BaseQuestion {
   id: number;
   type: QuestionType;
@@ -49,7 +41,6 @@ export interface BaseQuestion {
   explanation: string;
   correctAnswer: string | number;
   info: QuestionInfo;
-  metadata?: QuestionMetadata;
 }
 
 export interface QuestionClickOnError extends BaseQuestion {
@@ -91,14 +82,13 @@ export interface Content {
   id: string;
   name: string;
   level: Level;
-  questions?: Question[];
+  questions: Question[];
 }
 
 export interface Discipline {
   id: string;
   name: string;
-  icon: React.ReactNode;
-  contents: Content[];
+  iconSlug: string;
 }
 
 export interface SavedProgress {

@@ -1,4 +1,4 @@
-import { Level, QuestionType } from "./study";
+import type { Level, QuestionType } from "./study";
 
 export type StatusQuestao = "correta" | "errada" | "pendente";
 

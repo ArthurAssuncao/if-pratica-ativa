@@ -1,5 +1,5 @@
 import type { Element } from "hast";
-import ReactMarkdown, { Components } from "react-markdown";
+import ReactMarkdown, { type Components } from "react-markdown";
 
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import remarkGfm from "remark-gfm";

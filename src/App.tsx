@@ -11,7 +11,7 @@ export default function App() {
         <header>
           <Navbar />
         </header>
-        <div className="flex">
+        <div className="flex items-start justify-center">
           <StudySelectionPage />
         </div>
         <Footer />

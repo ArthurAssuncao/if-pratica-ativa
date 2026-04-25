@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useCallback, useState } from "react";
+import { type ReactNode, useCallback, useState } from "react";
 // Ajustado para usar o alias @hook conforme seu tsconfig.json
 import { SidebarContext } from "@hook/useSidebar";
 

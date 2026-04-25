@@ -1,6 +1,6 @@
-import { Nivel, TipoQuestao } from "types/quiz";
+import type { QuestionType } from "types/study";
 
-export const MAPA_TIPOS_QUESTAO: Record<TipoQuestao, string> = {
+export const MAPA_TIPOS_QUESTAO: Record<QuestionType, string> = {
   multipla_escolha: "Múltipla Escolha",
   verdadeiro_falso: "Verdadeiro ou Falso",
   lacuna: "Preencher Lacuna",
@@ -11,28 +11,7 @@ export const MAPA_TIPOS_QUESTAO: Record<TipoQuestao, string> = {
   fluxograma_novo: "Fluxograma (Novo)",
 };
 
-// Transformando em lista para o Select
-export const LISTA_TIPOS_QUESTAO = Object.entries(MAPA_TIPOS_QUESTAO).map(
-  ([value, label]) => ({
-    value,
-    label,
-  }),
-);
-
-export const MAPA_NIVEIS_QUESTAO: Record<Nivel, string> = {
-  iniciante: "Iniciante",
-  intermediário: "Intermediário",
-  avançado: "Avançado",
-};
-
-export const LISTA_NIVEIS_QUESTAO = Object.entries(MAPA_NIVEIS_QUESTAO).map(
-  ([value, label]) => ({
-    value,
-    label,
-  }),
-);
-
-export const getTipoQuestaoPorExtenso = (tipo: TipoQuestao) => {
+export const getTipoQuestaoPorExtenso = (tipo: QuestionType) => {
   return MAPA_TIPOS_QUESTAO[tipo];
 };
 

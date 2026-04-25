@@ -1,5 +1,8 @@
-import { DISCIPLINES } from "data/activities";
-import { LESSONS } from "data/lessons/lessons";
+import {
+  useContentsWithQuestions,
+  useDisciplines,
+  useLessons,
+} from "hook/useDatabase";
 import { useQuizGenerator } from "hook/useQuizGenerator";
 import {
   BarChart3,
@@ -12,8 +15,8 @@ import {
   Settings2,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Amount, QuizConfig } from "types/quiz";
-import { Level, SavedProgress } from "types/study";
+import type { Amount, QuizConfig } from "types/quiz";
+import type { Level, SavedProgress } from "types/study";
 import { Textbook } from "./lesson/Textbook";
 import Quiz from "./Quiz";
 import { Breadcrumb } from "./ui/Breadcrumb";
@@ -44,35 +47,49 @@ export default function StudySelectionPage() {
   useState(false);
   const [isContentOptionsVisible, setIsContentOptionsVisible] = useState(true);
 
-  const discipline = DISCIPLINES.find((d) => d.id === config.disciplineId);
-  const quiz = useQuizGenerator({
-    discipline: discipline || null,
-    contentId: config.contentId,
-    level: config.level,
-    type: config.type,
-    limit: config.amount === "Livre" ? undefined : config.amount,
-    shuffle: true,
-  });
+  const { data: disciplinesData } = useDisciplines();
+
+  const disciplines = useMemo(() => disciplinesData || [], [disciplinesData]);
+
+  const discipline = disciplines.find((d) => d.id === config.disciplineId);
 
   const selectedDiscipline = useMemo(
-    () => DISCIPLINES.find((d) => d.id === config.disciplineId),
-    [config.disciplineId],
+    () => disciplines.find((d) => d.id === config.disciplineId),
+    [config.disciplineId, disciplines],
   );
 
-  const disciplineName = DISCIPLINES.find(
+  const disciplineName = disciplines.find(
     (d) => d.id === config.disciplineId,
   )?.name;
-  const content = DISCIPLINES.find(
-    (d) => d.id === config.disciplineId,
-  )?.contents.find((c) => c.id === config.contentId);
 
-  const lesson = LESSONS.find((l) => l.id === config.contentId);
+  const { data: contentsData } = useContentsWithQuestions(
+    config?.disciplineId || undefined,
+  );
+  const contents = useMemo(() => contentsData || [], [contentsData]);
+
+  const content = contents.find((c) => c.id === config.contentId);
+
+  const { data: lessonsData } = useLessons(config?.disciplineId || undefined);
+
+  const lesson = useMemo(
+    () => lessonsData?.find((l) => l.id === config.contentId),
+    [config.contentId, lessonsData],
+  );
 
   const sectionEnabled =
     (config.contentId &&
       content?.questions &&
       content?.questions?.length > 0) ||
     false;
+
+  const quiz = useQuizGenerator({
+    discipline: discipline || null,
+    selectedContent: content || null,
+    level: config.level,
+    type: config.type,
+    limit: config.amount === "Livre" ? undefined : config.amount,
+    shuffle: true,
+  });
 
   const handleStart = () => {
     console.log("Iniciando Quiz:", config);
@@ -143,7 +160,7 @@ export default function StudySelectionPage() {
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {DISCIPLINES.map((discipline) => (
+                  {disciplines.map((discipline) => (
                     <DisciplineCard
                       key={discipline.id}
                       discipline={discipline}
@@ -174,8 +191,9 @@ export default function StudySelectionPage() {
                     </h2>
                   </div>
                   <div className="space-y-2">
-                    {selectedDiscipline.contents.map((content) => {
+                    {contents.map((content) => {
                       const isSelected = config.contentId === content.id;
+                      console.log("Content", content.id);
                       return (
                         <button
                           key={content.id}

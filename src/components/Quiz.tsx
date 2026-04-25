@@ -1,7 +1,7 @@
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-import { Nivel, TipoQuestao } from "types/quiz";
+import type { Nivel, TipoQuestao } from "types/quiz";
 
 // Importando os componentes extraídos
 import { QuestionSelector } from "components/questions/QuestionSelector";
@@ -9,7 +9,7 @@ import { Feedback } from "components/ui/Feedback";
 import { ProgressBar } from "components/ui/ProgressBar";
 import { ResultScreen } from "components/ui/ResultScreen";
 import { Toaster } from "react-hot-toast";
-import { Quiz } from "types/study";
+import type { Quiz } from "types/study";
 import { getTipoQuestaoPorExtenso } from "util/Quiz";
 
 interface QuizProps {

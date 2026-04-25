@@ -1,5 +1,5 @@
-import { BaseQuestionProps } from "types/question";
-import { BaseQuestion } from "types/study";
+import type { BaseQuestionProps } from "types/question";
+import type { BaseQuestion } from "types/study";
 
 export function createQuestion<
   TProps extends BaseQuestionProps,

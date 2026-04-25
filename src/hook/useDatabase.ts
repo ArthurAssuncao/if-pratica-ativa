@@ -1,54 +1,132 @@
-import { useCallback, useEffect, useState } from "react";
-import { Question } from "types/study";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { StudyService } from "service/study-service";
+import type { Lesson } from "types/lesson";
+import type { Content, Discipline, Question } from "types/study";
 
 /**
- * Hook customizado para gerenciar a busca de questões do Neon via Netlify Functions.
- * * @param contentId O ID do conteúdo (ex: 'python-basico')
- * @returns Um objeto contendo as questões, estado de carregamento e erros.
+ * Hook para buscar todas as disciplinas disponíveis.
+ * Ideal para Sidebar ou menus de navegação principal.
  */
-export function useDatabase(contentId: string | null) {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+export function useDisciplines() {
+  return useQuery<Discipline[]>({
+    queryKey: ["disciplines"],
+    queryFn: () => StudyService.getDisciplines(),
+    staleTime: 1000 * 60 * 30, // Dados estáveis por 30 minutos
+  });
+}
 
-  const fetchQuestions = useCallback(async (id: string) => {
-    setLoading(true);
-    setError(null);
+/**
+ * Hook para buscar conteúdos filtrados por uma disciplina.
+ * @param disciplineId ID da disciplina (ex: 'python', 'informatica')
+ */
+export function useContents(disciplineId?: string) {
+  return useQuery<Content[]>({
+    queryKey: ["contents", disciplineId],
+    queryFn: () => StudyService.getContents(disciplineId!),
+    enabled: !!disciplineId, // Só executa se houver ID
+    staleTime: 1000 * 60 * 10, // Cache de 10 minutos
+  });
+}
 
-    try {
-      // Chamada para a Netlify Function que criamos anteriormente
-      const response = await fetch(
-        `/.netlify/functions/get-questions?contentId=${id}`,
+export function useContentsWithQuestions(disciplineId?: string) {
+  return useQuery<Content[]>({
+    queryKey: ["contents", disciplineId],
+    queryFn: () => StudyService.getContentsWithQuestions(disciplineId!),
+    enabled: !!disciplineId, // Só executa se houver ID
+    staleTime: 1000 * 60 * 10, // Cache de 10 minutos
+  });
+}
+
+export function useContentsWithQuestionsMultipleRequest(disciplineId?: string) {
+  return useQuery<Content[]>({
+    queryKey: ["contents", disciplineId],
+    queryFn: async () => {
+      // 1. Busca a lista de conteúdos básicos vinculados à disciplina
+      const contents = await StudyService.getContents(disciplineId!);
+
+      // 2. Para cada conteúdo retornado, busca suas respectivas questões em paralelo
+      // Utilizamos Promise.all para otimizar o tempo de resposta
+      const contentsWithQuestions = await Promise.all(
+        contents.map(async (content) => {
+          const questions = await StudyService.getQuestions(content.id);
+          return {
+            ...content,
+            questions, // Injeta o array de questões no objeto do conteúdo
+          };
+        }),
       );
 
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.statusText}`);
-      }
+      return contentsWithQuestions;
+    },
+    enabled: !!disciplineId,
+    staleTime: 1000 * 60 * 10, // 10 minutos
+  });
+}
 
-      const data = await response.json();
-      setQuestions(data);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      console.error("Erro ao buscar dados do Neon:", err);
-      setError(err.message || "Erro desconhecido ao carregar questões.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+/**
+ * Hook para buscar questões filtradas por um conteúdo específico.
+ * @param contentId O identificador do conteúdo (ex: 'python-basico')
+ */
+export function useQuestions(contentId?: string) {
+  return useQuery<Question[]>({
+    queryKey: ["questions", contentId],
+    queryFn: () => StudyService.getQuestions(contentId!),
+    enabled: !!contentId,
+    staleTime: 1000 * 60 * 5, // Cache de 5 minutos
+  });
+}
 
-  useEffect(() => {
-    if (contentId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      fetchQuestions(contentId);
-    }
-  }, [contentId, fetchQuestions]);
+/**
+ * Hook utilitário para ações globais de cache.
+ */
+export function useDatabaseActions() {
+  const queryClient = useQueryClient();
 
-  /**
-   * Permite recarregar os dados manualmente (útil para botões de "Tentar Novamente")
-   */
-  const refresh = () => {
-    if (contentId) fetchQuestions(contentId);
+  return {
+    refreshAll: () => queryClient.invalidateQueries(),
+    refreshDisciplines: () =>
+      queryClient.invalidateQueries({ queryKey: ["disciplines"] }),
+    refreshContent: (disciplineId: string) =>
+      queryClient.invalidateQueries({ queryKey: ["contents", disciplineId] }),
   };
+}
 
-  return { questions, loading, error, refresh };
+export function useGithubActions() {
+  const queryClient = useQueryClient();
+
+  return {
+    refreshAll: () => queryClient.invalidateQueries(),
+    refreshLessons: (disciplineId?: string) =>
+      queryClient.invalidateQueries({ queryKey: ["lessons", disciplineId] }),
+    refreshLessonMarkdown: (disciplineId?: string, slug?: string) =>
+      queryClient.invalidateQueries({
+        queryKey: ["lessonMarkdown", disciplineId, slug],
+      }),
+  };
+}
+
+export function useLessons(disciplineId?: string) {
+  return useQuery<Lesson[]>({
+    queryKey: ["lessons", disciplineId],
+    queryFn: async () => {
+      if (!disciplineId) throw new Error("ID da disciplina é obrigatório");
+
+      // Chamada para a nova função no Service que busca do GitHub
+      const data = await StudyService.getLessonsAvailable(disciplineId);
+
+      console.log(`Dados carregados para ${disciplineId}:`, data);
+      return data;
+    },
+    enabled: !!disciplineId, // Só executa se houver ID
+    staleTime: 1000 * 60 * 10, // Cache de 10 minutos
+  });
+}
+
+export function useLessonMarkdown(slug: string, disciplineId?: string) {
+  return useQuery<string>({
+    queryKey: ["lessonMarkdown", disciplineId, slug],
+    queryFn: () => StudyService.getLessonMarkdown(slug, disciplineId!),
+    enabled: !!disciplineId && !!slug, // Só executa se houver ID e slug
+    staleTime: 1000 * 60 * 10, // Cache de 10 minutos
+  });
 }

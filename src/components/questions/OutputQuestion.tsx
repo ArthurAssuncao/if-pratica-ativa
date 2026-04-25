@@ -3,8 +3,8 @@ import { QuestionHint } from "components/ui/QuestionHint";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { BaseQuestionProps } from "types/question";
-import { QuestionOutput } from "types/study";
+import type { BaseQuestionProps } from "types/question";
+import type { QuestionOutput } from "types/study";
 import { ajustarResposta } from "util/Quiz";
 import { createQuestion } from "./QuestionFactory";
 

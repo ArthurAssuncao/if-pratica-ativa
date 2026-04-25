@@ -1,5 +1,5 @@
 import { ChevronRight, Clock, Play } from "lucide-react";
-import { SavedProgress } from "types/study";
+import type { SavedProgress } from "types/study";
 
 export const ContinueCard = ({
   progress,

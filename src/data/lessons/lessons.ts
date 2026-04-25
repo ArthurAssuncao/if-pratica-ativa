@@ -1,6 +1,6 @@
-import { LessonContent } from "types/lesson";
+import type { Lesson } from "types/lesson";
 
-export const LESSONS: LessonContent[] = [
+export const LESSONS: Lesson[] = [
   {
     id: "python-basico",
     title: "Fundamentos de Python",

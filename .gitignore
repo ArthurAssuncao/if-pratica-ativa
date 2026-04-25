@@ -1,3 +1,26 @@
+# Dependências
+node_modules/
+/.pnp
+.pnp.js
+
+# Testes
+/coverage
+
+# Produção
+/build
+/dist
+dist-ssr
+.vercel
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+*.local
+
 # Logs
 logs
 *.log
@@ -7,18 +30,45 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# Editor
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.swp
+*.swo
+*.code-workspace
+.history
+
+# Netlify
+.netlify/
+.netlify
+netlify/
+
+# Cache e arquivos temporários
+.cache/
+.parcel-cache/
+.npm
+.eslintcache
+.stylelintcache
+.turbo
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*~
+
+# Opcional - remova se usar esses arquivos
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

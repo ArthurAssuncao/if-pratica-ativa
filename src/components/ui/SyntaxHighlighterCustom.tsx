@@ -1,7 +1,7 @@
 import { useIsMobile } from "hook/useIsMobile";
 import { useEffect, useState } from "react";
 import SyntaxHighlighter, {
-  SyntaxHighlighterProps,
+  type SyntaxHighlighterProps,
 } from "react-syntax-highlighter";
 import { nnfx, nord } from "react-syntax-highlighter/dist/esm/styles/hljs";
 

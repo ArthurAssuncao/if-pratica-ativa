@@ -1,14 +1,16 @@
 import { Sidebar } from "components/ui/Sidebar";
 import { LESSONS } from "data/lessons/lessons";
+import { useLessonMarkdown } from "hook/useDatabase";
 import { BookOpen, ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
-import { LessonContent } from "types/lesson";
-import { Discipline } from "types/study";
+import { useMemo, useState } from "react";
+
+import type { Lesson } from "types/lesson";
+import type { Discipline } from "types/study";
 import MarkdownRenderer from "./MarkdownRender";
 import "./textBook.css";
 
 interface SidebarSumarioProps {
-  handleLessonChange: (lesson: LessonContent) => void;
+  handleLessonChange: (lesson: Lesson) => void;
 }
 
 const SidebarSumario = ({ handleLessonChange }: SidebarSumarioProps) => {
@@ -35,7 +37,7 @@ const SidebarSumario = ({ handleLessonChange }: SidebarSumarioProps) => {
 };
 
 interface TextbookProps {
-  lesson: LessonContent;
+  lesson: Lesson;
   discipline: Discipline;
   onLessonChange: (lessonId: string) => void;
 }
@@ -45,28 +47,17 @@ export function Textbook({
   discipline,
   onLessonChange,
 }: TextbookProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [markdown, setMarkdown] = useState("");
-  const [lessonContent, setLessonContent] = useState<LessonContent>(lesson);
+  const [lessonContent, setLessonContent] = useState<Lesson>(lesson);
 
-  useEffect(() => {
-    // Busca o arquivo .md baseado no que está selecionado
-    if (discipline.name && lesson) {
-      const url = `/data/lessons/${discipline.id.toLocaleLowerCase()}/${lessonContent.slug}.md`;
-      fetch(url)
-        .then((res) => res.text())
-        .then((text) => {
-          lesson.markdown = text;
-          setMarkdown(text);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.error("Erro:", err);
-        });
-    }
-  }, [lesson, discipline, lessonContent.slug]);
+  const { data: lessonMarkdown } = useLessonMarkdown(
+    discipline.id,
+    lessonContent.slug,
+  );
+  const markdown = useMemo(() => {
+    return lessonMarkdown || "";
+  }, [lessonMarkdown]);
 
-  const handleLessonChange = (newLesson: LessonContent) => {
+  const handleLessonChange = (newLesson: Lesson) => {
     onLessonChange(newLesson.id);
     setLessonContent(newLesson);
   };
@@ -83,7 +74,7 @@ export function Textbook({
     handleLessonChange(newLesson);
   };
 
-  if (isLoading) {
+  if (!lessonMarkdown) {
     return <div>Carregando...</div>;
   }
 
@@ -93,9 +84,9 @@ export function Textbook({
         <SidebarSumario handleLessonChange={handleLessonChange} />
       </Sidebar>
 
-      <aside className="w-64 border-r border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 hidden md:flex flex-col">
+      {/* <aside className="w-64 border-r border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 hidden md:flex flex-col">
         <SidebarSumario handleLessonChange={handleLessonChange} />
-      </aside>
+      </aside> */}
 
       {/* Área do Conteúdo */}
       <main className="flex-1 p-4 md:p-8 min-w-0">
@@ -107,9 +98,7 @@ export function Textbook({
             </div>
           </header>
           {/* Renderizador de Markdown */}
-          {lesson.markdown && markdown && (
-            <MarkdownRenderer>{markdown}</MarkdownRenderer>
-          )}
+          {markdown && <MarkdownRenderer>{markdown}</MarkdownRenderer>}
 
           {/* Navegação entre aulas */}
           <footer className="mt-16 pt-8 border-t border-slate-100 dark:border-slate-800 flex justify-between">

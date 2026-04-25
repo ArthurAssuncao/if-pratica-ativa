@@ -1,8 +1,8 @@
 import { ButtonConfirm } from "components/ui/ButtonConfirm";
 import React from "react";
 import toast from "react-hot-toast";
-import { BaseQuestionProps } from "types/question";
-import { QuestionMultipleChoice } from "types/study";
+import type { BaseQuestionProps } from "types/question";
+import type { QuestionMultipleChoice } from "types/study";
 import { getLetraByIndex } from "util/Quiz";
 import { createQuestion } from "./QuestionFactory";
 

@@ -1,4 +1,4 @@
-import { ReactNode, useLayoutEffect, useRef, useState } from "react";
+import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
 
 interface OptionSliderProps<T> {
   options: T[];

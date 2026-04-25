@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
-import { QuizData, Quizes } from "types/quiz";
-import { Discipline } from "types/study";
+import type { QuizData, Quizes } from "types/quiz";
+import type { Discipline } from "types/study";
 
 const quizesData: QuizData[] = [
   {

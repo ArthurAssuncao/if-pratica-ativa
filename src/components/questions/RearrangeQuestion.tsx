@@ -3,8 +3,8 @@ import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { RotateCcw, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
-import { BaseQuestionProps } from "types/question";
-import { QuestionRearrange, RearrangeRow } from "types/study";
+import type { BaseQuestionProps } from "types/question";
+import type { QuestionRearrange, RearrangeRow } from "types/study";
 import { createQuestion } from "./QuestionFactory";
 
 interface RearrangeQuestionProps extends BaseQuestionProps {

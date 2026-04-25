@@ -1,6 +1,6 @@
 import {
-  Edge,
-  Node,
+  type Edge,
+  type Node,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -13,8 +13,8 @@ import { ButtonConfirm } from "components/ui/ButtonConfirm";
 import { nodeTypes } from "components/ui/FlowNodes";
 import { QuestionHint } from "components/ui/QuestionHint";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
-import { BaseQuestionProps } from "types/question";
-import { QuestionFlowchartnNew } from "types/study";
+import type { BaseQuestionProps } from "types/question";
+import type { QuestionFlowchartnNew } from "types/study";
 import { createQuestion } from "./QuestionFactory";
 
 interface FlowchartNewQuestionProps extends BaseQuestionProps {

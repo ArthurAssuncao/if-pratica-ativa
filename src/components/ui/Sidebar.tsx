@@ -8,7 +8,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const { isSidebarOpened, closeSidebar } = useSidebar();
-  console.log("Sidebar", isSidebarOpened);
+
   return (
     <>
       {/* Overlay para Mobile: Só aparece quando isOpen é true e em telas menores que LG */}

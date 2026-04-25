@@ -1,7 +1,6 @@
-export interface LessonContent {
+export interface Lesson {
   id: string;
   title: string;
   slug: string; // URL amigável
-  markdown?: string;
   order: number;
 }

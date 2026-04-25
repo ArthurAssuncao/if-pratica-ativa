@@ -9,4 +9,7 @@ export default defineConfig({
     // Automatically use "paths" from tsconfig.json
     tsconfigPaths: true,
   },
+  define: {
+    "process.env": {},
+  },
 });

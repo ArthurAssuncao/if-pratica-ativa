@@ -1,7 +1,6 @@
-import { Icon } from "@iconify/react";
-import { Discipline, Question } from "types/study";
+import type { Question } from "types/study";
 
-const questions: Question[] = [
+export const questions: Question[] = [
   {
     id: 1,
     type: "multipla_escolha",
@@ -101,60 +100,6 @@ const questions: Question[] = [
       { from: "decisao_1", to: "decisao_2", label: "Não" },
       { from: "decisao_2", to: "recuperacao", label: "Sim" },
       { from: "decisao_2", to: "reprovado", label: "Não" },
-    ],
-  },
-];
-
-export const DISCIPLINES: Discipline[] = [
-  {
-    id: "python",
-    name: "Programação em Python",
-    icon: <Icon icon="devicon:python-wordmark" />,
-    contents: [
-      {
-        id: "python-basico",
-        name: "Conteúdos gerais",
-        level: "iniciante",
-        questions: questions,
-      },
-      {
-        id: "tipos-basicos",
-        name: "Tipos básicos, variáveis e operadores",
-        level: "iniciante",
-      },
-      { id: "entrada-saida", name: "Entrada e saída", level: "iniciante" },
-      {
-        id: "condicionais",
-        name: "Estruturas Condicionais",
-        level: "iniciante",
-      },
-      { id: "repeticao", name: "Estruturas de Repetição", level: "iniciante" },
-      { id: "funcoes", name: "Funções", level: "iniciante" },
-      {
-        id: "estruturas-dados",
-        name: "Estruturas de Dados",
-        level: "iniciante",
-      },
-    ],
-  },
-  {
-    id: "informatica",
-    name: "Informática Básica",
-    icon: <Icon icon="noto:desktop-computer" />,
-    contents: [
-      { id: "hardware", name: "Hardware", level: "iniciante" },
-      { id: "software", name: "Software", level: "iniciante" },
-      {
-        id: "arquitetura-de-computadores",
-        name: "Arquitetura de Computadores",
-        level: "iniciante",
-      },
-      { id: "redes", name: "Redes", level: "iniciante" },
-      {
-        id: "redes-de-computadores",
-        name: "Redes de Computadores",
-        level: "iniciante",
-      },
     ],
   },
 ];

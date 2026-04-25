@@ -1,4 +1,5 @@
-import { Discipline } from "types/study";
+import { Icon } from "@iconify/react";
+import type { Discipline } from "types/study";
 
 interface DisciplineCardProps {
   discipline: Discipline;
@@ -24,7 +25,9 @@ export function DisciplineCard({
         }
       `}
     >
-      <span className="text-5xl md:text-4xl mb-2">{discipline.icon}</span>
+      <span className="text-5xl md:text-4xl mb-2">
+        <Icon icon={discipline.iconSlug} />
+      </span>
       <span className="font-bold text-sm text-center leading-tight">
         {discipline.name}
       </span>

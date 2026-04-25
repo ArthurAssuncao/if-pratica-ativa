@@ -3,7 +3,7 @@ import AuthModal from "auth/AuthModal";
 import { useAuth } from "hook/useAuth";
 import { Laptop, LogIn, Menu, User } from "lucide-react";
 import { useState } from "react";
-import { UserData } from "types/user";
+import type { UserData } from "types/user";
 import { ThemeToggle } from "./ThemeToggle";
 
 export const Navbar = () => {
@@ -49,7 +49,7 @@ export const Navbar = () => {
 
         <button
           onClick={() => toggleSidebar()}
-          className="visible md:hidden group p-2 rounded-full border border-slate-700 bg-slate-50 hover:bg-slate-500 transition-all text-slate-700 hover:text-slate-200 dark:text-slate-300 dark:hover:text-slate-700 hover:cursor-pointer dark:hover:bg-slate-300 ease-in-out duration-500"
+          className="visible lg:hidden group p-2 rounded-full border border-slate-700 bg-slate-50 hover:bg-slate-500 transition-all text-slate-700 hover:text-slate-200 dark:text-slate-300 dark:hover:text-slate-700 hover:cursor-pointer dark:hover:bg-slate-300 ease-in-out duration-500"
           title="Abrir Menu"
         >
           <Menu size={24} />
