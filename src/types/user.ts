@@ -1,4 +1,3 @@
-export interface UserData {
-  name?: string;
-  email?: string;
-}
+import netlifyIdentity from "netlify-identity-widget";
+
+export type UserData = netlifyIdentity.User;

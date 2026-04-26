@@ -193,7 +193,6 @@ export default function StudySelectionPage() {
                   <div className="space-y-2">
                     {contents.map((content) => {
                       const isSelected = config.contentId === content.id;
-                      console.log("Content", content.id);
                       return (
                         <button
                           key={content.id}

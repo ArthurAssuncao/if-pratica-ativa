@@ -1,23 +1,15 @@
 import { useSidebar } from "@hook/useSidebar";
 import AuthModal from "auth/AuthModal";
-import { Laptop, LogIn, Menu, User } from "lucide-react";
-import netlifyIdentity from "netlify-identity-widget";
+import { useAuth } from "hook/useAuth";
+import { Laptop, LogIn, Menu } from "lucide-react";
 import { useState } from "react";
-import type { UserData } from "types/user";
 import { ThemeToggle } from "./ThemeToggle";
 
 export const Navbar = () => {
   const { toggleSidebar } = useSidebar();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [user, setUser] = useState<UserData | null>(null);
-  netlifyIdentity.on("init", (user) => {
-    console.log("init", user);
-    setUser(user);
-  });
-  netlifyIdentity.on("login", (user) => {
-    console.log("login", user);
-    setUser(user);
-  });
+
+  const user = useAuth();
 
   const handleLoginSuccess = () => {
     setIsAuthModalOpen(false);
@@ -48,8 +40,14 @@ export const Navbar = () => {
           </button>
         ) : (
           <div className="flex items-center gap-2 text-white bg-blue-800 px-3 py-1.5 rounded-full border border-blue-400/30">
-            <User size={18} />
-            <span className="text-sm font-medium">{user.name || "Aluno"}</span>
+            <img
+              src={user.user_metadata?.avatar_url}
+              alt="avatar"
+              className="w-8 h-8 rounded-full"
+            />
+            <span className="text-sm font-medium">
+              {user.user_metadata?.full_name || "Aluno"}
+            </span>
           </div>
         )}
 

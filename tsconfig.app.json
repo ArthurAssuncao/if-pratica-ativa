@@ -30,7 +30,8 @@
       "@util/*": ["./src/util/*"],
       "@auth/*": ["./src/auth/*"],
       "@service/*": ["./src/service/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
   "include": ["src"]
