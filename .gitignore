@@ -47,7 +47,6 @@ lerna-debug.log*
 # Netlify
 .netlify/
 .netlify
-netlify/
 
 # Cache e arquivos temporários
 .cache/
