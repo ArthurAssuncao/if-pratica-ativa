@@ -58,7 +58,7 @@ export default function App() {
   return (
     <SidebarProvider>
       <div className="min-h-screen bg-blue-50 dark:bg-slate-950 transition-colors">
-        <header>
+        <header className="mb-16">
           <Navbar />
         </header>
         <div className="flex items-start justify-center">

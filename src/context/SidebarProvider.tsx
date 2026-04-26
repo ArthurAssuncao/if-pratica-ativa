@@ -16,6 +16,7 @@ export function SidebarProvider({ children }: SidebarProviderProps) {
   const [isSidebarOpened, setIsSidebarOpened] = useState(true);
 
   const toggleSidebar = useCallback(() => {
+    console.log("SidebarProvider - toggleSidebar");
     setIsSidebarOpened((prev) => !prev);
   }, []);
 

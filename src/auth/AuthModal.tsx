@@ -69,7 +69,7 @@ export default function AuthModal({
       />
 
       {/* Estrutura do Modal */}
-      <div className="relative w-full max-w-md transform overflow-hidden rounded-3xl bg-white dark:bg-slate-900 p-8 shadow-2xl transition-all border border-slate-200 dark:border-slate-800">
+      <div className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-slate-900 p-8 shadow-2xl transition-all border border-slate-200 dark:border-slate-800">
         {/* Botão de Fechar */}
         <button
           onClick={onClose}

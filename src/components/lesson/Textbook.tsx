@@ -1,40 +1,11 @@
-import { Sidebar } from "components/ui/Sidebar";
-import { LESSONS } from "data/lessons/lessons";
 import { useLessonMarkdown } from "hook/useDatabase";
-import { BookOpen, ChevronRight } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ChevronRight } from "lucide-react";
+import { useMemo } from "react";
 
 import type { Lesson } from "types/lesson";
 import type { Discipline } from "types/study";
 import MarkdownRenderer from "./MarkdownRender";
 import "./textBook.css";
-
-interface SidebarSumarioProps {
-  handleLessonChange: (lesson: Lesson) => void;
-}
-
-const SidebarSumario = ({ handleLessonChange }: SidebarSumarioProps) => {
-  return (
-    <>
-      <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
-        <BookOpen size={20} className="text-blue-500" />
-        <span>Sumário</span>
-      </div>
-      <nav className="flex-1 overflow-y-auto p-4 space-y-2">
-        {LESSONS.map((l) => (
-          <button
-            key={l.id}
-            onClick={() => handleLessonChange(l)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all bg-blue-500 text-white shadow-lg shadow-blue-500/20 hover:cursor-pointer hover:bg-blue-600`}
-          >
-            <span className="opacity-90">{l.order}.</span>
-            <span className="truncate">{l.title}</span>
-          </button>
-        ))}
-      </nav>
-    </>
-  );
-};
 
 interface TextbookProps {
   lesson: Lesson;
@@ -47,31 +18,20 @@ export function Textbook({
   discipline,
   onLessonChange,
 }: TextbookProps) {
-  const [lessonContent, setLessonContent] = useState<Lesson>(lesson);
-
   const { data: lessonMarkdown } = useLessonMarkdown(
     discipline.id,
-    lessonContent.slug,
+    lesson.slug,
   );
   const markdown = useMemo(() => {
     return lessonMarkdown || "";
   }, [lessonMarkdown]);
 
-  const handleLessonChange = (newLesson: Lesson) => {
-    onLessonChange(newLesson.id);
-    setLessonContent(newLesson);
-  };
-
   const handlePreviousLesson = () => {
-    const newLesson = LESSONS.find((l) => l.order === lesson.order - 1);
-    if (!newLesson) return;
-    handleLessonChange(newLesson);
+    onLessonChange(String(parseInt(lesson.id) - 1));
   };
 
   const handleNextLesson = () => {
-    const newLesson = LESSONS.find((l) => l.order === lesson.order + 1);
-    if (!newLesson) return;
-    handleLessonChange(newLesson);
+    onLessonChange(String(parseInt(lesson.id) + 1));
   };
 
   if (!lessonMarkdown) {
@@ -79,11 +39,7 @@ export function Textbook({
   }
 
   return (
-    <div className="w-full flex bg-white dark:bg-slate-950 rounded-3xl border border-slate-200 dark:border-slate-800">
-      <Sidebar>
-        <SidebarSumario handleLessonChange={handleLessonChange} />
-      </Sidebar>
-
+    <div className="w-full flex bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800">
       {/* <aside className="w-64 border-r border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 hidden md:flex flex-col">
         <SidebarSumario handleLessonChange={handleLessonChange} />
       </aside> */}

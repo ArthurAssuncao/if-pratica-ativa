@@ -10,7 +10,11 @@ interface Theme {
   color: string;
 }
 
-export function ThemeToggle() {
+interface ThemeProps {
+  className?: string;
+}
+
+export function ThemeToggle({ className }: ThemeProps) {
   const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,7 +38,7 @@ export function ThemeToggle() {
   const currentTheme = themes.find((t) => t.id === theme) || themes[2];
 
   return (
-    <div className="relative">
+    <div className={`relative ${className}`}>
       {/* --- VERSÃO MOBILE (Dropdown) --- */}
       <div className="md:hidden">
         <button

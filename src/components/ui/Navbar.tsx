@@ -1,6 +1,7 @@
 import { useSidebar } from "@hook/useSidebar";
 import AuthModal from "auth/AuthModal";
 import { useAuth } from "hook/useAuth";
+import { useBreakpoints } from "hook/useBreakpoints";
 import { Laptop, LogIn, Menu } from "lucide-react";
 import { useState } from "react";
 import { ThemeToggle } from "./ThemeToggle";
@@ -8,6 +9,7 @@ import { ThemeToggle } from "./ThemeToggle";
 export const Navbar = () => {
   const { toggleSidebar } = useSidebar();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const isTablet = useBreakpoints().isTablet;
 
   const user = useAuth();
 
@@ -16,7 +18,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="w-full h-16 border-b  bg-blue-700  border-slate-300 dark:border-slate-600 flex items-center justify-between px-6 sticky top-0 z-50 transition-colors duration-300">
+    <nav className=" w-full h-16 shadow-md bg-blue-700   flex items-center justify-between px-6 fixed top-0 z-50 transition-colors duration-300">
       {/* Lado Esquerdo: Logo e Nome */}
       <div className="flex items-center gap-3">
         <div className="bg-white p-2 rounded-lg">
@@ -28,36 +30,40 @@ export const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-3">
-        <ThemeToggle />
+        <ThemeToggle className="hidden md:block" />
 
         {!user ? (
-          <button
-            onClick={() => setIsAuthModalOpen(true)}
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all border border-white/20 active:scale-95"
-          >
-            <LogIn size={18} />
-            <span className="hidden sm:inline">Entrar</span>
-          </button>
+          <>
+            <button
+              onClick={() => setIsAuthModalOpen(true)}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all border border-white/20 active:scale-95"
+            >
+              <LogIn size={18} />
+              <span className="hidden sm:inline">Entrar</span>
+            </button>
+            <button
+              onClick={() => toggleSidebar()}
+              className={`visible lg:hidden group p-2 rounded-full border border-slate-700 bg-slate-50 hover:bg-slate-500 transition-all text-slate-700 hover:text-slate-200 dark:text-slate-300 dark:hover:text-slate-700 hover:cursor-pointer dark:hover:bg-slate-300 ease-in-out duration-500 `}
+              title="Abrir Menu"
+            >
+              <Menu size={24} />
+            </button>
+          </>
         ) : (
-          <div className="flex items-center gap-2 text-white bg-blue-800 px-3 py-1.5 rounded-full border border-blue-400/30">
+          <button
+            className={`flex items-center gap-2 text-white bg-blue-800 px-3 lg:px-4 py-1.5 h-11 rounded-full border border-blue-400/30 ${!isTablet ? "cursor-default" : "cursor-pointer"}`}
+            onClick={() => isTablet && toggleSidebar()}
+          >
             <img
               src={user.user_metadata?.avatar_url}
               alt="avatar"
-              className="w-8 h-8 rounded-full"
+              className="w-8 h-8 rounded-full lg:hidden"
             />
             <span className="text-sm font-medium">
               {user.user_metadata?.full_name || "Aluno"}
             </span>
-          </div>
+          </button>
         )}
-
-        <button
-          onClick={() => toggleSidebar()}
-          className="visible lg:hidden group p-2 rounded-full border border-slate-700 bg-slate-50 hover:bg-slate-500 transition-all text-slate-700 hover:text-slate-200 dark:text-slate-300 dark:hover:text-slate-700 hover:cursor-pointer dark:hover:bg-slate-300 ease-in-out duration-500"
-          title="Abrir Menu"
-        >
-          <Menu size={24} />
-        </button>
       </div>
       <AuthModal
         isOpen={isAuthModalOpen}

@@ -7,7 +7,7 @@ export const ResultScreen = ({
   pontos: number;
   total: number;
 }) => (
-  <div className="flex flex-col items-center justify-center  p-10 bg-slate-100 dark:bg-slate-800 rounded-3xl text-center border border-slate-300 dark:border-slate-700 shadow-2xl">
+  <div className="flex flex-col items-center justify-center  p-10 bg-slate-100 dark:bg-slate-800 rounded-2xl text-center border border-slate-300 dark:border-slate-700 shadow-2xl">
     <h2 className="text-3xl font-bold text-slate-700 dark:text-white mb-4">
       Resultado
     </h2>
