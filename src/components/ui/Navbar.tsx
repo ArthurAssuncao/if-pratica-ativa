@@ -1,7 +1,7 @@
 import { useSidebar } from "@hook/useSidebar";
 import AuthModal from "auth/AuthModal";
-import { useAuth } from "hook/useAuth";
 import { Laptop, LogIn, Menu, User } from "lucide-react";
+import netlifyIdentity from "netlify-identity-widget";
 import { useState } from "react";
 import type { UserData } from "types/user";
 import { ThemeToggle } from "./ThemeToggle";
@@ -10,10 +10,16 @@ export const Navbar = () => {
   const { toggleSidebar } = useSidebar();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [user, setUser] = useState<UserData | null>(null);
-  const userData = useAuth();
+  netlifyIdentity.on("init", (user) => {
+    console.log("init", user);
+    setUser(user);
+  });
+  netlifyIdentity.on("login", (user) => {
+    console.log("login", user);
+    setUser(user);
+  });
 
   const handleLoginSuccess = () => {
-    setUser(userData);
     setIsAuthModalOpen(false);
   };
 

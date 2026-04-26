@@ -1,5 +1,5 @@
-import { handleAuthCallback, oauthLogin } from "@netlify/identity";
 import { Loader2, LogIn, X } from "lucide-react";
+import netlifyIdentity from "netlify-identity-widget";
 import { useEffect, useState } from "react";
 
 interface AuthModalProps {
@@ -24,28 +24,10 @@ export default function AuthModal({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!window.location.hash || !AUTH_HASH_PATTERN.test(window.location.hash))
-      return;
-
-    handleAuthCallback()
-      .then((result) => {
-        if (!result) {
-          setProcessing(false);
-          return;
-        }
-        if (result.type === "invite") {
-          window.location.href = `/accept-invite?token=${result.token}`;
-        } else if (result.type === "recovery") {
-          window.location.href = "/reset-password";
-        } else {
-          window.location.href = "/";
-          onLoginSuccess();
-        }
-      })
-      .catch((err) => {
-        setError(err instanceof Error ? err.message : "Callback failed");
-        setProcessing(false);
-      });
+    netlifyIdentity.on("login", (user) => {
+      console.log("login", user);
+      onLoginSuccess();
+    });
   }, [onLoginSuccess]);
 
   // Fecha o modal ao pressionar a tecla ESC para melhor acessibilidade
@@ -66,12 +48,11 @@ export default function AuthModal({
 
     try {
       // Abre a janela de autorização do Google
-      oauthLogin("google");
+      // oauthLogin("google");
+
+      netlifyIdentity.open("login");
     } catch (err) {
       console.error("Erro durante o login OAuth:", err);
-      // setError(
-      //   "Falha na conexão com o Google. Verifique se o provedor está habilitado no Netlify.",
-      // );
     } finally {
       setProcessing(false);
     }

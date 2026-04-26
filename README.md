@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+# IF Pratica Ativa
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Executando o projeto
 
-Currently, two official plugins are available:
+### Pré-requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [Node.js](https://nodejs.org/en/) versão 16.x ou superior
+- [Yarn](https://yarnpkg.com/) versão 1.x ou superior
 
-## React Compiler
+### Executando o projeto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Clone o repositório:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/netlify-labs/if-pratica-ativa.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Entre na pasta do projeto:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd if-pratica-ativa
 ```
+
+3. Instale as dependências:
+
+```bash
+npm install
+```
+
+4. Instale o Netlify CLI:
+
+```bash
+npm install netlify-cli -g
+```
+
+5. Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente:
+
+```bash
+# URL do banco de dados
+DATABASE_URL=https://<nome-do-site>.banco.com
+```
+
+6. Login no Netlify:
+
+```bash
+netlify login
+```
+
+7. Link a sua conta do Netlify:
+
+```bash
+netlify link
+```
+
+8. Inicie o projeto:
+
+```bash
+netlify dev
+```
+
+O projeto agora estará disponível em `http://localhost:5173`.
+
+### Executando o projeto no Netlify
+
+1. Acesse o [Netlify](https://app.netlify.com/) e crie uma nova aplicação.
+2. Selecione o repositório do projeto.
+3. Clique em "Deploy site".
+4. Selecione a branch `main`.
+5. Clique em "Deploy site".
+
+O projeto agora estará disponível em `https://<nome-do-site>.netlify.app`.
