@@ -4,6 +4,7 @@ import {
   useDisciplines,
   useLessons,
 } from "hook/useDatabase";
+import { useIsMobile } from "hook/useIsMobile";
 import { useQuizGenerator } from "hook/useQuizGenerator";
 import {
   BarChart3,
@@ -15,6 +16,7 @@ import {
   Play,
   Settings2,
 } from "lucide-react";
+import netlifyIdentity from "netlify-identity-widget";
 import { useMemo, useState } from "react";
 import type { Amount, QuizConfig } from "types/quiz";
 import type { Level, SavedProgress } from "types/study";
@@ -26,6 +28,8 @@ import { ContinueCard } from "./ui/ContinueCard";
 import { DisciplineCard } from "./ui/DisciplineCard";
 import { OptionSlider } from "./ui/OptionSlider";
 import { Sidebar } from "./ui/Sidebar";
+import { ThemeToggle } from "./ui/ThemeToggle";
+import { UserStatsCard } from "./ui/UserStatsCard";
 
 const MOCK_PROGRESS: SavedProgress = {
   disciplineId: "mat",
@@ -49,6 +53,7 @@ export default function StudySelectionPage() {
   const [hasContentSelected, setHasContentSelected] = useState(false);
   useState(false);
   const [isContentOptionsVisible, setIsContentOptionsVisible] = useState(true);
+  const isMobile = useIsMobile();
 
   const { data: disciplinesData } = useDisciplines();
 
@@ -127,28 +132,41 @@ export default function StudySelectionPage() {
     setIsContentOptionsVisible(false);
   };
 
+  const handleLogout = () => {
+    console.log("Logout");
+    netlifyIdentity.logout();
+  };
+
   return (
     <div className="flex flex-row items-stretch">
-      <Sidebar className="self-stretch md:flex-1/3 lg:flex-1/3 w-1/2 md:w-1/3 p-0 lg:p-8 lg:pr-0 md:pr-0 animate-in fade-in duration-500 flex flex-col gap-4 ">
+      <Sidebar className="self-stretch md:flex-1/3 lg:flex-1/3 w-3/4 md:w-1/3 p-0 lg:p-8 lg:pr-0 md:pr-0 animate-in fade-in duration-500 flex flex-col gap-4 ">
         <div className="h-full lg:rounded-2xl p-0 shadow border  bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800">
           {user && user.user_metadata && user.user_metadata.full_name && (
-            <div className="flex items-center gap-4 p-4 rounded-t-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
+            <div className="flex flex-col xl:flex-row items-center gap-2 xl:gap-4 p-4 rounded-t-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
               <img
                 src={user.user_metadata.avatar_url}
                 alt={user.user_metadata.full_name}
-                className="w-12 h-12 rounded-full border-2 border-blue-500 p-0.5"
+                className="w-12 h-12 rounded-full border-2 border-blue-500"
               />
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
+
+              <div className="flex flex-col gap-1">
+                <span className="text-sm font-medium text-slate-500 dark:text-slate-200">
                   Olá,{" "}
                   <span className="text-slate-900 dark:text-white font-bold">
                     {user.user_metadata.full_name.split(" ")[0]}
                   </span>{" "}
                   👋
                 </span>
-                <span className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-37.5">
+                <span className="text-xs text-slate-400 dark:text-slate-200 truncate max-w-37.5">
                   {user.email}
                 </span>
+                {isMobile && <ThemeToggle />}
+                <button
+                  onClick={handleLogout}
+                  className="mt-2 text-xs bg-slate-200 text-slate-900 hover:text-red-700 transition-colors rounded-2xl py-2 hover:cursor-pointer"
+                >
+                  Sair
+                </button>
               </div>
             </div>
           )}
@@ -159,6 +177,12 @@ export default function StudySelectionPage() {
                 handleLessonChange={handleLessonChange}
               />
             )}
+            <UserStatsCard
+              completedQuizzes={0}
+              totalQuizzes={10}
+              accuracy={0}
+              totalPoints={0}
+            />
           </div>
         </div>
       </Sidebar>

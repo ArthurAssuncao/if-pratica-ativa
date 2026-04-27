@@ -12,11 +12,11 @@ export const SidebarSumario = ({
 }: SidebarSumarioProps) => {
   return (
     <>
-      <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
+      <div className="mx-2 pb-2 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
         <BookOpen size={20} className="text-blue-500" />
         <span>Sumário</span>
       </div>
-      <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+      <nav className="flex-1 overflow-y-auto p-2 pt-0 pb-4 flex flex-col gap-2">
         {lessons.map((l) => (
           <button
             key={l.id}

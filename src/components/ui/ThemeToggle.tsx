@@ -46,9 +46,9 @@ export function ThemeToggle({ className }: ThemeProps) {
           className="flex items-center gap-2 p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700"
         >
           <span>{theme === "system" ? "📱" : currentTheme.icon}</span>
-          {/* <span className="text-sm font-medium dark:text-white capitalize">
+          <span className="text-sm font-medium dark:text-white capitalize">
             {currentTheme.label}
-          </span> */}
+          </span>
           <ChevronDown
             size={16}
             className={`transition-transform ${isOpen ? "rotate-180" : ""}`}

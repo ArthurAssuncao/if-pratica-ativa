@@ -28,7 +28,7 @@ export function DisciplineCard({
       <span className="text-5xl md:text-4xl mb-2">
         <Icon icon={discipline.iconSlug} />
       </span>
-      <span className="font-bold text-sm text-center leading-tight">
+      <span className="font-bold text-sm text-center leading-tight text-slate-700 dark:text-slate-200">
         {discipline.name}
       </span>
     </button>
