@@ -55,13 +55,14 @@ export const Navbar = () => {
             onClick={() => isTablet && toggleSidebar()}
           >
             <img
-              src={user.user_metadata?.avatar_url}
+              src={user.user_metadata?.avatar_url || ""}
               alt="avatar"
               className="w-8 h-8 rounded-full lg:hidden"
             />
             <span className="text-sm font-medium">
               {user.user_metadata?.full_name || "Aluno"}
             </span>
+            <Menu size={24} className="block lg:hidden" />
           </button>
         )}
       </div>

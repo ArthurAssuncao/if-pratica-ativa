@@ -302,6 +302,9 @@ export default function StudySelectionPage() {
                           </button>
                         );
                       })}
+                      {contents.length === 0 && (
+                        <span>Nenhum conteúdo disponível</span>
+                      )}
                       {hasContentSelected && (
                         <div className="flex items-center justify-center gap-2 mb-4">
                           <button

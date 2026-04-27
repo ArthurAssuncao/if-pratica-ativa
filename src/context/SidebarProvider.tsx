@@ -13,7 +13,7 @@ interface SidebarProviderProps {
  * Utiliza os aliases do tsconfig para garantir importações limpas.
  */
 export function SidebarProvider({ children }: SidebarProviderProps) {
-  const [isSidebarOpened, setIsSidebarOpened] = useState(true);
+  const [isSidebarOpened, setIsSidebarOpened] = useState(false);
 
   const toggleSidebar = useCallback(() => {
     console.log("SidebarProvider - toggleSidebar");
