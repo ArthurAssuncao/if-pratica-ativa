@@ -125,7 +125,16 @@ export default function StudySelectionPage() {
   };
 
   const handleLessonChange = (newLessonId: string) => {
+    console.log("handleLessonChange", newLessonId);
     const newLesson = lessonsData?.find((l) => l.id === newLessonId);
+    if (!newLesson) return;
+    setConfig({ ...config, contentId: newLesson.id });
+    setHasContentSelected(true);
+    setIsContentOptionsVisible(false);
+  };
+
+  const handleLessonOrderChange = (newLessonOrder: number) => {
+    const newLesson = lessonsData?.find((l) => l.order === newLessonOrder);
     if (!newLesson) return;
     setConfig({ ...config, contentId: newLesson.id });
     setHasContentSelected(true);
@@ -208,7 +217,7 @@ export default function StudySelectionPage() {
           <Textbook
             lesson={lesson}
             discipline={selectedDiscipline}
-            onLessonChange={() => console.log("onLessonChange")}
+            onLessonChange={handleLessonOrderChange}
           />
         )}
 

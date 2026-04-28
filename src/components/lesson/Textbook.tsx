@@ -10,7 +10,7 @@ import "./textBook.css";
 interface TextbookProps {
   lesson: Lesson;
   discipline: Discipline;
-  onLessonChange: (lessonId: string) => void;
+  onLessonChange: (lessonOrder: number) => void;
 }
 
 export function Textbook({
@@ -27,11 +27,11 @@ export function Textbook({
   }, [lessonMarkdown]);
 
   const handlePreviousLesson = () => {
-    onLessonChange(String(parseInt(lesson.id) - 1));
+    onLessonChange(lesson.order - 1);
   };
 
   const handleNextLesson = () => {
-    onLessonChange(String(parseInt(lesson.id) + 1));
+    onLessonChange(lesson.order + 1);
   };
 
   if (!lessonMarkdown) {
@@ -46,7 +46,7 @@ export function Textbook({
 
       {/* Área do Conteúdo */}
       <main className="flex-1 p-4 md:p-8 min-w-0">
-        <section className="w-full prose prose-p:text-justify prose-pre:bg-transparent prose-pre:m-0 prose-slate prose-pre:p-2 prose-pre:pe-0 prose-pre:ps-0 dark:prose-invert prose-headings:font-bold prose-a:text-blue-500 prose-code:text-pink-500 prose-h1:prose-code:text-2xl prose-h1:mt-1 prose-h1:mb-2 prose-h2:mt-2 prose-h2:mb-2">
+        <section className="w-full max-w-full overflow-hidden prose-code:whitespace-pre-wrap! prose prose-pre:whitespace-pre-wrap prose-p:text-justify prose-pre:bg-transparent prose-pre:m-0 prose-slate prose-pre:p-2 prose-pre:pe-0 prose-pre:ps-0 dark:prose-invert prose-headings:font-bold prose-a:text-blue-500 prose-code:text-pink-500 prose-h1:prose-code:text-2xl prose-h1:mt-1 prose-h1:mb-2 prose-h2:mt-2 prose-h2:mb-2">
           {/* Cabeçalho da Aula */}
           <header className="mb-4 border-b border-slate-100 dark:border-slate-800 pb-4">
             <div className="text-blue-500 font-bold text-xs uppercase tracking-widest">
@@ -59,13 +59,13 @@ export function Textbook({
           {/* Navegação entre aulas */}
           <footer className="mt-16 pt-8 border-t border-slate-100 dark:border-slate-800 flex justify-between">
             <button
-              className="text-slate-400 hover:text-slate-900 font-medium flex items-center gap-2"
+              className="text-blue-400 hover:text-blue-900 font-medium flex items-center gap-2 hover:cursor-pointer transition-colors"
               onClick={handlePreviousLesson}
             >
               <ChevronRight size={20} className="rotate-180" /> Anterior
             </button>
             <button
-              className="bg-slate-900 dark:bg-blue-600 text-white px-6 py-2 rounded-full font-bold"
+              className="bg-blue-600 hover:bg-blue-800 dark:hover:bg-blue-900  text-white px-6 py-2 rounded-full font-bold hover:cursor-pointer transition-colors"
               onClick={handleNextLesson}
             >
               Próxima Aula

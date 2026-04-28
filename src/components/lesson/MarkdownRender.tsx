@@ -55,7 +55,7 @@ export default function MarkdownRenderer({ children }: MarkdownRendererProps) {
         </div>
       ) : (
         <code
-          className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-pink-500 font-mono text-sm"
+          className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-pink-500 font-mono text-sm whitespace-pre-wrap"
           {...props}
         >
           {children}
