@@ -24,9 +24,12 @@ const RANKS_NAMES = [
  * Calcula o nível do estudante com base nas questões totais respondidas.
  * Usa progressão geométrica: Nível 1 = 10, Nível 2 = 21, etc.
  */
-export function getStudentLevel(totalQuestions: number): Rank {
+export function getStudentLevel(
+  totalQuestions: number,
+  tipoRanking: "geral" | "disciplina",
+): Rank {
   let level = 0;
-  let pointsForNextLevel = 10;
+  let pointsForNextLevel = tipoRanking == "geral" ? 10 : 2;
   let accumulatedPoints = 0;
 
   // Enquanto o total de pontos acumulados para o PRÓXIMO nível
@@ -53,8 +56,11 @@ export function getStudentLevel(totalQuestions: number): Rank {
 /**
  * Calcula quanto falta para o próximo nível (útil para barras de progresso)
  */
-export function getProgressToNextLevel(totalQuestions: number) {
-  const current = getStudentLevel(totalQuestions);
+export function getProgressToNextLevel(
+  totalQuestions: number,
+  tipoRanking: "geral" | "disciplina",
+) {
+  const current = getStudentLevel(totalQuestions, tipoRanking);
   const nextPointsNeed = Math.round(10 * Math.pow(1.1, current.level));
   const pointsSinceLevelStart = totalQuestions - current.minPoints;
 
