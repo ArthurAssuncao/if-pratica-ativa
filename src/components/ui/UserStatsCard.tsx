@@ -128,7 +128,12 @@ export function UserStatsCard({
               : "Rank Atual Geral"}
           </p>
           <p className="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">
-            {getStudentLevel(currentStats.totalQuestions).title}
+            {
+              getStudentLevel(
+                currentStats.totalQuestions,
+                activeTab === "disciplina" ? "disciplina" : "geral",
+              ).title
+            }
           </p>
         </div>
       </div>

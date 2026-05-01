@@ -28,6 +28,7 @@ import { ContinueCard } from "./ui/ContinueCard";
 import { DisciplineCard } from "./ui/DisciplineCard";
 import { OptionSlider } from "./ui/OptionSlider";
 import { Sidebar } from "./ui/Sidebar";
+import { Spinner } from "./ui/Spinner";
 import { ThemeToggle } from "./ui/ThemeToggle";
 import { UserStatsCard } from "./ui/UserStatsCard";
 
@@ -54,6 +55,8 @@ export default function StudySelectionPage() {
   useState(false);
   const [isContentOptionsVisible, setIsContentOptionsVisible] = useState(true);
   const isMobile = useIsMobile();
+
+  const [isContentLoading, setIsContentLoading] = useState(false);
 
   const generalStats = {
     completedQuizzes: 0,
@@ -269,6 +272,7 @@ export default function StudySelectionPage() {
                             disciplineId: isSame ? null : id,
                             contentId: null,
                           });
+                          setIsContentLoading(true);
                           setHasContentSelected(false);
                           setIsContentOptionsVisible(true);
                         }}
@@ -295,6 +299,7 @@ export default function StudySelectionPage() {
                             onClick={() => {
                               setConfig({ ...config, contentId: content.id });
                               setHasContentSelected(true);
+
                               setIsContentOptionsVisible(false);
                             }}
                             className={`
@@ -326,9 +331,16 @@ export default function StudySelectionPage() {
                           </button>
                         );
                       })}
-                      {contents.length === 0 && (
-                        <span>Nenhum conteúdo disponível</span>
-                      )}
+                      {contents.length === 0 &&
+                        (isContentLoading ? (
+                          <Spinner
+                            onComplete={() => {
+                              setIsContentLoading(false);
+                            }}
+                          />
+                        ) : (
+                          <span>Nenhum conteúdo disponível</span>
+                        ))}
                       {hasContentSelected && (
                         <div className="flex items-center justify-center gap-2 mb-4">
                           <button
