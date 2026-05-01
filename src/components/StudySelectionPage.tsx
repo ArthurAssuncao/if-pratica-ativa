@@ -55,6 +55,21 @@ export default function StudySelectionPage() {
   const [isContentOptionsVisible, setIsContentOptionsVisible] = useState(true);
   const isMobile = useIsMobile();
 
+  const generalStats = {
+    completedQuizzes: 0,
+    totalQuizzes: 10,
+    accuracy: 0,
+    totalQuestions: 0,
+  };
+
+  const disciplineStats = {
+    completedQuizzes: 0,
+    totalQuizzes: 10,
+    accuracy: 0,
+    totalQuestions: 0,
+    name: "Matemática",
+  };
+
   const { data: disciplinesData } = useDisciplines();
 
   const disciplines = useMemo(() => disciplinesData || [], [disciplinesData]);
@@ -189,10 +204,8 @@ export default function StudySelectionPage() {
               />
             )}
             <UserStatsCard
-              completedQuizzes={0}
-              totalQuizzes={10}
-              accuracy={0}
-              totalQuestions={0}
+              generalStats={generalStats}
+              disciplineStats={disciplineStats}
             />
           </div>
         </div>
