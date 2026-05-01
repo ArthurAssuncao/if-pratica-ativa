@@ -4,7 +4,7 @@ import type { BaseQuestionProps } from "types/question";
 import type {
   Question,
   QuestionClickOnError,
-  QuestionFillQuestion,
+  QuestionFill,
   QuestionFlowchartnNew,
   QuestionMultipleChoice,
   QuestionOutput,
@@ -57,7 +57,7 @@ export const QuestionSelector = ({
       case "lacuna":
         return (
           <FillQuestion
-            data={data as QuestionFillQuestion}
+            data={data as QuestionFill}
             onAnswer={onAnswer}
             isAbleToAnswer={isAbleToAnswer}
             disabled={isAnswered}

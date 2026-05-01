@@ -23,6 +23,8 @@ export const OutputQuestion = createQuestion<
   Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
     const [resposta, setResposta] = useState("");
 
+    console.log("data", data);
+
     const handleConfirmar = () => {
       if (!isAbleToAnswer) {
         toast.error("Você não pode responder ainda!");

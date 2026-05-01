@@ -3,10 +3,11 @@ import type {
   BaseQuestion,
   Question,
   QuestionClickOnError,
-  QuestionFillQuestion,
+  QuestionFill,
   QuestionFlowchartnNew,
   QuestionInfo,
   QuestionMultipleChoice,
+  QuestionOutput,
   QuestionRearrange,
   QuestionType,
 } from "types/study";
@@ -40,12 +41,12 @@ const QuestionMappers: Partial<
     ({
       ...base,
       code: (meta as QuestionMetadata).code || "",
-    }) as QuestionFillQuestion,
-  predicao: (base, _, raw) =>
+    }) as QuestionFill,
+  predicao: (base, meta) =>
     ({
       ...base,
-      code: (raw as QuestionMetadata).code || "",
-    }) as QuestionFillQuestion,
+      code: (meta as QuestionMetadata).code || "",
+    }) as QuestionOutput,
 
   fluxograma_novo: (base, meta) =>
     ({

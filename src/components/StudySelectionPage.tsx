@@ -116,7 +116,9 @@ export default function StudySelectionPage() {
       setConfig((prev) => ({ ...prev, disciplineId: null, contentId: null }));
     } else {
       setConfig((prev) => ({ ...prev, contentId: null }));
+      setHasContentSelected(false);
     }
+    setIsLessonReady(false);
     setIsQuizReady(false);
   };
 
@@ -172,7 +174,7 @@ export default function StudySelectionPage() {
                 {isMobile && <ThemeToggle />}
                 <button
                   onClick={handleLogout}
-                  className="mt-2 text-xs bg-slate-200 text-slate-900 hover:text-red-700 transition-colors rounded-2xl py-2 hover:cursor-pointer"
+                  className="mt-2 text-xs bg-slate-200 text-slate-900 hover:text-red-700 transition-all rounded-2xl py-2 hover:cursor-pointer hover:shadow-md hover:shadow-slate-200"
                 >
                   Sair
                 </button>
@@ -190,7 +192,7 @@ export default function StudySelectionPage() {
               completedQuizzes={0}
               totalQuizzes={10}
               accuracy={0}
-              totalPoints={0}
+              totalQuestions={0}
             />
           </div>
         </div>

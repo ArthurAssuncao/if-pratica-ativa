@@ -4,18 +4,15 @@ import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import type { BaseQuestionProps } from "types/question";
-import type { QuestionFillQuestion } from "types/study";
+import type { QuestionFill } from "types/study";
 import { ajustarResposta } from "util/Quiz";
 import { createQuestion } from "./QuestionFactory";
 
 interface FillQuestionProps extends BaseQuestionProps {
-  data: QuestionFillQuestion;
+  data: QuestionFill;
 }
 
-export const FillQuestion = createQuestion<
-  FillQuestionProps,
-  QuestionFillQuestion
->({
+export const FillQuestion = createQuestion<FillQuestionProps, QuestionFill>({
   validateAnswer: ({ resposta, data }) => {
     const isRespostaCorreta =
       ajustarResposta(data.correctAnswer) === ajustarResposta(resposta);

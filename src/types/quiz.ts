@@ -61,7 +61,7 @@ export interface QuestionClickOnError extends BaseQuestion {
   linhas: OrdenacaoLinha[];
 }
 
-export interface QuestionFillQuestion extends BaseQuestion {
+export interface QuestionFill extends BaseQuestion {
   codigo: string;
 }
 
@@ -87,7 +87,7 @@ export interface QuestionFlowchartnNew extends BaseQuestion {
 
 export type QuestionTypes =
   | QuestionClickOnError
-  | QuestionFillQuestion
+  | QuestionFill
   | QuestionMultipleChoice
   | QuestionOutput
   | QuestionRearrange

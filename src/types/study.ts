@@ -47,7 +47,7 @@ export interface QuestionClickOnError extends BaseQuestion {
   rows: RearrangeRow[];
 }
 
-export interface QuestionFillQuestion extends BaseQuestion {
+export interface QuestionFill extends BaseQuestion {
   code: string;
 }
 
@@ -72,7 +72,7 @@ export interface QuestionFlowchartnNew extends BaseQuestion {
 
 export type Question =
   | QuestionClickOnError
-  | QuestionFillQuestion
+  | QuestionFill
   | QuestionMultipleChoice
   | QuestionOutput
   | QuestionRearrange
