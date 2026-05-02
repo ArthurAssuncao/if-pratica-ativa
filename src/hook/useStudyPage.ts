@@ -10,6 +10,7 @@ import netlifyIdentity from "netlify-identity-widget";
 import { useMemo, useState } from "react";
 import type { QuizConfig } from "types/quiz";
 import type { SavedProgress } from "types/study";
+import { isLocalhost } from "util/localhost";
 
 export type ViewMode = "selection" | "quiz" | "lesson";
 
@@ -36,7 +37,7 @@ export function useStudyPage() {
   const [isContentLoading, setIsContentLoading] = useState(false);
 
   const isMobile = useIsMobile();
-  const user = useAuth();
+  const { user, setUser } = useAuth();
 
   const { data: disciplinesData } = useDisciplines();
   const disciplines = useMemo(() => disciplinesData || [], [disciplinesData]);
@@ -76,21 +77,6 @@ export function useStudyPage() {
     limit: config.amount === "Livre" ? undefined : config.amount,
     shuffle: true,
   });
-
-  const generalStats = {
-    completedQuizzes: 0,
-    totalQuizzes: 10,
-    accuracy: 0,
-    totalQuestions: 0,
-  };
-
-  const disciplineStats = {
-    completedQuizzes: 0,
-    totalQuizzes: 10,
-    accuracy: 0,
-    totalQuestions: 0,
-    name: "Matemática",
-  };
 
   // --- Handlers ---
 
@@ -152,6 +138,9 @@ export function useStudyPage() {
 
   const handleLogout = () => {
     netlifyIdentity.logout();
+    if (isLocalhost) {
+      setUser(null);
+    }
   };
 
   const handleConfigChange = (partial: Partial<QuizConfig>) => {
@@ -177,8 +166,7 @@ export function useStudyPage() {
     lesson,
     quiz,
     sectionEnabled,
-    generalStats,
-    disciplineStats,
+
     // handlers
     handleStart,
     handleStartLesson,

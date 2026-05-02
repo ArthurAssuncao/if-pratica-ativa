@@ -20,3 +20,16 @@
     padding-right: 1em !important;
   }
 }
+
+*::selection {
+  background: #1447e6;
+  color: #fff085;
+}
+*::-moz-selection {
+  background: #1447e6;
+  color: #fff085;
+}
+*::-webkit-selection {
+  background: #1447e6;
+  color: #fff085;
+}

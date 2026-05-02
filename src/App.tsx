@@ -1,4 +1,6 @@
 import { getUser, handleAuthCallback } from "@netlify/identity";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import StudySelectionPage from "components/StudySelectionPage";
 import { Footer } from "components/ui/Footer";
 import { Navbar } from "components/ui/Navbar";
@@ -19,6 +21,8 @@ if (typeof window !== "undefined") {
     locale: "pt-br",
   });
 }
+
+const queryClient = new QueryClient();
 
 export default function App() {
   useEffect(() => {
@@ -56,16 +60,19 @@ export default function App() {
   }, []);
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen bg-blue-50 dark:bg-slate-950 transition-colors">
-        <header className="mb-16">
-          <Navbar />
-        </header>
-        <div className="flex items-start justify-center">
-          <StudySelectionPage />
+    <QueryClientProvider client={queryClient}>
+      <SidebarProvider>
+        <div className="min-h-screen bg-blue-50 dark:bg-slate-950 transition-colors">
+          <header className="mb-16">
+            <Navbar />
+          </header>
+          <div className="flex items-start justify-center">
+            <StudySelectionPage />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }

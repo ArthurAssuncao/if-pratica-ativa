@@ -1,44 +1,64 @@
 import { USER_MOCKED } from "data/mock";
 import netlifyIdentity from "netlify-identity-widget";
 import { useEffect, useState } from "react";
-import type { UserData } from "types/user";
+import { StudyService } from "service/study-service";
+import { mapUserToDatabase, type UserData } from "types/user";
 import { isLocalhost } from "util/localhost";
 
+// Variável fora do hook para persistir MESMO com re-renders e StrictMode
+let lastSyncedUserId: string | null = null;
+let isSyncing = false;
+
 export function useAuth() {
-  // 1. Resolvemos o erro de Lint calculando o estado inicial FORA do useEffect
-  // O React permite passar uma função para o useState para inicialização lógica
   const [user, setUser] = useState<UserData | null>(() => {
     if (isLocalhost) return USER_MOCKED as unknown as UserData;
-
-    // Tenta pegar o usuário já logado antes da montagem
-    const currentUser = netlifyIdentity.currentUser();
-    return currentUser ? (currentUser as unknown as UserData) : null;
+    return netlifyIdentity.currentUser() as unknown as UserData | null;
   });
 
   useEffect(() => {
-    if (isLocalhost) return;
+    if (!isLocalhost) netlifyIdentity.init();
 
-    netlifyIdentity.init();
+    const syncUser = async (userData: UserData) => {
+      // 1. Bloqueio por ID e Status: Se já sincronizamos ESSE usuário, ou se já tem um fetch voando, para aqui.
+      if (lastSyncedUserId === userData.id || isSyncing) return;
 
-    const handleLogin = (user: UserData) => {
-      if (!user) return;
-      setUser(user);
+      isSyncing = true;
+      try {
+        const userDb = mapUserToDatabase(userData);
+        await StudyService.syncProfile(userDb);
+
+        // Só marca como sincronizado DEPOIS do sucesso do banco
+        lastSyncedUserId = userData.id;
+        console.log("✅ Perfil sincronizado única vez para:", userData.email);
+      } catch (error) {
+        console.error("❌ Erro na sincronização:", error);
+      } finally {
+        isSyncing = false;
+      }
     };
 
-    const handleLogout = () => setUser(null);
+    // Tenta sincronizar o usuário inicial
+    if (user) syncUser(user);
 
-    // 2. Resolvemos o erro de tipagem fazendo um cast para 'any' no nome do evento
-    // ou apenas omitindo o 'init' se já pegamos o currentUser acima.
-    netlifyIdentity.on("init", (user) => user && handleLogin(user));
+    const handleLogin = (loggedUser: UserData) => {
+      if (!loggedUser) return;
+      setUser(loggedUser);
+      syncUser(loggedUser);
+    };
+
+    const handleLogout = () => {
+      setUser(null);
+      lastSyncedUserId = null; // Reseta para permitir novo login
+    };
+
     netlifyIdentity.on("login", handleLogin);
     netlifyIdentity.on("logout", handleLogout);
 
     return () => {
-      netlifyIdentity.on("init", (user) => user && handleLogin(user));
       netlifyIdentity.off("login", handleLogin);
       netlifyIdentity.off("logout", handleLogout);
     };
-  }, []);
+  }, [user, user?.id]); // Observa apenas o ID do usuário
 
-  return user;
+  return { user, isLoggedIn: !!user, setUser };
 }

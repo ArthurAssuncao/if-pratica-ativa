@@ -26,8 +26,7 @@ export default function StudySelectionPage() {
     lesson,
     quiz,
     sectionEnabled,
-    generalStats,
-    disciplineStats,
+
     handleStart,
     handleStartLesson,
     handleReset,
@@ -43,19 +42,6 @@ export default function StudySelectionPage() {
 
   return (
     <div className="flex flex-row items-stretch">
-      {/* Sidebar */}
-      <StudySidebar
-        user={user}
-        viewMode={viewMode}
-        selectedDiscipline={selectedDiscipline}
-        lesson={lesson}
-        lessons={lessons}
-        generalStats={generalStats}
-        disciplineStats={disciplineStats}
-        onLessonChange={handleLessonChange}
-        onLogout={handleLogout}
-      />
-
       {/* Main Content */}
       <div className="max-w-full p-4 md:p-8 animate-in fade-in duration-500 flex flex-col gap-4">
         {/* Continue Card */}
@@ -74,68 +60,80 @@ export default function StudySelectionPage() {
           contentName={content?.name || ""}
         />
 
-        {/* Lesson View */}
-        {viewMode === "lesson" && selectedDiscipline && lesson && (
-          <Textbook
-            lesson={lesson}
+        <div className="flex gap-8">
+          <StudySidebar
+            user={user}
+            viewMode={viewMode}
             discipline={selectedDiscipline}
-            onLessonChange={handleLessonOrderChange}
+            lesson={lesson}
+            lessons={lessons}
+            onLessonChange={handleLessonChange}
+            onLogout={handleLogout}
           />
-        )}
 
-        {/* Quiz View */}
-        {viewMode === "quiz" && (
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm items-center justify-center">
-            <Quiz quiz={quiz} />
-          </div>
-        )}
+          {/* Lesson View */}
+          {viewMode === "lesson" && selectedDiscipline && lesson && (
+            <Textbook
+              lesson={lesson}
+              discipline={selectedDiscipline}
+              onLessonChange={handleLessonOrderChange}
+            />
+          )}
 
-        {/* Selection View */}
-        {viewMode === "selection" && (
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-              {/* Left Column */}
-              <div className="lg:col-span-7">
-                <DisciplineSelector
-                  disciplines={disciplines}
-                  selectedDisciplineId={config.disciplineId}
-                  onSelect={handleSelectDiscipline}
-                />
+          {/* Quiz View */}
+          {viewMode === "quiz" && (
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm items-center justify-center">
+              <Quiz quiz={quiz} discipline={selectedDiscipline} />
+            </div>
+          )}
 
-                {selectedDiscipline && (
-                  <ContentSelector
-                    disciplineName={selectedDiscipline.name}
-                    contents={contents}
-                    selectedContentId={config.contentId}
-                    hasContentSelected={hasContentSelected}
-                    isContentOptionsVisible={isContentOptionsVisible}
-                    isContentLoading={isContentLoading}
-                    onSelectContent={handleSelectContent}
-                    onToggleContentOptions={handleToggleContentOptions}
-                    onContentLoadComplete={() => setIsContentLoading(false)}
+          {/* Selection View */}
+          {viewMode === "selection" && (
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                {/* Left Column */}
+                <div className="lg:col-span-7">
+                  <DisciplineSelector
+                    disciplines={disciplines}
+                    selectedDisciplineId={config.disciplineId}
+                    onSelect={handleSelectDiscipline}
                   />
-                )}
-              </div>
 
-              {/* Right Column */}
-              <div className="lg:col-span-5 space-y-8">
-                <QuizConfigurator
-                  config={config}
-                  sectionEnabled={sectionEnabled}
-                  onConfigChange={handleConfigChange}
-                  onStart={handleStart}
-                />
+                  {selectedDiscipline && (
+                    <ContentSelector
+                      disciplineName={selectedDiscipline.name}
+                      contents={contents}
+                      selectedContentId={config.contentId}
+                      hasContentSelected={hasContentSelected}
+                      isContentOptionsVisible={isContentOptionsVisible}
+                      isContentLoading={isContentLoading}
+                      onSelectContent={handleSelectContent}
+                      onToggleContentOptions={handleToggleContentOptions}
+                      onContentLoadComplete={() => setIsContentLoading(false)}
+                    />
+                  )}
+                </div>
 
-                {selectedDiscipline && lesson && (
-                  <StudyMaterialSection
+                {/* Right Column */}
+                <div className="lg:col-span-5 space-y-8">
+                  <QuizConfigurator
+                    config={config}
                     sectionEnabled={sectionEnabled}
-                    onStartLesson={handleStartLesson}
+                    onConfigChange={handleConfigChange}
+                    onStart={handleStart}
                   />
-                )}
+
+                  {selectedDiscipline && lesson && (
+                    <StudyMaterialSection
+                      sectionEnabled={sectionEnabled}
+                      onStartLesson={handleStartLesson}
+                    />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

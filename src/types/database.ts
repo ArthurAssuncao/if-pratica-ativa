@@ -52,3 +52,19 @@ export type ContentWithQuestionsDatabase = {
   slug: string;
   type: QuestionType;
 };
+
+export interface UserProgressDatabase {
+  question_id: number;
+  discipline_slug: string;
+  attempts: number;
+  is_correct: boolean;
+  solved_at: string | null; // Vem como string ISO do banco
+  last_attempt_at: string; // Vem como string ISO do banco
+}
+
+export interface UserDatabase {
+  id: string;
+  email: string;
+  full_name: string | null;
+  avatar_url: string | null;
+}

@@ -148,6 +148,71 @@ const handler: Handler = async (event: HandlerEvent) => {
         };
       }
 
+      // Adicione este caso ao seu switch/router
+      case "user_progress": {
+        const userId = event.queryStringParameters?.userId; // ID do Netlify Identity
+        const disciplineSlug = event.queryStringParameters?.disciplineSlug;
+
+        if (!userId) {
+          return {
+            statusCode: 400,
+            body: JSON.stringify({ error: "userId necessário" }),
+          };
+        }
+
+        // Busca o progresso do usuário para uma disciplina específica ou geral
+        const data = await sql`
+    SELECT 
+      question_id, 
+      discipline_slug,
+      attempts, 
+      is_correct, 
+      solved_at, 
+      last_attempt_at
+    FROM user_progress 
+    WHERE user_id = ${userId}
+    ${disciplineSlug ? sql`AND discipline_slug = ${disciplineSlug}` : sql``}
+  `;
+
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(data),
+        };
+      }
+
+      case "userStats": {
+        const userId = event.queryStringParameters?.userId;
+
+        if (!userId) {
+          return {
+            statusCode: 400,
+            body: JSON.stringify({ error: "userId necessário" }),
+          };
+        }
+
+        // Esta query agrupa por disciplina e conta:
+        // - total_attempted: Quantas questões diferentes o usuário tentou
+        // - total_solved: Quantas questões diferentes o usuário acertou
+        // - total_tries: A soma de todas as tentativas feitas (opcional, para precisão)
+        const stats = await sql`
+    SELECT 
+      discipline_slug,
+      COUNT(question_id) as total_attempted,
+      COUNT(question_id) FILTER (WHERE is_correct = TRUE) as total_solved,
+      SUM(attempts) as total_tries
+    FROM user_progress
+    WHERE user_id = ${userId}
+    GROUP BY discipline_slug
+  `;
+
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(stats),
+        };
+      }
+
       default:
         return {
           statusCode: 400,

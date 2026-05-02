@@ -24,6 +24,7 @@ interface QuestionSelectorProps extends BaseQuestionProps {
 
 export const QuestionSelector = ({
   data,
+
   disabled,
   onAnswer,
 }: QuestionSelectorProps) => {

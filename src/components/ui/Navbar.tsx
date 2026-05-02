@@ -11,7 +11,7 @@ export const Navbar = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const isTablet = useBreakpoints().isTablet;
 
-  const user = useAuth();
+  const { user } = useAuth();
 
   const handleLoginSuccess = () => {
     setIsAuthModalOpen(false);

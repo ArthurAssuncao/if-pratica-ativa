@@ -73,7 +73,7 @@ export default function AuthModal({
         {/* Botão de Fechar */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-2"
+          className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-2 hover:cursor-pointer"
           aria-label="Fechar modal"
         >
           <X size={24} />
@@ -104,7 +104,7 @@ export default function AuthModal({
           <button
             onClick={handleGoogleLogin}
             disabled={processing}
-            className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 py-4 font-semibold text-slate-700 dark:text-slate-200 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-blue-400 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+            className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 py-4 font-semibold text-slate-700 dark:text-slate-200 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-blue-400 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] hover:cursor-pointer"
           >
             {processing ? (
               <Loader2 className="animate-spin text-blue-500" size={20} />
