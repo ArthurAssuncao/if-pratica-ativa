@@ -27,7 +27,7 @@ export function useStudyPage() {
     disciplineId: null,
     contentId: null,
     level: undefined,
-    type: undefined,
+    questionsType: [],
     amount: "Livre",
   });
 
@@ -57,6 +57,11 @@ export function useStudyPage() {
   const contents = useMemo(() => contentsData || [], [contentsData]);
   const content = contents.find((c) => c.id === config.contentId);
 
+  const contentSelectedQuestions = useMemo(
+    () => content?.questions || [],
+    [content],
+  );
+
   const { data: lessonsData } = useLessons(config?.disciplineId || undefined);
   const lesson = useMemo(
     () => lessonsData?.find((l) => l.id === config.contentId),
@@ -73,7 +78,7 @@ export function useStudyPage() {
     discipline: discipline || null,
     selectedContent: content || null,
     level: config.level,
-    type: config.type,
+    questionsType: config.questionsType,
     limit: config.amount === "Livre" ? undefined : config.amount,
     shuffle: true,
   });
@@ -162,6 +167,7 @@ export function useStudyPage() {
     disciplineName,
     contents,
     content,
+    contentSelectedQuestions,
     lessons: lessonsData || [],
     lesson,
     quiz,

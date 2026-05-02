@@ -28,13 +28,15 @@ export default function Quiz({ quiz, discipline }: QuizProps) {
     new Set(),
   );
   const [atual, setAtual] = useState(0);
+  const [isUserFinishedQuiz, setIsUserFinishedQuiz] = useState(false);
 
   const [atualQuestionId, setAtualQuestionId] = useState(quiz.questions[0].id);
   const { user } = useAuth();
   const submitAnswerMutation = useSubmitAnswer();
   const { data: userProgress } = useUserProgress(user?.id, discipline?.id);
 
-  const fim = questoesRealizadas.size === quiz.questions.length;
+  const fim =
+    questoesRealizadas.size === quiz.questions.length && isUserFinishedQuiz;
 
   const questaoAnterior = () => {
     if (atual > 0) {
@@ -49,6 +51,10 @@ export default function Quiz({ quiz, discipline }: QuizProps) {
   };
 
   const questaoProxima = () => {
+    if (questoesRealizadas.size === quiz.questions.length) {
+      setIsUserFinishedQuiz(true);
+      setFeedback(null);
+    }
     if (atual < quiz.questions.length - 1) {
       setAtual(atual + 1);
       setAtualQuestionId(quiz.questions[atual + 1].id);
@@ -105,7 +111,7 @@ export default function Quiz({ quiz, discipline }: QuizProps) {
       <div className="min-h-screen p-6 flex flex-col items-center">
         <div
           className="w-full max-w-2xl p-8 rounded-2xl shadow-xl border transition-colors duration-300
-    bg-white border-slate-200 text-slate-900 
+    bg-white border-slate-200 text-slate-900
     dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
         >
           Nenhuma questão disponível
@@ -122,7 +128,7 @@ export default function Quiz({ quiz, discipline }: QuizProps) {
 
       <div
         className="flex flex-col  w-full max-w-2xl p-4 lg:p-8 rounded-2xl shadow-xl border transition-colors duration-300
-      bg-white border-slate-200 text-slate-900 
+      bg-white border-slate-200 text-slate-900
       dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
       >
         <ProgressBar
@@ -164,7 +170,7 @@ export default function Quiz({ quiz, discipline }: QuizProps) {
             )}
             {feedback && (
               <button
-                onClick={() => (setAtual(atual + 1), setFeedback(null))}
+                onClick={() => questaoProxima()}
                 className="bg-green-500 dark:bg-green-500 border-olive-300 dark:border-slate-600 text-slate-50 dark:text-slate-800 border w-full flex items-center justify-center gap-2  p-4 mb-2 rounded-lg font-bold hover:bg-green-600 dark:hover:bg-green-400 hover:text-slate-50 dark:hover:text-slate-900 transition-colors hover:cursor-pointer"
               >
                 Continuar <ArrowRight size={20} />

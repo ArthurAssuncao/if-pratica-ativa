@@ -3,6 +3,7 @@ import type {
   BaseQuestion,
   Question,
   QuestionClickOnError,
+  QuestionDeskCheck,
   QuestionFill,
   QuestionFlowchartnNew,
   QuestionInfo,
@@ -56,6 +57,12 @@ const QuestionMappers: Partial<
       nodes: meta.nodes || [],
       conections: meta.connections || [], // Normalização de connections -> conections
     }) as QuestionFlowchartnNew,
+  teste_mesa: (base, meta) =>
+    ({
+      ...base,
+      code: (meta as QuestionMetadata).code || "",
+      checkpoints: meta.checkpoints || [],
+    }) as QuestionDeskCheck,
 };
 
 /**

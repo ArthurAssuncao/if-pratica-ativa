@@ -1,5 +1,6 @@
 import type {
   BaseQuestion,
+  Checkpoint,
   ConectionNode,
   Content,
   Discipline,
@@ -16,6 +17,7 @@ export interface QuestionMetadata {
   connections?: ConectionNode[]; // Para fluxogramas
   root?: string; // Para o nó raiz do fluxograma
   code?: string; // Para preenchimento de código
+  checkpoints?: Checkpoint[]; // Para o teste de mesa
 }
 // content_id	type	level	question_text	correct_answer	explanation	metadata
 export type BaseQuestionDatabase = Omit<

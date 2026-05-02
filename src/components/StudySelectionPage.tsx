@@ -22,6 +22,7 @@ export default function StudySelectionPage() {
     disciplineName,
     contents,
     content,
+    contentSelectedQuestions,
     lessons,
     lesson,
     quiz,
@@ -81,7 +82,7 @@ export default function StudySelectionPage() {
           )}
 
           {/* Quiz View */}
-          {viewMode === "quiz" && (
+          {viewMode === "quiz" && quiz.questions && (
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm items-center justify-center">
               <Quiz quiz={quiz} discipline={selectedDiscipline} />
             </div>
@@ -118,9 +119,10 @@ export default function StudySelectionPage() {
                 <div className="lg:col-span-5 space-y-8">
                   <QuizConfigurator
                     config={config}
-                    sectionEnabled={sectionEnabled}
+                    sectionEnabled={sectionEnabled || !quiz.questions}
                     onConfigChange={handleConfigChange}
                     onStart={handleStart}
+                    questions={contentSelectedQuestions}
                   />
 
                   {selectedDiscipline && lesson && (

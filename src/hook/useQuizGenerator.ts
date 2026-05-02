@@ -12,7 +12,7 @@ interface UseQuizGeneratorProps {
   discipline: Discipline | null;
   selectedContent: Content | null;
   level?: Level;
-  type?: QuestionType;
+  questionsType?: QuestionType[];
   limit?: number;
   shuffle?: boolean;
 }
@@ -21,7 +21,7 @@ export function useQuizGenerator({
   discipline,
   selectedContent,
   level,
-  type,
+  questionsType,
   limit,
   shuffle = true,
 }: UseQuizGeneratorProps): Quiz {
@@ -42,8 +42,10 @@ export function useQuizGenerator({
       filteredQuestions = filteredQuestions.filter((q) => q.level === level);
     }
 
-    if (type) {
-      filteredQuestions = filteredQuestions.filter((q) => q.type === type);
+    if (questionsType && questionsType.length > 0) {
+      filteredQuestions = filteredQuestions.filter((q) =>
+        questionsType.includes(q.type),
+      );
     }
 
     // 2. Embaralhamento (Fisher-Yates)
@@ -65,7 +67,7 @@ export function useQuizGenerator({
     }
 
     return filteredQuestions;
-  }, [discipline, selectedContent, level, type, shuffle, limit]);
+  }, [discipline, selectedContent, level, questionsType, shuffle, limit]);
 
   useEffect(() => {
     if (discipline && selectedContent) {

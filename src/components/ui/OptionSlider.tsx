@@ -87,11 +87,11 @@ export function OptionSlider<T>({
             onClick={() => (disabled ? null : onChange(option))}
             type="button"
             className={`
-              relative z-10 py-2.5 text-sm font-bold rounded-xl transition-colors duration-200 
+              relative z-10 py-2.5 text-sm font-bold rounded-xl transition-colors duration-200 hover:cursor-pointer
               ${
                 isActive
                   ? "text-blue-600 dark:text-blue-400"
-                  : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-500"
+                  : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-2 border-blue-100 dark:border-blue-950 hover:border-blue-500 dark:hover:border-blue-500 "
               }
               ${disabled ? "**:cursor-not-allowed" : "**:cursor-pointer"}
             `}

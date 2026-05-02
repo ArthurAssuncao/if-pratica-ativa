@@ -6,18 +6,21 @@ import SyntaxHighlighter, {
 import { nnfx, nord } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 interface SyntaxHighlighterCustomProps extends SyntaxHighlighterProps {
+  language?: string;
   theme?: "dark" | "light";
   showLineNumbers?: boolean;
   padding?: number;
   children: string | string[];
+  highlightLines?: number[];
 }
 
 export const SyntaxHighlighterCustom = ({
+  language = "python",
   theme,
   showLineNumbers = true,
   padding,
   children,
-
+  highlightLines,
   syntaxHighlighterProps,
 }: SyntaxHighlighterCustomProps) => {
   const [appTheme, setAppTheme] = useState<"dark" | "light">(() => {
@@ -58,7 +61,7 @@ export const SyntaxHighlighterCustom = ({
 
   return (
     <SyntaxHighlighter
-      language="python"
+      language={language}
       style={appTheme === "dark" ? nord : nnfx}
       customStyle={{
         background: "trasnparent",
@@ -71,6 +74,32 @@ export const SyntaxHighlighterCustom = ({
         borderRight: "1px solid #ccc",
       }}
       wrapLines
+      lineProps={(lineNumber) => {
+        const isHighlighted = highlightLines?.includes(lineNumber);
+        const style: React.CSSProperties = {
+          display: "block",
+          width: "100%",
+          transition: "all 0.3s ease",
+        };
+
+        if (isHighlighted) {
+          style.backgroundColor =
+            appTheme === "dark"
+              ? "rgba(59, 130, 246, 0.25)" // Azul sutil no Dark
+              : "rgba(59, 130, 246, 0.15)"; // Azul sutil no Light
+          style.borderLeft = "4px solid #3b82f6";
+          style.marginLeft = "-4px"; // Ajuste para a borda não empurrar o texto
+        }
+
+        return { style };
+      }}
+      lineNumberStyle={{
+        minWidth: "2.5em",
+        paddingRight: "1em",
+        color: appTheme === "dark" ? "#4c566a" : "#94a3b8",
+        textAlign: "right",
+        userSelect: "none",
+      }}
       {...syntaxHighlighterProps}
     >
       {isMobile ? textoReduzidoEspacos : children}

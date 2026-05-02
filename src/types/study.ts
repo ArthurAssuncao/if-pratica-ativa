@@ -8,7 +8,8 @@ export type QuestionType =
   | "clique_erro"
   | "ordenacao"
   | "fluxograma"
-  | "fluxograma_novo";
+  | "fluxograma_novo"
+  | "teste_mesa";
 
 export type RearrangeRow = { text: string; identationLevel: number };
 
@@ -26,6 +27,21 @@ export type ConectionNode = {
   label: string;
 };
 
+export interface Slot {
+  id: string;
+  label: string;
+  type: "NUMBER" | "STRING" | "BOOLEAN" | "OUTPUT";
+  expected: string;
+}
+
+export interface Checkpoint {
+  step: number;
+  description: string;
+  lineReference: number[];
+  iteration?: number;
+  slots: Slot[];
+}
+
 export type QuestionStatus = "correta" | "errada" | "pendente";
 
 export interface QuestionInfo {
@@ -33,14 +49,21 @@ export interface QuestionInfo {
   attemptCount: number;
 }
 
+export type CorrectAnswer = string | number;
+
 export interface BaseQuestion {
   id: number;
   type: QuestionType;
   level: Level;
   questionText: string;
   explanation: string;
-  correctAnswer: string | number;
+  correctAnswer: CorrectAnswer;
   info: QuestionInfo;
+}
+
+export interface QuestionDeskCheck extends BaseQuestion {
+  code: string;
+  checkpoints: Checkpoint[];
 }
 
 export interface QuestionClickOnError extends BaseQuestion {

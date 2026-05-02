@@ -10,7 +10,7 @@ export interface QuizConfig {
   disciplineId: string | null;
   contentId: string | null;
   level?: Level;
-  type?: QuestionType;
+  questionsType?: QuestionType[];
   amount?: Amount;
 }
 

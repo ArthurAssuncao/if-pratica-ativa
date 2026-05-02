@@ -109,7 +109,7 @@ export function UserStatsCard({ discipline }: UserStatsProps) {
       <div className="grid grid-cols-2 gap-3">
         <UserStat
           title={<>Precisão</>}
-          value={`${currentStats.accuracy}%`}
+          value={`${Math.ceil(currentStats.accuracy)}%`}
           icon={
             <Target
               size={14}

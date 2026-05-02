@@ -4,6 +4,7 @@ import type { BaseQuestionProps } from "types/question";
 import type {
   Question,
   QuestionClickOnError,
+  QuestionDeskCheck,
   QuestionFill,
   QuestionFlowchartnNew,
   QuestionMultipleChoice,
@@ -11,6 +12,8 @@ import type {
   QuestionRearrange,
 } from "types/study";
 import { ClickOnErrorQuestion } from "./ClickOnErrorQuestion";
+
+import { DeskCheckingQuestion } from "./DeskCheckingQuestion";
 import { FillQuestion } from "./FillQuestion";
 import { FlowchartNewQuestion } from "./FlowchartNewQuestion";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
@@ -100,8 +103,17 @@ export const QuestionSelector = ({
             disabled={isAnswered}
           />
         );
+      case "teste_mesa":
+        return (
+          <DeskCheckingQuestion
+            data={data as QuestionDeskCheck}
+            onAnswer={onAnswer}
+            isAbleToAnswer={isAbleToAnswer}
+            disabled={isAnswered}
+          />
+        );
       default:
-        return null;
+        return <span>{`Tipo ${data.type} de questão não encontrada`}</span>;
     }
   };
 

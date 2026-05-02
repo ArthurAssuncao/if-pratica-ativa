@@ -1,11 +1,15 @@
-import { BarChart3, Play, Settings2 } from "lucide-react";
+import { BarChart3, Play, Settings2, Tally5, Type } from "lucide-react";
+import { useMemo } from "react";
 import type { Amount, QuizConfig } from "types/quiz";
-import type { Level } from "types/study";
+import type { Level, Question, QuestionType } from "types/study";
+import { rangeStartEnd } from "../util/util";
+import { MultiOptionToggle } from "./ui/MultiOptionToggle";
 import { OptionSlider } from "./ui/OptionSlider";
 
 interface QuizConfiguratorProps {
   config: QuizConfig;
   sectionEnabled: boolean;
+  questions: Question[];
   onConfigChange: (partial: Partial<QuizConfig>) => void;
   onStart: () => void;
 }
@@ -13,13 +17,30 @@ interface QuizConfiguratorProps {
 export function QuizConfigurator({
   config,
   sectionEnabled,
+  questions,
   onConfigChange,
   onStart,
 }: QuizConfiguratorProps) {
+  const totalQuestions = useMemo(() => questions.length, [questions]);
+  const minQuestionsCount =
+    totalQuestions % 4 === 0
+      ? totalQuestions / 4
+      : Math.ceil(totalQuestions / 4);
+  const maxQuestionsCountOptions =
+    totalQuestions > 0
+      ? rangeStartEnd(minQuestionsCount, totalQuestions, minQuestionsCount)
+      : [];
+
+  const questionTypes: Array<QuestionType> = Array.from(
+    new Set(questions.map((q) => q.type)).values(),
+  ).sort();
+
   return (
     <section
       className={`transition-opacity duration-300 ${
-        sectionEnabled ? "opacity-100 **:cursor-auto" : "opacity-40 **:pointer-not-allowed"
+        sectionEnabled
+          ? "opacity-100 **:cursor-auto"
+          : "opacity-40 **:pointer-not-allowed"
       }`}
     >
       <div className="flex items-center gap-2 mb-6">
@@ -41,21 +62,36 @@ export function QuizConfigurator({
         />
       </div>
 
-      <div className="mb-8">
+      <div className="mb-6">
         <label className="flex items-center gap-2 text-sm font-bold text-slate-500 uppercase tracking-tighter mb-3">
-          <Play size={14} /> Quantidade de Questões
+          <Tally5 size={14} /> Quantidade de Questões
         </label>
         <OptionSlider
-          options={[10, 20, "Livre"]}
+          options={[...maxQuestionsCountOptions, "Livre"]}
           value={config.amount || "Livre"}
           disabled={!sectionEnabled}
           onChange={(value) => onConfigChange({ amount: value as Amount })}
         />
       </div>
 
+      <div className="mb-8">
+        <label className="flex items-center gap-2 text-sm font-bold text-slate-500 uppercase tracking-tighter mb-3">
+          <Type size={14} /> Tipo de questão
+        </label>
+        <MultiOptionToggle<QuestionType | "Todos">
+          options={[...questionTypes, "Todos"]}
+          allOptionValue="Todos"
+          exclude={["fluxograma"]}
+          selectedValues={config.questionsType || ["Todos"]}
+          onChange={(value) =>
+            onConfigChange({ questionsType: value as QuestionType[] })
+          }
+        />
+      </div>
+
       <button
         onClick={onStart}
-        disabled={!sectionEnabled}
+        disabled={!sectionEnabled || totalQuestions === 0 || !questions}
         className={`
           w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-bold text-lg shadow-lg transition-all
           ${

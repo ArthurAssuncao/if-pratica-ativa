@@ -8,11 +8,17 @@ export const MAPA_TIPOS_QUESTAO: Record<QuestionType, string> = {
   clique_erro: "Encontrar o Erro",
   ordenacao: "Ordenação de Código",
   fluxograma: "Fluxograma",
-  fluxograma_novo: "Fluxograma (Novo)",
+  fluxograma_novo: "Fluxograma",
+  teste_mesa: "Teste de Mesa",
 };
 
+export const TIPOS_QUESTAO = Object.keys(MAPA_TIPOS_QUESTAO) as QuestionType[];
+
 export const getTipoQuestaoPorExtenso = (tipo: QuestionType) => {
-  return MAPA_TIPOS_QUESTAO[tipo];
+  if (tipo in MAPA_TIPOS_QUESTAO) {
+    return MAPA_TIPOS_QUESTAO[tipo];
+  }
+  return tipo;
 };
 
 export const getLetraByIndex = (index: number) => {
