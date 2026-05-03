@@ -12,6 +12,13 @@
     border-right: 1px solid #8989b7;
     color: #8989b7;
   }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+  }
 }
 
 @media (min-width: 768px) {

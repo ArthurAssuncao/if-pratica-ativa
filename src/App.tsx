@@ -6,16 +6,19 @@ import { Footer } from "components/ui/Footer";
 import { Navbar } from "components/ui/Navbar";
 import { SidebarProvider } from "context/SidebarProvider";
 import netlifyIdentity from "netlify-identity-widget";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { isLocalhost } from "util/localhost";
 import "./App.css";
+import MarkdownRenderer from "./components/lesson/MarkdownRender";
+import { Modal } from "./components/ui/Modal";
+import { CookieConsent } from "./legal/CookieConsent";
+import markdownPrivacy from "./legal/privacy.md?raw";
 
 if (typeof window !== "undefined") {
   localStorage.setItem(
     "netlifySiteURL",
     "https://if-pratica-ativa.netlify.app",
   );
-  localStorage.clear();
   netlifyIdentity.init({
     APIUrl: isLocalhost ? "https://if-pratica-ativa.netlify.app" : undefined,
     locale: "pt-br",
@@ -25,6 +28,8 @@ if (typeof window !== "undefined") {
 const queryClient = new QueryClient();
 
 export default function App() {
+  const [isModalPrivacyOpen, setIsModalPrivacyOpen] = useState(false);
+
   useEffect(() => {
     const initAuth = async () => {
       console.log("App.tsx - Iniciando verificação de autenticação");
@@ -72,6 +77,13 @@ export default function App() {
           <Footer />
         </div>
       </SidebarProvider>
+      <CookieConsent onPrivacyClick={() => setIsModalPrivacyOpen(true)} />
+      <Modal
+        isOpen={isModalPrivacyOpen}
+        onClose={() => setIsModalPrivacyOpen(false)}
+      >
+        <MarkdownRenderer>{markdownPrivacy}</MarkdownRenderer>
+      </Modal>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
