@@ -12,14 +12,14 @@ export function Footer() {
             <div className="bg-white/10 p-3 rounded-2xl backdrop-blur-sm border border-white/20">
               <GraduationCap size={32} className="text-blue-200" />
             </div>
-            <div className="text-center md:text-left">
+            {/* <div className="text-center md:text-left">
               <h3 className="text-lg font-bold tracking-tight">
                 IF Sudeste MG
               </h3>
               <p className="text-blue-200/80 text-sm font-medium">
                 Campus Santos Dumont
               </p>
-            </div>
+            </div> */}
           </div>
 
           {/* Centro: Destaque ao Professor */}
@@ -27,7 +27,7 @@ export function Footer() {
             <div className="flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
               <Award size={16} className="text-yellow-400" />
               <span className="text-xs uppercase tracking-[0.2em] font-bold text-blue-100">
-                Orientação
+                Coordenação
               </span>
             </div>
             <h2 className="text-xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-white via-blue-100 to-blue-200">
@@ -42,11 +42,11 @@ export function Footer() {
               <span className="text-sm font-medium">Santos Dumont - MG</span>
               <MapPin size={16} className="text-blue-300" />
             </div>
-            <p className="text-xs text-blue-200/60 text-center md:text-right leading-relaxed">
+            {/* <p className="text-xs text-blue-200/60 text-center md:text-right leading-relaxed">
               Desenvolvimento de Tecnologias Educacionais
               <br />
               Instituto Federal do Sudeste de Minas Gerais
-            </p>
+            </p> */}
           </div>
         </div>
 

@@ -86,7 +86,7 @@ export function MultiOptionToggle<T>({
               relative  p-1 z-10 py-2 text-sm font-bold rounded-xl transition-all duration-200 flex items-start justify-center gap-2 hover:cursor-pointer
               ${
                 isActive || selectedValues.includes(allOptionValue)
-                  ? "bg-white dark:bg-blue-600 shadow-sm text-blue-600 dark:text-white border-2 border-blue-500"
+                  ? "bg-white dark:bg-blue-600 shadow-sm text-blue-600 dark:text-white border-2 border-blue-500 hover:bg-slate-200 dark:hover:bg-blue-800 hover:border-blue-600 dark:hover:border-blue-800"
                   : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-2 border-blue-100 dark:border-blue-950 hover:border-blue-500 dark:hover:border-blue-500"
               }
               ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}

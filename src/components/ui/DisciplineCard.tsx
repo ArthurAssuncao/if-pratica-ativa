@@ -16,11 +16,11 @@ export function DisciplineCard({
     <button
       onClick={() => onSelect(discipline.id)}
       className={`
-        flex flex-row md:flex-col gap-2 items-center justify-start md:justify-center p-4 rounded-2xl border-2 
+        flex flex-row md:flex-col gap-2 items-center justify-start md:justify-center p-4 rounded-2xl border-2
         transition-all duration-200 cursor-pointer w-full
         ${
           isSelected
-            ? "border-blue-500 bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 ring-2 ring-blue-200 dark:ring-blue-500/20"
+            ? "border-blue-500 bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 ring-2 ring-blue-200 dark:ring-blue-500/20 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-500/30"
             : "border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400"
         }
       `}

@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { isLocalhost } from "util/localhost";
 import "./App.css";
 import MarkdownRenderer from "./components/lesson/MarkdownRender";
+import { FeedbackFloatingButton } from "./components/ui/FeedbackFloatingButton";
+import { InstitutionalNotice } from "./components/ui/InstitutionalNotice";
 import { Modal } from "./components/ui/Modal";
 import { CookieConsent } from "./legal/CookieConsent";
 import markdownPrivacy from "./legal/privacy.md?raw";
@@ -75,6 +77,8 @@ export default function App() {
             <StudySelectionPage />
           </div>
           <Footer />
+          <InstitutionalNotice />
+          <FeedbackFloatingButton />
         </div>
       </SidebarProvider>
       <CookieConsent onPrivacyClick={() => setIsModalPrivacyOpen(true)} />
