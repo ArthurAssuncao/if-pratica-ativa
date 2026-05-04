@@ -82,7 +82,11 @@ export function QuizConfigurator({
           options={[...questionTypes, "Todos"]}
           allOptionValue="Todos"
           exclude={["fluxograma"]}
-          selectedValues={config.questionsType || ["Todos"]}
+          selectedValues={
+            config.questionsType && config.questionsType.length > 0
+              ? config.questionsType
+              : [...questionTypes, "Todos"]
+          }
           onChange={(value) =>
             onConfigChange({ questionsType: value as QuestionType[] })
           }

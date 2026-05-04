@@ -31,7 +31,7 @@ export function MultiOptionToggle<T>({
       const isAllSelected = selectedValues.length === options.length;
       // Se já estava tudo marcado, desmarca tudo (ou mantém apenas 'Todos', conforme preferência)
       // Aqui vamos seguir a lógica: se clicar em todos, marca o array inteiro
-      onChange(isAllSelected ? [] : [...options]);
+      onChange(isAllSelected ? [allOptionValue] : [...options]);
       return;
     }
 
@@ -69,6 +69,7 @@ export function MultiOptionToggle<T>({
         .filter((opt) => !exclude?.includes(opt))
         .map((option) => {
           const isActive = selectedValues.includes(option);
+
           let optionText = String(option);
           if ((TIPOS_QUESTAO as string[]).includes(String(option))) {
             optionText = getTipoQuestaoPorExtenso(

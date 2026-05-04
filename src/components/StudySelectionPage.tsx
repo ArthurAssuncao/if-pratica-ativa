@@ -83,14 +83,14 @@ export default function StudySelectionPage() {
 
           {/* Quiz View */}
           {viewMode === "quiz" && quiz.questions && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm items-center justify-center">
+            <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm items-center justify-center">
               <Quiz quiz={quiz} discipline={selectedDiscipline} />
             </div>
           )}
 
           {/* Selection View */}
           {viewMode === "selection" && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm">
+            <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 {/* Left Column */}
                 <div className="lg:col-span-7">
