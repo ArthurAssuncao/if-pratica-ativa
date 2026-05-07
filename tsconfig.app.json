@@ -24,6 +24,7 @@
       "*": ["./src/*"],
       "@data/*": ["./src/data/*"],
       "@components/*": ["./src/components/*"],
+      "@constants/*": ["./src/constants/*"],
       "@types/*": ["./src/types/*"],
       "@context/*": ["./src/context/*"],
       "@hook/*": ["./src/hook/*"],

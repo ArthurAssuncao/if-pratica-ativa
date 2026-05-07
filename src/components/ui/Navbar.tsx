@@ -4,6 +4,7 @@ import { useAuth } from "hook/useAuth";
 import { useBreakpoints } from "hook/useBreakpoints";
 import { Laptop, LogIn, Menu } from "lucide-react";
 import { useState } from "react";
+import { APP_NAME } from "../../constants/app";
 import { ThemeToggle } from "./ThemeToggle";
 
 export const Navbar = () => {
@@ -25,7 +26,7 @@ export const Navbar = () => {
           <Laptop className="text-blue-700" size={20} />
         </div>
         <span className="text-xl font-bold tracking-tight text-blue-600 dark:text-white">
-          <span className="text-white">IF Prática Ativa</span>
+          <span className="text-white">{APP_NAME}</span>
         </span>
       </a>
 

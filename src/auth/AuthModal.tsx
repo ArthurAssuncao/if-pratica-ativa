@@ -1,6 +1,7 @@
 import { Loader2, LogIn, X } from "lucide-react";
 import netlifyIdentity from "netlify-identity-widget";
 import { useEffect, useState } from "react";
+import { APP_NAME } from "../constants/app";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -86,7 +87,7 @@ export default function AuthModal({
           </div>
 
           <h2 className="mb-2 text-2xl font-bold text-slate-900 dark:text-white">
-            Bem-vindo ao IF Prática Ativa
+            Bem-vindo ao {APP_NAME}
           </h2>
           <p className="mb-8 text-slate-600 dark:text-slate-400">
             Entre para salvar seu progresso, acessar simulados e sincronizar

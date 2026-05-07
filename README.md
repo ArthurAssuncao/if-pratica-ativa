@@ -1,6 +1,6 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/e5fe6eb8-eac7-47cc-9cd3-7f5c7a795524/deploy-status)](https://app.netlify.com/projects/if-pratica-ativa/deploys)
 
-# 📘 Prática Ativa - Plataforma de Estudos
+# 📘 IF Aprenda - Plataforma de Estudos
 
 Plataforma de aprendizado interativo que combina gestão de aulas em Markdown com um sistema de quizzes para fixação de conteúdo. O projeto foca em uma experiência de usuário fluida, com suporte nativo a temas (dark/light) e autenticação robusta.
 
