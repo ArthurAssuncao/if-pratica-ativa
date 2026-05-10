@@ -1,0 +1,42 @@
+.react-syntax-highlighter-line-number {
+  border-right: 1px solid #a2a186;
+  color: #a2a186;
+  padding: 0;
+  margin: 0;
+  margin-right: 0.5em;
+  padding-right: 0.5em !important;
+}
+
+.dark {
+  .react-syntax-highlighter-line-number {
+    border-right: 1px solid #8989b7;
+    color: #8989b7;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .react-syntax-highlighter-line-number {
+    margin-right: 1em;
+    padding-right: 1em !important;
+  }
+}
+
+*::selection {
+  background: #1447e6;
+  color: #fff085;
+}
+*::-moz-selection {
+  background: #1447e6;
+  color: #fff085;
+}
+*::-webkit-selection {
+  background: #1447e6;
+  color: #fff085;
+}
