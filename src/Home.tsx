@@ -1,24 +1,35 @@
 import {
   ArrowRight,
+  ArrowUpRight,
   CheckCircle2,
   FileCode2,
+  GitBranch,
   PlayCircle,
   Search,
   Split,
   Terminal,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Footer } from "./components/ui/Footer";
 import { InstitutionalNotice } from "./components/ui/InstitutionalNotice";
+import { default as IMG_CLICK_ERROR } from "/assets/img/exemplo-tipos-questao/encontre-erro.png";
+import { default as IMG_FLOWCHART } from "/assets/img/exemplo-tipos-questao/fluxograma.png";
+import { default as IMG_MULTIPLE_CHOICE } from "/assets/img/exemplo-tipos-questao/multipla-escolha.png";
+import { default as IMG_REARRANGE } from "/assets/img/exemplo-tipos-questao/ordenacao-linhas.png";
+import { default as IMG_FILL } from "/assets/img/exemplo-tipos-questao/preencher-lacuna.png";
+import { default as IMG_OUTPUT } from "/assets/img/exemplo-tipos-questao/saida-codigo.png";
+import { default as IMG_DESK_CHECK } from "/assets/img/exemplo-tipos-questao/teste-mesa.png";
+import { default as IMG_TRUE_FALSE } from "/assets/img/exemplo-tipos-questao/verdadeiro-ou-falso.png";
 
 const ExemploImage = ({ src, alt }: { src: string; alt: string }) => (
-  <div className="relative group w-full max-w-4xl mx-auto">
+  <div className="relative group w-full max-w-4xl mx-auto ">
     {/* Efeito de brilho atrás da imagem */}
     <div className="absolute -inset-4 bg-white/10 rounded-[2.5rem] blur-2xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
-    <div className="relative overflow-hidden rounded-3xl shadow-2xl border border-white/20 bg-slate-950">
+    <div className="m-0 max-h-110 relative overflow-hidden ">
       <img
         src={src}
         alt={alt}
-        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+        className="m-0 mx-auto w-auto max-h-110 object-cover transition-transform border-2 hover:border-blue-400 rounded-3xl  border-slate-400"
       />
     </div>
   </div>
@@ -30,36 +41,57 @@ export const Home = () => {
       titulo: "Múltipla Escolha",
       desc: "Avalie conceitos teóricos e sintaxe com alternativas inteligentes. O feedback imediato ajuda a corrigir o raciocínio na hora.",
       icon: <CheckCircle2 size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Múltipla+Escolha",
+      img: IMG_MULTIPLE_CHOICE,
       bgColor: "bg-blue-600",
     },
     {
       titulo: "Verdadeiro ou Falso",
       desc: "Ideal para validação rápida de definições e lógica. Uma forma eficiente de checar a compreensão de regras e conceitos.",
       icon: <Split size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Verdadeiro+ou+Falso",
+      img: IMG_TRUE_FALSE,
       bgColor: "bg-emerald-600",
     },
     {
       titulo: "Preencher Lacuna",
       desc: "Trabalhe a memorização ativa de termos-chave, fórmulas ou sintaxe. Complete o que falta para tornar o conteúdo funcional.",
       icon: <FileCode2 size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Preencher+Lacuna",
+      img: IMG_FILL,
       bgColor: "bg-slate-900",
     },
     {
       titulo: "Predição de Saída",
       desc: "Desenvolva a capacidade de prever resultados. Analise o cenário dado e determine exatamente o que será o desfecho final.",
       icon: <Terminal size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Predição+de+Saída",
+      img: IMG_OUTPUT,
       bgColor: "bg-purple-700",
     },
     {
       titulo: "Encontrar o Erro",
       desc: "Onde está a falha? Identifique erros de lógica ou sintaxe em cenários preparados para desafiar seu olhar crítico.",
       icon: <Search size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Encontrar+o+Erro",
+      img: IMG_CLICK_ERROR,
       bgColor: "bg-rose-600",
+    },
+    {
+      titulo: "Ordenação de Linhas",
+      desc: "Organize as linhas de uma tabela de forma que a informação seja apresentada de forma clara e coerente.",
+      icon: <ArrowUpRight size={40} />,
+      img: IMG_REARRANGE,
+      bgColor: "bg-green-600",
+    },
+    {
+      titulo: "Teste de Mesa",
+      desc: "Verifique se uma resposta está correta, se um cálculo está correto ou se um resultado está dentro do intervalo esperado.",
+      icon: <PlayCircle size={40} />,
+      img: IMG_DESK_CHECK,
+      bgColor: "bg-blue-600",
+    },
+    {
+      titulo: "Fluxograma",
+      desc: "Visualize o fluxo de um programa ou algoritmo, identificando as etapas e as condições necessárias para que o programa funcione corretamente.",
+      icon: <GitBranch size={40} />,
+      img: IMG_FLOWCHART,
+      bgColor: "bg-green-600",
     },
     // ... adicione as demais seções seguindo o mesmo padrão
   ];
@@ -71,8 +103,8 @@ export const Home = () => {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950">
         {/* Background Decorativo */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-500/20 blur-[120px] rounded-full pointer-events-none"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-250 h-150 bg-blue-500/20 blur-[120px] rounded-full pointer-events-none"></div>
         </div>
 
         <div className="container relative z-10 mx-auto px-6 text-center">
@@ -86,14 +118,14 @@ export const Home = () => {
 
           <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-none dark:text-white">
             Plataforma <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-blue-600 to-indigo-500">
               IF Aprenda
             </span>
           </h1>
 
           <p className="max-w-2xl mx-auto text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-12 leading-relaxed">
-            A ferramenta definitiva para fixação de conteúdo multidisciplinar.
-            Pratique lógica, linguagens e conceitos técnicos em um só lugar.
+            Sistema para fixação de conteúdo multidisciplinar. Pratique lógica,
+            linguagens e conceitos técnicos em um só lugar.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -128,25 +160,27 @@ export const Home = () => {
         {secoes.map((secao, index) => (
           <section
             key={index}
-            className={`min-h-[90vh] flex items-center py-20 px-6 ${secao.bgColor} text-white sticky top-0`}
+            className={`min-h-[96vh] flex items-start md:items-center py-10 px-6 ${secao.bgColor} text-white sticky top-0`}
           >
             <div className="container mx-auto">
-              <div className="grid lg:grid-cols-1 gap-12 text-center">
-                <div className="max-w-4xl mx-auto space-y-6 mb-12">
-                  <div className="inline-flex p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 mb-4 animate-pulse">
-                    {secao.icon}
+              <div className="grid lg:grid-cols-1 gap-4 text-center">
+                <div className="max-w-4xl mx-auto flex flex-col gap-8 md:gap-2 items-center">
+                  <div className="flex items-center justify-center gap-6 md:gap-2 flex-col md:flex-row">
+                    <div className="inline-flex p-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20  animate-pulse">
+                      {secao.icon}
+                    </div>
+                    <h2 className="text-5xl md:text-5xl font-black tracking-tight">
+                      {secao.titulo}
+                    </h2>
                   </div>
-                  <h2 className="text-5xl md:text-7xl font-black tracking-tight">
-                    {secao.titulo}
-                  </h2>
-                  <p className="text-xl md:text-2xl opacity-90 leading-relaxed">
+                  <p className="text-xl md:text-xl opacity-90 leading-relaxed">
                     {secao.desc}
                   </p>
                 </div>
 
                 <ExemploImage src={secao.img} alt={secao.titulo} />
 
-                <div className="pt-10">
+                <div className="pt-6 md:pt-2">
                   <Link
                     to="/app"
                     className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 rounded-2xl font-black hover:scale-105 transition-all shadow-xl"
@@ -161,11 +195,7 @@ export const Home = () => {
       </div>
 
       {/* --- FOOTER SIMPLES --- */}
-      <footer className="py-20 bg-slate-950 text-center text-slate-500 border-t border-slate-900">
-        <p className="font-bold">
-          © 2026 IF Aprenda - Projetos de Ensino, Pesquisa e Extensão
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 };

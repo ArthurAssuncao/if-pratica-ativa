@@ -7,6 +7,7 @@ import {
   X,
 } from "lucide-react";
 import React, { useState } from "react";
+import { useIsMobile } from "../../hook/useIsMobile";
 
 type FeedbackType = "bug" | "sugestao" | "erro";
 
@@ -16,6 +17,7 @@ export const FeedbackFloatingButton = () => {
   const [description, setDescription] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -152,16 +154,20 @@ export const FeedbackFloatingButton = () => {
       <div className="flex flex-col items-center justify-center gap-1">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 hover:cursor-pointer ${
+          className={`w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 hover:cursor-pointer ${
             isOpen
               ? "bg-slate-800 dark:bg-white text-white dark:text-slate-900 rotate-90"
               : "bg-blue-600 text-white"
           }`}
         >
-          {isOpen ? <X size={28} /> : <MessageSquarePlus size={28} />}
+          {isOpen ? (
+            <X size={isMobile ? 24 : 28} />
+          ) : (
+            <MessageSquarePlus size={isMobile ? 24 : 28} />
+          )}
         </button>
         {!isOpen && (
-          <span className="text-sm text-slate-300 dark:text-slate-400">
+          <span className="text-sm text-blue-700 dark:text-blue-200">
             Enviar Feedback
           </span>
         )}

@@ -120,14 +120,14 @@ export default function Quiz({ quiz, discipline }: QuizProps) {
     );
 
   return (
-    <div className="w-full h-full p-0 lg:p-6 flex flex-col items-center">
+    <div className="w-full h-full flex flex-col items-center">
       <HeaderProgressBar
         completed={questoesRealizadas.size}
         total={quiz.questions.length}
       />
 
       <div
-        className="flex flex-col  w-full max-w-2xl p-4 lg:p-8 rounded-2xl shadow-xl border transition-colors duration-300
+        className="flex flex-col  w-full p-4 lg:p-8 rounded-2xl shadow-xl border transition-colors duration-300
       bg-white border-slate-200 text-slate-900
       dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200"
       >

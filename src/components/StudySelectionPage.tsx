@@ -42,9 +42,9 @@ export default function StudySelectionPage() {
   } = useStudyPage();
 
   return (
-    <div className="flex flex-row items-stretch">
+    <div className="flex flex-row items-stretch min-w-full justify-center">
       {/* Main Content */}
-      <div className="max-w-full p-4 md:p-8 animate-in fade-in duration-500 flex flex-col gap-4">
+      <div className="max-w-full min-w-full xl:min-w-10/12 p-4 md:p-8 animate-in fade-in duration-500 flex flex-col gap-4">
         {/* Continue Card */}
         {MOCK_PROGRESS && viewMode !== "quiz" && (
           <ContinueCard
