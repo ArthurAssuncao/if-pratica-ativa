@@ -1,11 +1,12 @@
 import {
   ArrowRight,
-  ArrowUpRight,
+  ArrowUpAZ,
   CheckCheck,
   CheckCircle2,
-  FileCode2,
   GitBranch,
   PlayCircle,
+  RectangleEllipsis,
+  RedoDot,
   Search,
   Split,
   Terminal,
@@ -110,7 +111,7 @@ export const Home = () => {
       descricao:
         "Trabalhe a memorização ativa de termos-chave, fórmulas ou sintaxe. Complete o que falta para tornar o conteúdo funcional.",
       icon: (
-        <FileCode2
+        <RectangleEllipsis
           size={
             isMobile
               ? HOME_SECTION_ICON_SIZE_MOBILE
@@ -176,7 +177,7 @@ export const Home = () => {
       descricao:
         "Organize as linhas de uma tabela ou trechos de informação de forma que a informação seja apresentada de forma clara e coerente.",
       icon: (
-        <ArrowUpRight
+        <ArrowUpAZ
           size={
             isMobile
               ? HOME_SECTION_ICON_SIZE_MOBILE
@@ -198,7 +199,7 @@ export const Home = () => {
       descricao:
         "Verifique se uma resposta está correta, se um cálculo está correto ou se um resultado está dentro do intervalo esperado.",
       icon: (
-        <PlayCircle
+        <RedoDot
           size={
             isMobile
               ? HOME_SECTION_ICON_SIZE_MOBILE
@@ -320,7 +321,7 @@ export const Home = () => {
 
                 <div className="flex flex-col md:flex-row gap-2 md:gap-4">
                   <ExemploImage src={secao.img} alt={secao.titulo} />
-                  <div className="flex flex-col gap-8 md:gap-4 lg:gap-8">
+                  <div className="flex flex-col gap-8 md:gap-4 lg:gap-8 items-start">
                     <p className="text-xl md:text-xl  leading-relaxed text-justify md:text-left">
                       {secao.descricao}
                     </p>
