@@ -65,7 +65,7 @@ export const FeedbackFloatingButton = () => {
     <div className="fixed bottom-8 right-2 z-999">
       {/* Formulário Expandido */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-[90vw] sm:w-100 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-right">
+        <div className="absolute bottom-16 right-0 w-[90vw] sm:w-100 bg-white dark:bg-slate-900 rounded-2xl shadow border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-right">
           <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
             <h3 className="font-bold text-slate-700 dark:text-white flex items-center gap-2">
               <MessageSquarePlus size={18} className="text-blue-500" />
@@ -168,7 +168,7 @@ export const FeedbackFloatingButton = () => {
         </button>
         {!isOpen && (
           <span className="text-sm text-blue-700 dark:text-blue-200">
-            Enviar Feedback
+            Feedback
           </span>
         )}
       </div>
