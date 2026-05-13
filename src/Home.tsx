@@ -304,7 +304,7 @@ export const Home = () => {
         {secoes.map((secao, index) => (
           <section
             key={index}
-            className={`min-h-[96vh] flex items-start md:items-center p-7 ${secao.bgColor} text-white sticky top-0`}
+            className={`min-h-[96vh] flex items-start md:items-start p-7 md:pt-10 ${secao.bgColor} text-white sticky top-0`}
           >
             <div className="container mx-auto">
               <div className="flex flex-col gap-8 text-center">
@@ -322,7 +322,7 @@ export const Home = () => {
                 <div className="flex flex-col md:flex-row gap-2 md:gap-4">
                   <ExemploImage src={secao.img} alt={secao.titulo} />
                   <div className="flex flex-col gap-8 md:gap-4 lg:gap-8 items-start">
-                    <p className="text-xl md:text-xl  leading-relaxed text-justify md:text-left">
+                    <p className=" md:text-xl  leading-relaxed text-justify md:text-left">
                       {secao.descricao}
                     </p>
                     <ul className="flex-col  gap-2 hidden md:flex">
@@ -338,7 +338,7 @@ export const Home = () => {
                         </li>
                       ))}
                     </ul>
-                    <div className="pt-0 md:pt-2">
+                    <div className="pt-0 md:pt-2 flex items-center justify-center w-full">
                       <Link
                         to="/app"
                         className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 rounded-2xl font-black hover:scale-105 transition-all shadow-xl"
