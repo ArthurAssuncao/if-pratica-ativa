@@ -2,10 +2,11 @@ import { useSidebar } from "@hook/useSidebar";
 import AuthModal from "auth/AuthModal";
 import { useAuth } from "hook/useAuth";
 import { useBreakpoints } from "hook/useBreakpoints";
-import { Laptop, LogIn, Menu } from "lucide-react";
+import { LogIn, Menu } from "lucide-react";
 import { useState } from "react";
 import { APP_NAME } from "../../constants/app";
 import { ThemeToggle } from "./ThemeToggle";
+import { default as ICON } from "/assets/icon.svg";
 
 export const Navbar = () => {
   const { toggleSidebar } = useSidebar();
@@ -22,8 +23,8 @@ export const Navbar = () => {
     <nav className=" w-full h-16 shadow-md bg-blue-700   flex items-center justify-between px-6 fixed top-0 z-50 transition-colors duration-300">
       {/* Lado Esquerdo: Logo e Nome */}
       <a href="" className="flex items-center gap-3">
-        <div className="bg-white p-2 rounded-lg">
-          <Laptop className="text-blue-700" size={20} />
+        <div className="bg-white p-1 rounded-lg">
+          <img src={ICON} alt="logo" className="w-10 h-10" />
         </div>
         <span className="text-xl font-bold tracking-tight text-blue-600 dark:text-white">
           <span className="text-white">{APP_NAME}</span>

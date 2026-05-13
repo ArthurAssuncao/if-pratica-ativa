@@ -47,8 +47,8 @@ export const InstitutionalNotice = () => {
               <p className="text-amber-800/90 dark:text-amber-200/80 leading-relaxed">
                 Este portal é uma iniciativa acadêmica independente destinada à
                 hospedagem e divulgação de projetos de{" "}
-                <strong>ensino, pesquisa e extensão</strong> desenvolvidos por
-                servidores do IF Sudeste MG.
+                <strong>ensino, pesquisa e extensão</strong> desenvolvidos e
+                mantidos por alguns servidores do IF Sudeste MG.
               </p>
               <p className="text-amber-800/90 dark:text-amber-200/80 leading-relaxed mt-2">
                 Ressaltamos que, embora o conteúdo aqui presente seja de caráter
@@ -67,7 +67,8 @@ export const InstitutionalNotice = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-1 text-amber-900 dark:text-amber-100 font-bold hover:text-amber-700 transition-colors hover:cursor-pointer"
                 >
-                  Acessar Portal Oficial (edu.br) <ExternalLink size={14} />
+                  Acessar Portal Oficial do IF Sudeste MG (edu.br){" "}
+                  <ExternalLink size={14} />
                 </a>
               </div>
             </div>

@@ -1,67 +1,243 @@
 import {
   ArrowRight,
+  ArrowUpAZ,
+  CheckCheck,
   CheckCircle2,
-  FileCode2,
+  GitBranch,
   PlayCircle,
+  RectangleEllipsis,
+  RedoDot,
   Search,
   Split,
   Terminal,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Footer } from "./components/ui/Footer";
 import { InstitutionalNotice } from "./components/ui/InstitutionalNotice";
+import { useIsMobile } from "./hook/useIsMobile";
+import { default as IMG_CLICK_ERROR } from "/assets/img/exemplo-tipos-questao/mobile/encontre-erro.png";
+import { default as IMG_FLOWCHART } from "/assets/img/exemplo-tipos-questao/mobile/fluxograma.png";
+import { default as IMG_MULTIPLE_CHOICE } from "/assets/img/exemplo-tipos-questao/mobile/multipla-escolha.png";
+import { default as IMG_REARRANGE } from "/assets/img/exemplo-tipos-questao/mobile/ordenacao-linhas.png";
+import { default as IMG_FILL } from "/assets/img/exemplo-tipos-questao/mobile/preencher-lacuna.png";
+import { default as IMG_OUTPUT } from "/assets/img/exemplo-tipos-questao/mobile/saida-codigo.png";
+import { default as IMG_DESK_CHECK } from "/assets/img/exemplo-tipos-questao/mobile/teste-mesa.png";
+import { default as IMG_TRUE_FALSE } from "/assets/img/exemplo-tipos-questao/mobile/verdadeiro-ou-falso.png";
 
-const ExemploImage = ({ src, alt }: { src: string; alt: string }) => (
-  <div className="relative group w-full max-w-4xl mx-auto">
+const ExemploImage = ({
+  src,
+  alt,
+  className,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+}) => (
+  <div className={`relative group w-full max-w-4xl mx-auto ${className}`}>
     {/* Efeito de brilho atrás da imagem */}
     <div className="absolute -inset-4 bg-white/10 rounded-[2.5rem] blur-2xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
-    <div className="relative overflow-hidden rounded-3xl shadow-2xl border border-white/20 bg-slate-950">
+    <div className="m-0 max-h-110 relative overflow-hidden ">
       <img
         src={src}
         alt={alt}
-        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+        className="m-0 mx-auto w-auto max-h-110 object-cover transition-transform border-2 hover:border-blue-400 rounded-3xl  border-slate-400"
       />
     </div>
   </div>
 );
 
+interface HomeSection {
+  titulo: string;
+  descricao: string;
+  icon: React.ReactNode;
+  img: string;
+  bgColor: string;
+  beneficios: string[];
+}
+
+const HOME_SECTION_ICON_SIZE_DESKTOP = 40;
+const HOME_SECTION_ICON_SIZE_MOBILE = 32;
+
 export const Home = () => {
-  const secoes = [
+  const isMobile = useIsMobile();
+
+  const secoes: HomeSection[] = [
     {
       titulo: "Múltipla Escolha",
-      desc: "Avalie conceitos teóricos e sintaxe com alternativas inteligentes. O feedback imediato ajuda a corrigir o raciocínio na hora.",
-      icon: <CheckCircle2 size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Múltipla+Escolha",
+      descricao:
+        "Avalie conceitos teóricos e sintaxe com alternativas inteligentes. O feedback imediato ajuda a corrigir o raciocínio na hora.",
+      icon: (
+        <CheckCircle2
+          size={
+            isMobile
+              ? HOME_SECTION_ICON_SIZE_MOBILE
+              : HOME_SECTION_ICON_SIZE_DESKTOP
+          }
+        />
+      ),
+      img: IMG_MULTIPLE_CHOICE,
       bgColor: "bg-blue-600",
+      beneficios: [
+        "Identificação rápida de lacunas de conhecimento",
+        "Estímulo ao processo de eliminação e lógica dedutiva",
+        "Ideal para exames de certificação e concursos",
+        "Feedback instantâneo para correção de conceitos equivocados",
+      ],
     },
     {
       titulo: "Verdadeiro ou Falso",
-      desc: "Ideal para validação rápida de definições e lógica. Uma forma eficiente de checar a compreensão de regras e conceitos.",
-      icon: <Split size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Verdadeiro+ou+Falso",
+      descricao:
+        "Ideal para validação rápida de definições e lógica. Uma forma eficiente de checar a compreensão de regras e conceitos.",
+      icon: (
+        <Split
+          size={
+            isMobile
+              ? HOME_SECTION_ICON_SIZE_MOBILE
+              : HOME_SECTION_ICON_SIZE_DESKTOP
+          }
+        />
+      ),
+      img: IMG_TRUE_FALSE,
       bgColor: "bg-emerald-600",
+      beneficios: [
+        "Julgamento crítico de afirmações e premissas",
+        "Alta agilidade na revisão de grandes volumes de conteúdo",
+        "Diferenciação precisa entre conceitos semelhantes",
+        "Treino focado em normas, leis e definições axiomáticas",
+      ],
     },
     {
       titulo: "Preencher Lacuna",
-      desc: "Trabalhe a memorização ativa de termos-chave, fórmulas ou sintaxe. Complete o que falta para tornar o conteúdo funcional.",
-      icon: <FileCode2 size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Preencher+Lacuna",
+      descricao:
+        "Trabalhe a memorização ativa de termos-chave, fórmulas ou sintaxe. Complete o que falta para tornar o conteúdo funcional.",
+      icon: (
+        <RectangleEllipsis
+          size={
+            isMobile
+              ? HOME_SECTION_ICON_SIZE_MOBILE
+              : HOME_SECTION_ICON_SIZE_DESKTOP
+          }
+        />
+      ),
+      img: IMG_FILL,
       bgColor: "bg-slate-900",
+      beneficios: [
+        "Fortalecimento da memória semântica e vocabulário técnico",
+        "Exigência de precisão na escrita de fórmulas ou termos",
+        "Reconhecimento de padrões e estruturas sintáticas",
+        "Engajamento superior à simples leitura passiva",
+      ],
     },
     {
       titulo: "Predição de Saída",
-      desc: "Desenvolva a capacidade de prever resultados. Analise o cenário dado e determine exatamente o que será o desfecho final.",
-      icon: <Terminal size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Predição+de+Saída",
+      descricao:
+        "Desenvolva a capacidade de prever resultados. Analise o cenário dado e determine exatamente o que será o desfecho final.",
+      icon: (
+        <Terminal
+          size={
+            isMobile
+              ? HOME_SECTION_ICON_SIZE_MOBILE
+              : HOME_SECTION_ICON_SIZE_DESKTOP
+          }
+        />
+      ),
+      img: IMG_OUTPUT,
       bgColor: "bg-purple-700",
+      beneficios: [
+        "Capacidade de simulação mental de processos",
+        "Previsão de desfechos em sistemas complexos ou experimentos",
+        "Análise de causa e efeito sem necessidade de execução real",
+        "Foco total na interpretação de regras de transformação",
+      ],
     },
     {
       titulo: "Encontrar o Erro",
-      desc: "Onde está a falha? Identifique erros de lógica ou sintaxe em cenários preparados para desafiar seu olhar crítico.",
-      icon: <Search size={40} />,
-      img: "https://via.placeholder.com/1200x700?text=Exemplo+Encontrar+o+Erro",
+      descricao:
+        "Onde está a falha? Identifique erros de lógica ou sintaxe em cenários preparados para desafiar seu olhar crítico.",
+      icon: (
+        <Search
+          size={
+            isMobile
+              ? HOME_SECTION_ICON_SIZE_MOBILE
+              : HOME_SECTION_ICON_SIZE_DESKTOP
+          }
+        />
+      ),
+      img: IMG_CLICK_ERROR,
       bgColor: "bg-rose-600",
+      beneficios: [
+        "Desenvolvimento de atenção plena aos detalhes",
+        "Habilidade de depuração (debugging) aplicada a qualquer contexto",
+        "Revisão crítica de trabalhos e fluxos de trabalho",
+        "Aprendizado através da análise de equívocos comuns",
+      ],
     },
-    // ... adicione as demais seções seguindo o mesmo padrão
+    {
+      titulo: "Ordenação de Linhas",
+      descricao:
+        "Organize as linhas de uma tabela ou trechos de informação de forma que a informação seja apresentada de forma clara e coerente.",
+      icon: (
+        <ArrowUpAZ
+          size={
+            isMobile
+              ? HOME_SECTION_ICON_SIZE_MOBILE
+              : HOME_SECTION_ICON_SIZE_DESKTOP
+          }
+        />
+      ),
+      img: IMG_REARRANGE,
+      bgColor: "bg-green-600",
+      beneficios: [
+        "Comprensão de sequenciamento lógico e cronológico",
+        "Capacidade de organização de ideias e priorização",
+        "Entendimento da hierarquia em processos estruturados",
+        "Visualização da coesão e coerência em blocos de informação",
+      ],
+    },
+    {
+      titulo: "Teste de Mesa",
+      descricao:
+        "Verifique se uma resposta está correta, se um cálculo está correto ou se um resultado está dentro do intervalo esperado.",
+      icon: (
+        <RedoDot
+          size={
+            isMobile
+              ? HOME_SECTION_ICON_SIZE_MOBILE
+              : HOME_SECTION_ICON_SIZE_DESKTOP
+          }
+        />
+      ),
+      img: IMG_DESK_CHECK,
+      bgColor: "bg-blue-600",
+      beneficios: [
+        "Rastreamento minucioso de mudanças de estado e variáveis",
+        "Prevenção de erros acumulados em cálculos complexos",
+        "Metodologia rigorosa para validação de hipóteses",
+        "Domínio total sobre o fluxo de dados e transformações",
+      ],
+    },
+    {
+      titulo: "Fluxograma",
+      descricao:
+        "Visualize o fluxo de um processo ou algoritmo, identificando as etapas e as condições necessárias para um funcionamento correto.",
+      icon: (
+        <GitBranch
+          size={
+            isMobile
+              ? HOME_SECTION_ICON_SIZE_MOBILE
+              : HOME_SECTION_ICON_SIZE_DESKTOP
+          }
+        />
+      ),
+      img: IMG_FLOWCHART,
+      bgColor: "bg-green-600",
+      beneficios: [
+        "Pensamento sistêmico e visão holística do problema",
+        "Identificação de pontos de decisão e caminhos alternativos",
+        "Documentação clara de processos de qualquer natureza",
+        "Facilitação da comunicação de ideias complexas",
+      ],
+    },
   ];
 
   return (
@@ -92,8 +268,8 @@ export const Home = () => {
           </h1>
 
           <p className="max-w-2xl mx-auto text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-12 leading-relaxed">
-            A ferramenta definitiva para fixação de conteúdo multidisciplinar.
-            Pratique lógica, linguagens e conceitos técnicos em um só lugar.
+            Sistema para fixação de conteúdo multidisciplinar. Pratique lógica,
+            linguagens e conceitos técnicos em um só lugar.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -128,31 +304,49 @@ export const Home = () => {
         {secoes.map((secao, index) => (
           <section
             key={index}
-            className={`min-h-[90vh] flex items-center py-20 px-6 ${secao.bgColor} text-white sticky top-0`}
+            className={`min-h-[96vh] flex items-start md:items-start p-7 md:pt-10 ${secao.bgColor} text-white sticky top-0`}
           >
             <div className="container mx-auto">
-              <div className="grid lg:grid-cols-1 gap-12 text-center">
-                <div className="max-w-4xl mx-auto space-y-6 mb-12">
-                  <div className="inline-flex p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 mb-4 animate-pulse">
-                    {secao.icon}
+              <div className="flex flex-col gap-8 text-center">
+                <div className="max-w-4xl mx-auto flex flex-col gap-8 md:gap-2 items-center">
+                  <div className="flex items-center justify-center gap-6 md:gap-2 flex-row">
+                    <div className="inline-flex p-1 md:p-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20  animate-pulse">
+                      {secao.icon}
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tight text-left">
+                      {secao.titulo}
+                    </h2>
                   </div>
-                  <h2 className="text-5xl md:text-7xl font-black tracking-tight">
-                    {secao.titulo}
-                  </h2>
-                  <p className="text-xl md:text-2xl opacity-90 leading-relaxed">
-                    {secao.desc}
-                  </p>
                 </div>
 
-                <ExemploImage src={secao.img} alt={secao.titulo} />
-
-                <div className="pt-10">
-                  <Link
-                    to="/app"
-                    className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 rounded-2xl font-black hover:scale-105 transition-all shadow-xl"
-                  >
-                    Testar Agora <PlayCircle />
-                  </Link>
+                <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+                  <ExemploImage src={secao.img} alt={secao.titulo} />
+                  <div className="flex flex-col gap-8 md:gap-4 lg:gap-8 items-start">
+                    <p className=" md:text-xl  leading-relaxed text-justify md:text-left">
+                      {secao.descricao}
+                    </p>
+                    <ul className="flex-col  gap-2 hidden md:flex">
+                      {secao.beneficios.map((beneficio, index) => (
+                        <li
+                          key={index}
+                          className="flex gap-2 items-center justify-start"
+                        >
+                          <div className="border-2 border-white rounded-full p-1">
+                            <CheckCheck className="text-white" />
+                          </div>
+                          <span className="text-left">{beneficio}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="pt-0 md:pt-2 flex items-center justify-center w-full">
+                      <Link
+                        to="/app"
+                        className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-900 rounded-2xl font-black hover:scale-105 transition-all shadow-xl"
+                      >
+                        Testar Agora <PlayCircle />
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -161,11 +355,7 @@ export const Home = () => {
       </div>
 
       {/* --- FOOTER SIMPLES --- */}
-      <footer className="py-20 bg-slate-950 text-center text-slate-500 border-t border-slate-900">
-        <p className="font-bold">
-          © 2026 IF Aprenda - Projetos de Ensino, Pesquisa e Extensão
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 };

@@ -15,6 +15,7 @@ import { QuestionHint } from "components/ui/QuestionHint";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import type { BaseQuestionProps } from "types/question";
 import type { QuestionFlowchartnNew } from "types/study";
+import { useIsMobile } from "../../hook/useIsMobile";
 import { createQuestion } from "./QuestionFactory";
 
 interface FlowchartNewQuestionProps extends BaseQuestionProps {
@@ -33,6 +34,7 @@ export const FlowchartNewQuestion = createQuestion<
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
     const [nodeSelected, setNodeSelected] = useState<string>("");
+    const isMobile = useIsMobile();
 
     const handleClick = useCallback(
       (label: string) => {
@@ -65,7 +67,7 @@ export const FlowchartNewQuestion = createQuestion<
       const initialEdges: Edge[] = [];
 
       const espacamentoY = 150;
-      const espacamentoX = 150;
+      const espacamentoX = isMobile ? 100 : 150;
       const centroX = 300;
 
       const processados = new Set<string>();
@@ -144,7 +146,7 @@ export const FlowchartNewQuestion = createQuestion<
 
       setNodes(initialNodes);
       setEdges(initialEdges);
-    }, [data, handleClick, nodeSelected, setEdges, setNodes]);
+    }, [data, handleClick, isMobile, nodeSelected, setEdges, setNodes]);
 
     // Atualiza as funções de clique quando o timer libera
     useEffect(() => {
@@ -175,7 +177,7 @@ export const FlowchartNewQuestion = createQuestion<
           </div>
         )}
 
-        <div className="w-full h-112.5 bg-olive-50/50 dark:bg-slate-900/50 border-2 border-dashed border-olive-200 dark:border-slate-800 rounded-2xl overflow-hidden relative">
+        <div className="w-full h-90 bg-olive-50/50 dark:bg-slate-900/50 border-2 border-dashed border-olive-200 dark:border-slate-800 rounded-2xl overflow-hidden relative">
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -183,11 +185,12 @@ export const FlowchartNewQuestion = createQuestion<
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             fitView
-            fitViewOptions={{ padding: 0.2 }}
+            fitViewOptions={{ padding: isMobile ? 0.1 : 0.2 }}
             zoomOnScroll={false}
             preventScrolling={true}
             nodesConnectable={false}
             nodesDraggable={false}
+            lang="pt-br"
           />
         </div>
         <QuestionHint>
