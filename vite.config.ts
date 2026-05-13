@@ -12,5 +12,5 @@ export default defineConfig({
   define: {
     "process.env": {},
   },
-  assetsInclude: ["**/*.png"],
+  assetsInclude: ["**/*.png", "**/*.svg"],
 });
