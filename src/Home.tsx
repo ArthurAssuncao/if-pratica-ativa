@@ -71,8 +71,8 @@ export const Home = () => {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-950">
         {/* Background Decorativo */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-500/20 blur-[120px] rounded-full pointer-events-none"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-250 h-150 bg-blue-500/20 blur-[120px] rounded-full pointer-events-none"></div>
         </div>
 
         <div className="container relative z-10 mx-auto px-6 text-center">
@@ -86,7 +86,7 @@ export const Home = () => {
 
           <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-none dark:text-white">
             Plataforma <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-blue-600 to-indigo-500">
               IF Aprenda
             </span>
           </h1>

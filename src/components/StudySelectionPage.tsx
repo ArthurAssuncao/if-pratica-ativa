@@ -1,4 +1,4 @@
-import { MOCK_PROGRESS, useStudyPage } from "hook/useStudyPage";
+import { useStudyPage } from "hook/useStudyPage";
 import { ContentSelector } from "./ContentSelector";
 import { DisciplineSelector } from "./DisciplineSelector";
 import { Textbook } from "./lesson/Textbook";
@@ -7,7 +7,6 @@ import { QuizConfigurator } from "./QuizConfigurator";
 import { StudyMaterialSection } from "./StudyMaterialSection";
 import { StudySidebar } from "./StudySidebar";
 import { Breadcrumb } from "./ui/Breadcrumb";
-import { ContinueCard } from "./ui/ContinueCard";
 
 export default function StudySelectionPage() {
   const {
@@ -46,12 +45,6 @@ export default function StudySelectionPage() {
       {/* Main Content */}
       <div className="max-w-full p-4 md:p-8 animate-in fade-in duration-500 flex flex-col gap-4">
         {/* Continue Card */}
-        {MOCK_PROGRESS && viewMode !== "quiz" && (
-          <ContinueCard
-            progress={MOCK_PROGRESS}
-            onContinue={() => console.log("Continuando...", MOCK_PROGRESS)}
-          />
-        )}
 
         {/* Breadcrumb */}
         <Breadcrumb

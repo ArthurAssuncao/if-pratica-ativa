@@ -1,118 +1,268 @@
-import { ChevronDown, type LucideIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+// components/ui/Select.tsx
+import { AlertCircle, Check, ChevronDown } from "lucide-react";
+import { forwardRef, useEffect, useRef, useState, type ReactNode } from "react";
 
-interface Option {
-  label: string;
+export interface SelectOption {
   value: string;
+  label: string;
+  icon?: ReactNode;
+  description?: string;
 }
 
 interface SelectProps {
-  options: Option[];
-  value: string;
-  onChange: (value: string) => void;
+  label?: string;
+  options: SelectOption[] | string[];
+  error?: string;
+  hint?: string;
+  containerClassName?: string;
   placeholder?: string;
-  // Novas props para o modo ícone fixo
-  label: string;
-  onlyTextIcon?: boolean;
-  icon?: LucideIcon;
+  required?: boolean;
+  disabled?: boolean;
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+  onBlur?: () => void;
+  name?: string;
+  id?: string;
 }
 
-export const Select = ({
-  options,
-  value,
-  onChange,
-  placeholder,
-  onlyTextIcon,
-  icon,
-  label,
-}: SelectProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+export const Select = forwardRef<HTMLDivElement, SelectProps>(
+  (
+    {
+      label,
+      options,
+      error,
+      hint,
+      containerClassName = "",
+      placeholder = "Selecione uma opção",
+      required,
+      disabled = false,
+      value: controlledValue,
+      defaultValue,
+      onChange,
+      onBlur,
+      name,
+      id,
+    },
+    ref,
+  ) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [internalValue, setInternalValue] = useState(defaultValue || "");
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
+    // Converte string[] para SelectOption[] se necessário
+    const normalizedOptions: SelectOption[] = options.map((opt) =>
+      typeof opt === "string" ? { value: opt, label: opt } : opt,
+    );
+
+    // Determina o valor atual (controlado ou não)
+    const currentValue =
+      controlledValue !== undefined ? controlledValue : internalValue;
+
+    // Encontra a opção selecionada
+    const selectedOption = normalizedOptions.find(
+      (opt) => opt.value === currentValue,
+    );
+
+    // Fecha o dropdown ao clicar fora
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target as Node)
+        ) {
+          setIsOpen(false);
+          onBlur?.();
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }, [onBlur]);
+
+    // Fecha ao pressionar ESC
+    useEffect(() => {
+      const handleEsc = (event: KeyboardEvent) => {
+        if (event.key === "Escape" && isOpen) {
+          setIsOpen(false);
+          buttonRef.current?.focus();
+        }
+      };
+      document.addEventListener("keydown", handleEsc);
+      return () => document.removeEventListener("keydown", handleEsc);
+    }, [isOpen]);
+
+    const selectId = id || label?.toLowerCase().replace(/\s/g, "-");
+
+    const handleSelect = (value: string) => {
+      if (controlledValue === undefined) {
+        setInternalValue(value);
+      }
+      onChange?.(value);
+      setIsOpen(false);
+      buttonRef.current?.focus();
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+      if (disabled) return;
+
+      switch (event.key) {
+        case "Enter":
+        case " ":
+        case "ArrowDown":
+          event.preventDefault();
+          setIsOpen(true);
+          break;
+        case "ArrowUp":
+          event.preventDefault();
+          setIsOpen(true);
+          break;
+        case "Escape":
+          setIsOpen(false);
+          buttonRef.current?.focus();
+          break;
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
-  const selectedOption = options.find((opt) => opt.value === value);
-  const Icon = icon;
+    return (
+      <div className={`flex flex-col gap-1.5 ${containerClassName}`} ref={ref}>
+        {/* Label */}
+        {label && (
+          <label
+            htmlFor={selectId}
+            className="text-sm font-medium text-gray-700"
+          >
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+        )}
 
-  return (
-    <div className={``} ref={dropdownRef}>
-      {/* Container Principal (Trigger) */}
-      <div
-        onClick={() => setIsOpen(!isOpen)}
-        className={`
-          ${onlyTextIcon && !isOpen ? "w-fit" : "w-full"} flex items-center justify-between p-3 rounded-lg border-2 transition-all duration-200
-          hover:cursor-pointer shadow-sm group
-          bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600
-          ${isOpen ? "ring-2 ring-olive-400 dark:ring-blue-500/50 border-transparent" : ""}
-        `}
-      >
-        <div className="flex items-center gap-2 overflow-hidden min-w-18">
-          {/* Se onlyTextIcon existir, renderiza o ícone e label fixos */}
-          {onlyTextIcon && Icon ? (
-            <>
-              <Icon
-                size={18}
-                className="text-olive-500 dark:text-blue-400 shrink-0"
-              />
-              <span className="lg:text-sm font-bold text-slate-700 dark:text-blue-300">
-                {label}
-              </span>
-            </>
-          ) : (
-            /* Caso contrário, renderiza a opção selecionada ou placeholder */
-            <span className="lg:text-sm font-medium text-slate-700 dark:text-blue-300 truncate">
-              {selectedOption ? selectedOption.label : placeholder}
+        {/* Input escondido para compatibilidade com formulários */}
+        {name && <input type="hidden" name={name} value={currentValue || ""} />}
+
+        {/* Container do dropdown */}
+        <div className="relative" ref={dropdownRef}>
+          {/* Botão do select */}
+          <button
+            id={selectId}
+            ref={buttonRef}
+            type="button"
+            disabled={disabled}
+            onClick={() => !disabled && setIsOpen(!isOpen)}
+            onKeyDown={handleKeyDown}
+            aria-haspopup="listbox"
+            aria-expanded={isOpen}
+            aria-invalid={!!error}
+            aria-describedby={
+              error
+                ? `${selectId}-error`
+                : hint
+                  ? `${selectId}-hint`
+                  : undefined
+            }
+            className={`
+              w-full flex items-center justify-between
+              rounded-lg border bg-white px-4 py-2.5
+              text-gray-900
+              transition-all duration-200
+              focus:outline-none focus:ring-2 focus:ring-blue-500
+              disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500
+              ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500"}
+              ${isOpen ? "ring-2 ring-blue-500 border-blue-500" : ""}
+            `}
+          >
+            <span
+              className={!selectedOption ? "text-gray-400" : "text-gray-900"}
+            >
+              {selectedOption?.label || placeholder}
             </span>
+            <ChevronDown
+              size={18}
+              className={`text-gray-400 transition-transform duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+              strokeWidth={1.5}
+            />
+          </button>
+
+          {/* Dropdown menu */}
+          {isOpen && !disabled && (
+            <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+              <ul
+                className="max-h-60 overflow-y-auto py-1"
+                role="listbox"
+                aria-labelledby={selectId}
+              >
+                {normalizedOptions.map((option, index) => (
+                  <li key={option.value}>
+                    <button
+                      type="button"
+                      onClick={() => handleSelect(option.value)}
+                      className={`
+                        w-full flex items-center gap-3 px-4 py-2.5 text-left
+                        transition-colors duration-150
+                        hover:bg-blue-50
+                        ${currentValue === option.value ? "bg-blue-50 text-blue-700" : "text-gray-700"}
+                        ${index !== normalizedOptions.length - 1 ? "border-b border-gray-100" : ""}
+                      `}
+                      role="option"
+                      aria-selected={currentValue === option.value}
+                    >
+                      {/* Ícone opcional */}
+                      {option.icon && (
+                        <span className="flex-shrink-0 text-gray-400">
+                          {option.icon}
+                        </span>
+                      )}
+
+                      {/* Label e descrição */}
+                      <div className="flex-1">
+                        <div
+                          className={
+                            currentValue === option.value ? "font-medium" : ""
+                          }
+                        >
+                          {option.label}
+                        </div>
+                        {option.description && (
+                          <div className="text-xs text-gray-400">
+                            {option.description}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Checkmark da opção selecionada */}
+                      {currentValue === option.value && (
+                        <Check size={16} className="shrink-0 text-blue-500" />
+                      )}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
 
-        <ChevronDown
-          size={18}
-          className={`transition-transform duration-300 text-olive-500 dark:text-slate-400 shrink-0
-            ${isOpen ? "rotate-180" : "rotate-0"}`}
-        />
-      </div>
-
-      {/* Lista de Opções (Dropdown) */}
-      {isOpen && (
-        <div
-          className="absolute z-50 w-full left-0 min-w-60 mt-2 rounded-lg border-2 shadow-xl animate-in fade-in zoom-in-95 duration-200
-          text-slate-700 dark:text-blue-300 border-olive-400 dark:border-slate-700 bg-yellow-50 dark:bg-slate-800"
-        >
-          <div className="p-1 max-h-60 overflow-auto scrollbar-thin scrollbar-thumb-olive-300 dark:scrollbar-thumb-slate-600">
-            {options.map((option) => (
-              <div
-                key={option.value}
-                onClick={() => {
-                  onChange(option.value);
-                  setIsOpen(false);
-                }}
-                className={`
-                  px-4 py-2.5 rounded-lg lg:text-sm transition-colors cursor-pointer mb-1 last:mb-0
-                  ${
-                    value === option.value
-                      ? "bg-olive-200/50 dark:bg-blue-500/20 font-bold"
-                      : "hover:bg-olive-100 dark:hover:bg-slate-700"
-                  }
-                `}
-              >
-                {option.label}
-              </div>
-            ))}
+        {/* Mensagem de erro ou hint */}
+        {error && (
+          <div
+            className="flex items-center gap-1 text-sm text-red-500"
+            id={`${selectId}-error`}
+          >
+            <AlertCircle size={14} />
+            <span>{error}</span>
           </div>
-        </div>
-      )}
-    </div>
-  );
-};
+        )}
+        {!error && hint && (
+          <p className="text-xs text-gray-400" id={`${selectId}-hint`}>
+            {hint}
+          </p>
+        )}
+      </div>
+    );
+  },
+);
+
+Select.displayName = "Select";
