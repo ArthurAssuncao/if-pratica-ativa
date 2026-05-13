@@ -1,8 +1,16 @@
 import {
+  ArrowUpAZ,
+  CheckCircle2,
+  GitBranch,
   GitGraph,
   GripVertical,
+  RectangleEllipsis,
+  RedoDot,
+  Search,
   Settings2,
   Share2,
+  Split,
+  Terminal,
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
@@ -24,15 +32,48 @@ export const QuestionEditor = () => {
   const addOption = () => setOptions([...options, ""]);
   const addRow = () => setRows([...rows, { text: "", identationLevel: 0 }]);
 
+  const selectIconSize = 16;
   const tiposQuestao: SelectOption[] = [
-    { value: "multipla_escolha", label: "Múltipla Escolha" },
-    { value: "verdadeiro_falso", label: "Verdadeiro ou Falso" },
-    { value: "lacuna", label: "Preencher Lacuna" },
-    { value: "predicao", label: "Predição de Saída" },
-    { value: "clique_erro", label: "Encontrar o Erro" },
-    { value: "ordenacao", label: "Ordenação" },
-    { value: "fluxograma_novo", label: "Fluxograma (Novo)" },
-    { value: "teste_mesa", label: "Teste de Mesa" },
+    {
+      value: "multipla_escolha",
+      label: "Múltipla Escolha",
+      icon: <CheckCircle2 size={selectIconSize} />,
+    },
+    {
+      value: "verdadeiro_falso",
+      label: "Verdadeiro ou Falso",
+      icon: <Split size={selectIconSize} />,
+    },
+    {
+      value: "lacuna",
+      label: "Preencher Lacuna",
+      icon: <RectangleEllipsis size={selectIconSize} />,
+    },
+    {
+      value: "predicao",
+      label: "Predição de Saída",
+      icon: <Terminal size={selectIconSize} />,
+    },
+    {
+      value: "clique_erro",
+      label: "Encontrar o Erro",
+      icon: <Search size={selectIconSize} />,
+    },
+    {
+      value: "ordenacao",
+      label: "Ordenação",
+      icon: <ArrowUpAZ size={selectIconSize} />,
+    },
+    {
+      value: "fluxograma_novo",
+      label: "Fluxograma (Novo)",
+      icon: <GitBranch size={selectIconSize} />,
+    },
+    {
+      value: "teste_mesa",
+      label: "Teste de Mesa",
+      icon: <RedoDot size={selectIconSize} />,
+    },
   ];
 
   // Ordenar por nome (alfabeticamente)

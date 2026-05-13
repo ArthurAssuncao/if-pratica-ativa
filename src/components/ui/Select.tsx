@@ -174,8 +174,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             `}
           >
             <span
-              className={!selectedOption ? "text-gray-400" : "text-gray-900"}
+              className={`flex items-center justify-center gap-1 ${!selectedOption ? "text-gray-400" : "text-gray-900"}`}
             >
+              <span className="shrink-0 text-gray-400">
+                {selectedOption?.icon && selectedOption?.icon}
+              </span>
               {selectedOption?.label || placeholder}
             </span>
             <ChevronDown
@@ -201,7 +204,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                       type="button"
                       onClick={() => handleSelect(option.value)}
                       className={`
-                        w-full flex items-center gap-3 px-4 py-2.5 text-left
+                        w-full flex items-center gap-3 px-4 py-2.5 text-left hover:cursor-pointer
                         transition-colors duration-150
                         hover:bg-blue-50
                         ${currentValue === option.value ? "bg-blue-50 text-blue-700" : "text-gray-700"}
@@ -212,7 +215,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                     >
                       {/* Ícone opcional */}
                       {option.icon && (
-                        <span className="flex-shrink-0 text-gray-400">
+                        <span className="shrink-0 text-gray-400">
                           {option.icon}
                         </span>
                       )}
@@ -235,7 +238,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
                       {/* Checkmark da opção selecionada */}
                       {currentValue === option.value && (
-                        <Check size={16} className="shrink-0 text-blue-500" />
+                        <Check size={20} className="shrink-0 text-blue-500" />
                       )}
                     </button>
                   </li>

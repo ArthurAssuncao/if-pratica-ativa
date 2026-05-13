@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { LUCIDE_ICONS } from "../../constants/icons";
 import { lucidIconNameToIconComponent } from "../../util/icons";
 
 export const DisciplineEditor = () => {
   const [selectedIcon, setSelectedIcon] = useState("Book");
-  const iconNames = LUCIDE_ICONS;
+  const iconNames = useMemo(() => LUCIDE_ICONS, []);
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
