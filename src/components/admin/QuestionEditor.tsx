@@ -9,18 +9,24 @@ import {
   Search,
   Settings2,
   Share2,
+  SignalHigh,
+  SignalLow,
+  SignalMedium,
   Split,
   Terminal,
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
 import type { Level, QuestionType } from "../../types/study";
+import { Input } from "../ui/Input";
 import { Select, type SelectOption } from "../ui/Select";
+import { TextArea } from "../ui/TextArea";
 
 export const QuestionEditor = () => {
   const [view, setView] = useState<"form" | "preview">("form");
   const [type, setType] = useState<QuestionType>("multipla_escolha");
   const [level, setLevel] = useState<Level>("iniciante");
+  const [questionTitle, setQuestionTitle] = useState("");
 
   // Estados para os campos dinâmicos
   const [options, setOptions] = useState<string[]>(["", ""]);
@@ -82,9 +88,21 @@ export const QuestionEditor = () => {
   );
 
   const leveisOptions: SelectOption[] = [
-    { value: "iniciante", label: "Iniciante" },
-    { value: "intermediário", label: "Intermediário" },
-    { value: "avançado", label: "Avançado" },
+    {
+      value: "iniciante",
+      label: "Iniciante",
+      icon: <SignalLow size={selectIconSize} />,
+    },
+    {
+      value: "intermediário",
+      label: "Intermediário",
+      icon: <SignalMedium size={selectIconSize} />,
+    },
+    {
+      value: "avançado",
+      label: "Avançado",
+      icon: <SignalHigh size={selectIconSize} />,
+    },
   ];
 
   return (
@@ -143,9 +161,10 @@ export const QuestionEditor = () => {
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
               Enunciado / Pergunta
             </label>
-            <textarea
-              className="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border-none h-24 text-sm focus:ring-2 focus:ring-blue-500"
+            <TextArea
+              className="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800  h-24 text-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Descreva o que o aluno deve fazer..."
+              onChange={(e) => setQuestionTitle(e.target.value)}
             />
           </div>
 
@@ -160,7 +179,7 @@ export const QuestionEditor = () => {
                 </label>
                 <button
                   onClick={addOption}
-                  className="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-lg font-bold"
+                  className="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-lg font-bold hover:cursor-pointer hover:text-blue-800"
                 >
                   + Adicionar
                 </button>
@@ -175,13 +194,13 @@ export const QuestionEditor = () => {
                         className="w-4 h-4 text-blue-600"
                       />
                     </div>
-                    <input
+                    <Input
                       type="text"
-                      className="flex-1 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-sm border-none"
+                      className="flex-1 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-sm "
                       placeholder={`Alternativa ${i + 1}`}
                       value={opt}
                     />
-                    <button className="opacity-0 group-hover:opacity-100 p-2 text-rose-500">
+                    <button className="opacity-0 group-hover:opacity-100 p-2 text-rose-500 hover:cursor-pointer hover:text-rose-700 border border-transparent rounded-xl hover:border-rose-500">
                       <Trash2 size={16} />
                     </button>
                   </div>
@@ -328,8 +347,9 @@ export const QuestionEditor = () => {
               </div>
 
               <h2 className="text-xl font-bold mb-8 text-slate-800 dark:text-white leading-snug">
-                Título ou Enunciado da questão aparecerá aqui conforme você
-                digita no editor...
+                {questionTitle ||
+                  `Título ou Enunciado da questão aparecerá aqui conforme você
+                digita no editor...`}
               </h2>
 
               <div className="space-y-3">

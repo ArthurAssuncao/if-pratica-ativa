@@ -167,7 +167,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
               rounded-lg border bg-white px-4 py-2.5
               text-gray-900
               transition-all duration-200
-              focus:outline-none focus:ring-2 focus:ring-blue-500
+              focus:outline-none focus:ring-2 focus:ring-blue-500 hover:cursor-pointer hover:border-blue-400
               disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500
               ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:border-blue-500"}
               ${isOpen ? "ring-2 ring-blue-500 border-blue-500" : ""}

@@ -1,3 +1,4 @@
+import memoize from "just-memoize";
 import * as LucideIcons from "lucide-react";
 import { AlertCircle } from "lucide-react";
 import type { ReactNode } from "react";
@@ -15,8 +16,10 @@ export const lucidIconNameToIconComponent = (
     .join("");
 
   // Obtém o componente do Lucide
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const IconComponent = (LucideIcons as any)[componentName];
+  const getIcons = memoize(() => LucideIcons as any);
+  const IconComponent = getIcons()[componentName];
 
   // Se o ícone não existir, retorna um ícone de erro
   if (!IconComponent) {
