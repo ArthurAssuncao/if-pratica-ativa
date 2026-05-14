@@ -14,29 +14,51 @@ import {
   SignalMedium,
   Split,
   Terminal,
-  Trash2,
 } from "lucide-react";
 import { useState } from "react";
 import type { Level, QuestionType } from "../../types/study";
+import { Checkbox } from "../ui/Checkbox";
 import { Input } from "../ui/Input";
+import { QuestionHint } from "../ui/QuestionHint";
 import { Select, type SelectOption } from "../ui/Select";
 import { TextArea } from "../ui/TextArea";
+import { TrashButton } from "../ui/TrashButton";
 
 export const QuestionEditor = () => {
   const [view, setView] = useState<"form" | "preview">("form");
   const [type, setType] = useState<QuestionType>("multipla_escolha");
   const [level, setLevel] = useState<Level>("iniciante");
   const [questionTitle, setQuestionTitle] = useState("");
+  const [checkLines, setCheckLines] = useState<boolean[]>([]);
 
   // Estados para os campos dinâmicos
   const [options, setOptions] = useState<string[]>(["", ""]);
   const [rows, setRows] = useState<{ text: string; identationLevel: number }[]>(
-    [],
+    [{ text: "", identationLevel: 0 }],
   );
   const [code, setCode] = useState("");
 
   const addOption = () => setOptions([...options, ""]);
   const addRow = () => setRows([...rows, { text: "", identationLevel: 0 }]);
+
+  // const [question, setQuestion] = useState<Question>({
+  //   id: 0,
+  //   type: "multipla_escolha",
+  //   level: "iniciante",
+  //   code: "",
+  //   options: [],
+  //   rows: [],
+  //   nodes: [],
+  //   conections: [],
+  //   root: "",
+  //   questionText: "",
+  //   explanation: "",
+  //   correctAnswer: "",
+  //   info: {
+  //     status: "pendente",
+  //     attemptCount: 0,
+  //   },
+  // });
 
   const selectIconSize = 16;
   const tiposQuestao: SelectOption[] = [
@@ -200,9 +222,7 @@ export const QuestionEditor = () => {
                       placeholder={`Alternativa ${i + 1}`}
                       value={opt}
                     />
-                    <button className="opacity-0 group-hover:opacity-100 p-2 text-rose-500 hover:cursor-pointer hover:text-rose-700 border border-transparent rounded-xl hover:border-rose-500">
-                      <Trash2 size={16} />
-                    </button>
+                    <TrashButton />
                   </div>
                 ))}
               </div>
@@ -249,7 +269,7 @@ export const QuestionEditor = () => {
                 </label>
                 <button
                   onClick={addRow}
-                  className="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-lg font-bold"
+                  className="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-lg font-bold hover:cursor-pointer"
                 >
                   + Nova Linha
                 </button>
@@ -264,30 +284,42 @@ export const QuestionEditor = () => {
                       size={16}
                       className="text-slate-300 cursor-grab"
                     />
-                    <input
+                    <Input
                       type="number"
-                      className="w-12 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-xs text-center border-none"
+                      min={0}
+                      fullWidth={false}
+                      className="w-16 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-xs text-center"
                       placeholder="Tab"
                       title="Nível de Indentação"
                     />
-                    <input
+                    <Input
                       type="text"
-                      className="flex-1 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-sm border-none"
-                      placeholder="Conteúdo da linha..."
+                      className="flex-1 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-sm "
+                      placeholder="Código ou texto da linha..."
                     />
                     {type === "clique_erro" && (
-                      <input
+                      <Checkbox
                         type="checkbox"
+                        checkboxSize="xl"
                         title="É a linha com erro?"
                         className="accent-rose-500"
+                        checked={checkLines[i] || false}
+                        onChange={(e) =>
+                          setCheckLines((prev) => [
+                            ...prev.slice(0, i),
+                            e.target.checked,
+                            ...prev.slice(i + 1),
+                          ])
+                        }
                       />
                     )}
-                    <button className="p-1.5 text-slate-400 hover:text-rose-500">
-                      <Trash2 size={16} />
-                    </button>
+                    <TrashButton />
                   </div>
                 ))}
               </div>
+              <QuestionHint>
+                Use o checkbox para marcar a linha com erro.
+              </QuestionHint>
             </div>
           )}
 
@@ -393,6 +425,15 @@ export const QuestionEditor = () => {
                         Linha de informação 02
                       </span>
                     </div>
+                  </div>
+                )}
+
+                {type === "clique_erro" && (
+                  <div className="p-4 border-2 border-slate-100 dark:border-slate-800 rounded-2xl flex items-center gap-3 opacity-50">
+                    <div className="w-5 h-5 rounded-full border-2 border-slate-300" />
+                    <span className="text-sm font-medium">
+                      Clique em um erro para ver o código
+                    </span>
                   </div>
                 )}
               </div>

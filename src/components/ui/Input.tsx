@@ -1,6 +1,7 @@
 // components/ui/Input.tsx
 import { AlertCircle, Eye, EyeOff, Search, X } from "lucide-react";
 import { forwardRef, useState, type InputHTMLAttributes } from "react";
+import { getExclusiveClasses } from "../../util/tailwind-util";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -86,6 +87,17 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const rightPadding =
       (clearable && hasValue) || rightIcon || passwordToggle ? "pr-10" : "";
 
+    const classInput = `${sizeClasses[inputSize]}
+              ${widthClass}
+              ${leftPadding}
+              ${rightPadding} rounded-xl border h-10
+              text-gray-900 placeholder:text-gray-400
+              transition-all duration-200 ease-out
+              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+              disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400
+              hover:border-blue-500/70`;
+    const classInputFiltered = getExclusiveClasses(classInput, className);
+
     return (
       <div
         className={`flex flex-col gap-1.5 ${widthClass} ${containerClassName}`}
@@ -94,7 +106,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-semibold text-gray-700 flex items-center gap-1"
+            className="text-sm font-semibold text-gray-700 flex items-center gap-1 "
           >
             {label}
             {required && (
@@ -123,16 +135,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             required={required}
             className={`
-              ${sizeClasses[inputSize]}
-              ${widthClass}
-              ${leftPadding}
-              ${rightPadding}
-              rounded-xl border
-              text-gray-900 placeholder:text-gray-400
-              transition-all duration-200 ease-out
-              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-              disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400
-              hover:border-blue-500/70
+
+              ${classInputFiltered}
               ${
                 error
                   ? "border-red-400 focus:ring-red-500/30 focus:border-red-500"

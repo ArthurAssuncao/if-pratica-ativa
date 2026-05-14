@@ -1,10 +1,11 @@
 import { ButtonConfirm } from "components/ui/ButtonConfirm";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
-import { RotateCcw, Trash2 } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import type { BaseQuestionProps } from "types/question";
 import type { QuestionRearrange, RearrangeRow } from "types/study";
+import { TrashButton } from "../ui/TrashButton";
 import { createQuestion } from "./QuestionFactory";
 
 interface RearrangeQuestionProps extends BaseQuestionProps {
@@ -66,7 +67,7 @@ export const RearrangeQuestion = createQuestion<
     return (
       <div className="flex flex-col gap-2 w-full">
         <div
-          className="flex flex-col gap-2 min-h-37.5 p-2 md:p-4 rounded-lg border-2 border-dashed 
+          className="flex flex-col gap-2 min-h-37.5 p-2 md:p-4 rounded-lg border-2 border-dashed
         bg-olive-50 dark:bg-slate-900 border-slate-300  dark:border-slate-700"
         >
           {selecionadas.length === 0 && (
@@ -98,12 +99,7 @@ export const RearrangeQuestion = createQuestion<
                   </SyntaxHighlighterCustom>
                 </div>
 
-                <button
-                  className="mr-1 text-xs text-slate-500 hover:text-red-500 hover:cursor-pointer"
-                  onClick={() => removerLinha(index)}
-                >
-                  <Trash2 size={14} />
-                </button>
+                <TrashButton onClick={() => removerLinha(index)} />
               </div>
             ); // Fechamento do return
           })}
@@ -111,13 +107,10 @@ export const RearrangeQuestion = createQuestion<
 
         {/* Controles de Edição */}
         <div className="flex gap-4 justify-end">
-          <button
+          <TrashButton
             onClick={removerUltima}
             disabled={selecionadas.length === 0}
-            className="lg:text-sm flex items-center gap-1 text-slate-500 hover:text-red-500 cursor-pointer disabled:opacity-30"
-          >
-            <Trash2 size={14} /> Apagar última
-          </button>
+          />
           <button
             onClick={resetar}
             disabled={selecionadas.length === 0}
