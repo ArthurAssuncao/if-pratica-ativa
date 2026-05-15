@@ -1,5 +1,5 @@
 import { MarkdownSyntax } from "components/ui/MarkdownSyntax";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { BaseQuestionProps } from "types/question";
 import type {
   Question,
@@ -23,20 +23,29 @@ import { TimeToAnswer } from "./util/TimeToAnswer";
 
 interface QuestionSelectorProps extends BaseQuestionProps {
   data: Question;
+  timerEnabled?: boolean;
 }
 
 export const QuestionSelector = ({
   data,
-
   disabled,
+  timerEnabled = true,
+  isAbleToAnswer: isAbleToAnswerProp,
   onAnswer,
 }: QuestionSelectorProps) => {
-  const [isAbleToAnswer, setisAbleToAnswer] = useState(false);
+  const [isAbleToAnswer, setisAbleToAnswer] =
+    useState<boolean>(isAbleToAnswerProp);
+
   const isAnswered = disabled;
   const [unlockedQuestions, setUnlockedQuestions] = useState<Set<number>>(
     new Set(),
   );
   const isCurrentUnlocked = unlockedQuestions.has(data.id);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setisAbleToAnswer(isAbleToAnswerProp);
+  }, [isAbleToAnswerProp]);
 
   const handleTimerEnd = () => {
     setUnlockedQuestions((prev) => new Set(prev).add(data.id));
@@ -117,7 +126,7 @@ export const QuestionSelector = ({
     }
   };
 
-  const isBlocked = !isCurrentUnlocked && !isAbleToAnswer;
+  const isBlocked = timerEnabled && !isCurrentUnlocked && !isAbleToAnswer;
 
   const componente = getQuestionComponent(data, onAnswer);
 
@@ -125,11 +134,13 @@ export const QuestionSelector = ({
 
   return (
     <div className="flex flex-col relative">
-      <TimeToAnswer
-        key={data.id}
-        onTimerEnd={() => handleTimerEnd()}
-        countTimer={!isCurrentUnlocked}
-      />
+      {timerEnabled && (
+        <TimeToAnswer
+          key={data.id}
+          onTimerEnd={() => handleTimerEnd()}
+          countTimer={!isCurrentUnlocked}
+        />
+      )}
 
       <h2 className=" font-bold text-gray-700 dark:text-slate-200 mb-4">
         <MarkdownSyntax>{data.questionText}</MarkdownSyntax>

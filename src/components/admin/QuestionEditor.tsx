@@ -16,8 +16,16 @@ import {
   Terminal,
 } from "lucide-react";
 import { useState } from "react";
-import type { Level, QuestionType } from "../../types/study";
+import type {
+  Level,
+  Question,
+  QuestionMultipleChoice,
+  QuestionType,
+} from "../../types/study";
+import { getTipoQuestaoPorExtenso } from "../../util/Quiz";
+import { QuestionSelector } from "../questions/QuestionSelector";
 import { Checkbox } from "../ui/Checkbox";
+import { Feedback } from "../ui/Feedback";
 import { Input } from "../ui/Input";
 import { QuestionHint } from "../ui/QuestionHint";
 import { Select, type SelectOption } from "../ui/Select";
@@ -27,38 +35,60 @@ import { TrashButton } from "../ui/TrashButton";
 export const QuestionEditor = () => {
   const [view, setView] = useState<"form" | "preview">("form");
   const [type, setType] = useState<QuestionType>("multipla_escolha");
-  const [level, setLevel] = useState<Level>("iniciante");
-  const [questionTitle, setQuestionTitle] = useState("");
+
+  const [question, setQuestion] = useState<Question>({
+    id: 0,
+    type: "multipla_escolha",
+    level: "iniciante",
+    code: "",
+    options: [],
+    rows: [],
+    nodes: [],
+    conections: [],
+    root: "",
+    questionText:
+      "O enunciado da questão aparecerá aqui conforme você digita no editor...",
+    explanation: "",
+    correctAnswer: "",
+    info: {
+      status: "pendente",
+      attemptCount: 0,
+    },
+  });
+
+  const [questionMultiplaEscolha, setQuestionMultiplaEscolha] =
+    useState<QuestionMultipleChoice>({
+      id: 0,
+      type: "multipla_escolha",
+      level: "iniciante",
+      options: [],
+      questionText:
+        "O enunciado da questão aparecerá aqui conforme você digita no editor...",
+      explanation: "",
+      correctAnswer: "",
+      info: {
+        status: "pendente",
+        attemptCount: 0,
+      },
+    });
+
   const [checkLines, setCheckLines] = useState<boolean[]>([]);
 
   // Estados para os campos dinâmicos
-  const [options, setOptions] = useState<string[]>(["", ""]);
+
   const [rows, setRows] = useState<{ text: string; identationLevel: number }[]>(
     [{ text: "", identationLevel: 0 }],
   );
   const [code, setCode] = useState("");
 
-  const addOption = () => setOptions([...options, ""]);
+  const addOptionMultiplaEscolha = () =>
+    setQuestionMultiplaEscolha({
+      ...questionMultiplaEscolha,
+      options: [...questionMultiplaEscolha.options, ""],
+    });
   const addRow = () => setRows([...rows, { text: "", identationLevel: 0 }]);
 
-  // const [question, setQuestion] = useState<Question>({
-  //   id: 0,
-  //   type: "multipla_escolha",
-  //   level: "iniciante",
-  //   code: "",
-  //   options: [],
-  //   rows: [],
-  //   nodes: [],
-  //   conections: [],
-  //   root: "",
-  //   questionText: "",
-  //   explanation: "",
-  //   correctAnswer: "",
-  //   info: {
-  //     status: "pendente",
-  //     attemptCount: 0,
-  //   },
-  // });
+  const [feedback, setFeedback] = useState<"correto" | "errado" | null>(null);
 
   const selectIconSize = 16;
   const tiposQuestao: SelectOption[] = [
@@ -127,6 +157,23 @@ export const QuestionEditor = () => {
     },
   ];
 
+  const defineQuestion = (type: QuestionType) => {
+    switch (type) {
+      case "multipla_escolha":
+        return questionMultiplaEscolha;
+      default:
+        return question;
+    }
+  };
+
+  const validateAnswer = (acertou: boolean) => {
+    if (acertou) {
+      setFeedback("correto");
+      return;
+    }
+    setFeedback("errado");
+  };
+
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
       {/* Coluna 1: Formulário */}
@@ -162,9 +209,12 @@ export const QuestionEditor = () => {
                 Tipo de Questão
               </label>
               <Select
-                value={type}
+                value={question.type}
                 options={tiposQuestaoOrdenados}
-                onChange={(value) => setType(value as QuestionType)}
+                onChange={(value) => {
+                  setType(value as QuestionType);
+                  setQuestion({ ...question, type: value as QuestionType });
+                }}
               />
             </div>
             <div className="space-y-1.5">
@@ -172,9 +222,11 @@ export const QuestionEditor = () => {
                 Nível de Dificuldade
               </label>
               <Select
-                value={level}
+                value={question.level}
                 options={leveisOptions}
-                onChange={(value) => setLevel(value as Level)}
+                onChange={(value) =>
+                  setQuestion({ ...question, level: value as Level })
+                }
               />
             </div>
           </div>
@@ -186,7 +238,9 @@ export const QuestionEditor = () => {
             <TextArea
               className="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800  h-24 text-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Descreva o que o aluno deve fazer..."
-              onChange={(e) => setQuestionTitle(e.target.value)}
+              onChange={(e) =>
+                setQuestion({ ...question, questionText: e.target.value })
+              }
             />
           </div>
 
@@ -200,20 +254,28 @@ export const QuestionEditor = () => {
                   Opções de Resposta
                 </label>
                 <button
-                  onClick={addOption}
+                  onClick={addOptionMultiplaEscolha}
                   className="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-lg font-bold hover:cursor-pointer hover:text-blue-800"
                 >
                   + Adicionar
                 </button>
               </div>
               <div className="space-y-2">
-                {options.map((opt, i) => (
+                {questionMultiplaEscolha.options.map((opt, i) => (
                   <div key={i} className="flex gap-2 group">
                     <div className="flex items-center px-2 bg-slate-100 dark:bg-slate-800 rounded-xl">
                       <input
                         type="radio"
                         name="correct"
+                        value={opt}
                         className="w-4 h-4 text-blue-600"
+                        onChange={(e) => {
+                          setQuestionMultiplaEscolha({
+                            ...questionMultiplaEscolha,
+                            correctAnswer: e.target.value,
+                          });
+                          console.log(questionMultiplaEscolha.correctAnswer);
+                        }}
                       />
                     </div>
                     <Input
@@ -221,6 +283,14 @@ export const QuestionEditor = () => {
                       className="flex-1 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-sm "
                       placeholder={`Alternativa ${i + 1}`}
                       value={opt}
+                      onChange={(e) => {
+                        const newOptions = [...questionMultiplaEscolha.options];
+                        newOptions[i] = e.target.value;
+                        setQuestionMultiplaEscolha({
+                          ...questionMultiplaEscolha,
+                          options: newOptions,
+                        });
+                      }}
                     />
                     <TrashButton />
                   </div>
@@ -365,81 +435,35 @@ export const QuestionEditor = () => {
         </div>
 
         <div className="h-full flex flex-col items-center justify-center p-12">
-          {/* Card Mockup de como o Aluno verá */}
           <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
-            <div className="h-2 bg-blue-600 w-1/3" />
-            <div className="p-10">
-              <div className="flex justify-between items-start mb-6">
+            <div className="p-10 flex flex-col gap-4">
+              <div className="flex justify-between items-start">
                 <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-black uppercase tracking-tighter">
-                  {level}
+                  {question.level}
                 </span>
-                <span className="text-[10px] font-bold text-slate-400">
-                  Questão #01
+                <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-black uppercase tracking-tighter">
+                  {getTipoQuestaoPorExtenso(question.type)}
                 </span>
               </div>
-
-              <h2 className="text-xl font-bold mb-8 text-slate-800 dark:text-white leading-snug">
-                {questionTitle ||
-                  `Título ou Enunciado da questão aparecerá aqui conforme você
-                digita no editor...`}
-              </h2>
-
-              <div className="space-y-3">
-                {/* Renderização simulada do componente baseado no 'type' */}
-                {type === "multipla_escolha" && (
-                  <>
-                    <div className="p-4 border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center">
-                        <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
-                      </div>
-                      <span className="text-sm font-bold text-blue-700 dark:text-blue-300">
-                        Opção Selecionada
-                      </span>
-                    </div>
-                    <div className="p-4 border-2 border-slate-100 dark:border-slate-800 rounded-2xl flex items-center gap-3 opacity-50">
-                      <div className="w-5 h-5 rounded-full border-2 border-slate-300" />
-                      <span className="text-sm font-medium">
-                        Outra Alternativa
-                      </span>
-                    </div>
-                  </>
-                )}
-
-                {(type === "lacuna" || type === "predicao") && (
-                  <div className="bg-slate-950 p-6 rounded-2xl font-mono text-xs text-emerald-400 leading-relaxed shadow-inner">
-                    {code || "O código aparecerá aqui..."}
-                  </div>
-                )}
-
-                {type === "ordenacao" && (
-                  <div className="space-y-2">
-                    <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-2 border-slate-200 dark:border-slate-700 border-b-4 flex items-center gap-3">
-                      <GripVertical size={14} className="text-slate-400" />
-                      <span className="text-xs font-bold italic">
-                        Linha de informação 01
-                      </span>
-                    </div>
-                    <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border-2 border-slate-200 dark:border-slate-700 border-b-4 flex items-center gap-3">
-                      <GripVertical size={14} className="text-slate-400" />
-                      <span className="text-xs font-bold italic">
-                        Linha de informação 02
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {type === "clique_erro" && (
-                  <div className="p-4 border-2 border-slate-100 dark:border-slate-800 rounded-2xl flex items-center gap-3 opacity-50">
-                    <div className="w-5 h-5 rounded-full border-2 border-slate-300" />
-                    <span className="text-sm font-medium">
-                      Clique em um erro para ver o código
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <button className="w-full mt-10 py-4 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-2xl font-black uppercase text-xs tracking-widest cursor-not-allowed">
-                Verificar Resposta
+              <QuestionSelector
+                data={defineQuestion(type)}
+                onAnswer={validateAnswer}
+                isAbleToAnswer={true}
+                disabled={feedback !== null}
+                timerEnabled={false}
+              />
+              {feedback && (
+                <Feedback
+                  status={feedback}
+                  respostaCorreta={defineQuestion(type).correctAnswer}
+                />
+              )}
+              <button
+                className="px-3 py-3 bg-blue-500 text-white font-bold rounded-lg hover:cursor-pointer hover:bg-blue-700 transition-all disabled:bg-slate-300 disabled:cursor-not-allowed"
+                disabled={feedback === null}
+                onClick={() => setFeedback(null)}
+              >
+                Resetar preview
               </button>
             </div>
           </div>
