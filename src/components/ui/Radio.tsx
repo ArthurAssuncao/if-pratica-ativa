@@ -29,7 +29,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     // Classes de tamanho
     const radioSizeClasses = {
       sm: {
-        wrapper: "w-4 h-4",
+        wrapper: "w-5 h-5",
         inner: "w-1.5 h-1.5",
         label: "text-sm",
         description: "text-xs",
@@ -61,7 +61,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
         `}
       >
         {/* Radio button customizado */}
-        <div className="relative shrink-0 mt-0.5">
+        <div className="relative shrink-0">
           <input
             ref={ref}
             id={radioId}
@@ -84,7 +84,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
                   ? "border-blue-500 bg-blue-500"
                   : "border-gray-300 bg-white"
               }
-              ${!disabled && "group-hover:border-gray-400"}
+              ${!disabled && "hover:border-blue-400"}
               ${error && !checked ? "border-red-500" : ""}
             `}
           >

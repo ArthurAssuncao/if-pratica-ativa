@@ -5,6 +5,7 @@ import React from "react";
 import toast from "react-hot-toast";
 import type { BaseQuestionProps } from "types/question";
 import type { QuestionClickOnError } from "types/study";
+import { generateIndentation } from "../../constants/general";
 import { createQuestion } from "./QuestionFactory";
 
 interface ClickOnErrorQuestionProps extends BaseQuestionProps {
@@ -20,10 +21,10 @@ export const ClickOnErrorQuestion = createQuestion<
   },
 
   Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
-    const [opcaoSelecionada, setOpcaoSelecionada] = React.useState(-1);
+    const [opcaoSelecionada, setOpcaoSelecionada] = React.useState("");
 
     const handleClick = (index: number) => {
-      setOpcaoSelecionada(index);
+      setOpcaoSelecionada(data.rows[index].text);
     };
 
     const handleConfirmar = () => {
@@ -44,12 +45,12 @@ export const ClickOnErrorQuestion = createQuestion<
       <div className="flex flex-col gap-4">
         <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 rounded-lg font-mono border">
           <div className="bg-yellow-50 dark:bg-blue-500/10 flex flex-col gap-2 p-4">
-            {data.rows?.map((linha, index) => (
+            {data.rows?.map((row, index) => (
               <button
                 key={index}
                 onClick={() => handleClick(index)}
                 className={`text-slate-700 dark:text-blue-300 w-full text-left px-2 py-1 rounded hover:bg-green-500/20 hover:text-red-400 hover:cursor-pointer ${
-                  opcaoSelecionada === index
+                  opcaoSelecionada === row.text
                     ? "bg-green-500/10 text-red-400"
                     : ""
                 } transition-colors group flex gap-4`}
@@ -64,7 +65,7 @@ export const ClickOnErrorQuestion = createQuestion<
                   customStyle={{}}
                   className="group-hover:text-white"
                 >
-                  {linha.text}
+                  {generateIndentation(row.identationLevel) + row.text}
                 </SyntaxHighlighterCustom>
               </button>
             ))}
@@ -77,9 +78,9 @@ export const ClickOnErrorQuestion = createQuestion<
 
         <ButtonConfirm
           onClick={handleConfirmar}
-          disabled={!isAbleToAnswer || opcaoSelecionada < 0}
+          disabled={!isAbleToAnswer || opcaoSelecionada == ""}
           label={
-            opcaoSelecionada >= 0
+            opcaoSelecionada !== ""
               ? "Confirmar resposta"
               : "Você ainda não indicou o erro"
           }

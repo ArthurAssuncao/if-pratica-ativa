@@ -74,3 +74,7 @@ export const compareArrays = (
   if (a.length !== b.length) return false;
   return a.every((v, i) => v === b[i]);
 };
+
+export const generateRandomIndex = (size: number) => {
+  return Math.floor(Math.random() * size);
+};

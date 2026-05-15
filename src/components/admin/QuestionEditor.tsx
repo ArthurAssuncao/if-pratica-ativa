@@ -16,21 +16,29 @@ import {
   Terminal,
 } from "lucide-react";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
+import {
+  QUESTION_CLICK_ON_ERROR_EMPTY,
+  QUESTION_MULTIPLE_CHOICE_EMPTY,
+  QUESTION_TRUE_FALSE_EMPTY,
+} from "../../constants/questions";
 import type {
   Level,
   Question,
+  QuestionClickOnError,
   QuestionMultipleChoice,
   QuestionType,
 } from "../../types/study";
 import { getTipoQuestaoPorExtenso } from "../../util/Quiz";
 import { QuestionSelector } from "../questions/QuestionSelector";
-import { Checkbox } from "../ui/Checkbox";
 import { Feedback } from "../ui/Feedback";
 import { Input } from "../ui/Input";
 import { QuestionHint } from "../ui/QuestionHint";
 import { Select, type SelectOption } from "../ui/Select";
-import { TextArea } from "../ui/TextArea";
 import { TrashButton } from "../ui/TrashButton";
+import { QuestionClickOnErrorEditor } from "./questions/QuestionClickOnErrorEditor";
+import { QuestionMultipleChoiceEditor } from "./questions/QuestionMultipleChoiceEditor";
+import { QuestionTrueFalseEditor } from "./questions/QuestionTrueFalse";
 
 export const QuestionEditor = () => {
   const [view, setView] = useState<"form" | "preview">("form");
@@ -56,23 +64,14 @@ export const QuestionEditor = () => {
     },
   });
 
-  const [questionMultiplaEscolha, setQuestionMultiplaEscolha] =
-    useState<QuestionMultipleChoice>({
-      id: 0,
-      type: "multipla_escolha",
-      level: "iniciante",
-      options: [],
-      questionText:
-        "O enunciado da questão aparecerá aqui conforme você digita no editor...",
-      explanation: "",
-      correctAnswer: "",
-      info: {
-        status: "pendente",
-        attemptCount: 0,
-      },
-    });
+  const [questionMultipleChoice, setQuestionMultipleChoice] =
+    useState<QuestionMultipleChoice>(QUESTION_MULTIPLE_CHOICE_EMPTY);
 
-  const [checkLines, setCheckLines] = useState<boolean[]>([]);
+  const [questionClickOnError, setQuestionClickOnError] =
+    useState<QuestionClickOnError>(QUESTION_CLICK_ON_ERROR_EMPTY);
+
+  const [questionTrueFalse, setQuestionTrueFalse] =
+    useState<QuestionMultipleChoice>(QUESTION_TRUE_FALSE_EMPTY);
 
   // Estados para os campos dinâmicos
 
@@ -81,11 +80,6 @@ export const QuestionEditor = () => {
   );
   const [code, setCode] = useState("");
 
-  const addOptionMultiplaEscolha = () =>
-    setQuestionMultiplaEscolha({
-      ...questionMultiplaEscolha,
-      options: [...questionMultiplaEscolha.options, ""],
-    });
   const addRow = () => setRows([...rows, { text: "", identationLevel: 0 }]);
 
   const [feedback, setFeedback] = useState<"correto" | "errado" | null>(null);
@@ -160,7 +154,11 @@ export const QuestionEditor = () => {
   const defineQuestion = (type: QuestionType) => {
     switch (type) {
       case "multipla_escolha":
-        return questionMultiplaEscolha;
+        return questionMultipleChoice;
+      case "clique_erro":
+        return questionClickOnError;
+      case "verdadeiro_falso":
+        return questionTrueFalse;
       default:
         return question;
     }
@@ -231,72 +229,28 @@ export const QuestionEditor = () => {
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-              Enunciado / Pergunta
-            </label>
-            <TextArea
-              className="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800  h-24 text-sm focus:ring-2 focus:ring-blue-500"
-              placeholder="Descreva o que o aluno deve fazer..."
-              onChange={(e) =>
-                setQuestion({ ...question, questionText: e.target.value })
-              }
-            />
-          </div>
-
           {/* EDITOR DINÂMICO POR TIPO */}
 
           {/* Múltipla Escolha */}
           {type === "multipla_escolha" && (
-            <div className="space-y-4 animate-in fade-in slide-in-from-top-2">
-              <div className="flex justify-between items-center">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                  Opções de Resposta
-                </label>
-                <button
-                  onClick={addOptionMultiplaEscolha}
-                  className="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-lg font-bold hover:cursor-pointer hover:text-blue-800"
-                >
-                  + Adicionar
-                </button>
-              </div>
-              <div className="space-y-2">
-                {questionMultiplaEscolha.options.map((opt, i) => (
-                  <div key={i} className="flex gap-2 group">
-                    <div className="flex items-center px-2 bg-slate-100 dark:bg-slate-800 rounded-xl">
-                      <input
-                        type="radio"
-                        name="correct"
-                        value={opt}
-                        className="w-4 h-4 text-blue-600"
-                        onChange={(e) => {
-                          setQuestionMultiplaEscolha({
-                            ...questionMultiplaEscolha,
-                            correctAnswer: e.target.value,
-                          });
-                          console.log(questionMultiplaEscolha.correctAnswer);
-                        }}
-                      />
-                    </div>
-                    <Input
-                      type="text"
-                      className="flex-1 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-sm "
-                      placeholder={`Alternativa ${i + 1}`}
-                      value={opt}
-                      onChange={(e) => {
-                        const newOptions = [...questionMultiplaEscolha.options];
-                        newOptions[i] = e.target.value;
-                        setQuestionMultiplaEscolha({
-                          ...questionMultiplaEscolha,
-                          options: newOptions,
-                        });
-                      }}
-                    />
-                    <TrashButton />
-                  </div>
-                ))}
-              </div>
-            </div>
+            <QuestionMultipleChoiceEditor
+              questionMultipleChoice={questionMultipleChoice}
+              setQuestionMultipleChoice={setQuestionMultipleChoice}
+            />
+          )}
+
+          {type === "clique_erro" && (
+            <QuestionClickOnErrorEditor
+              questionClickOnError={questionClickOnError}
+              setQuestionClickOnError={setQuestionClickOnError}
+            />
+          )}
+
+          {type === "verdadeiro_falso" && (
+            <QuestionTrueFalseEditor
+              questionTrueFalse={questionTrueFalse}
+              setQuestionTrueFalse={setQuestionTrueFalse}
+            />
           )}
 
           {/* Código / Lacuna / Predição */}
@@ -331,7 +285,7 @@ export const QuestionEditor = () => {
           )}
 
           {/* Ordenação / Clique no Erro */}
-          {(type === "ordenacao" || type === "clique_erro") && (
+          {type === "ordenacao" && (
             <div className="space-y-4 animate-in fade-in">
               <div className="flex justify-between items-center">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -367,22 +321,7 @@ export const QuestionEditor = () => {
                       className="flex-1 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-sm "
                       placeholder="Código ou texto da linha..."
                     />
-                    {type === "clique_erro" && (
-                      <Checkbox
-                        type="checkbox"
-                        checkboxSize="xl"
-                        title="É a linha com erro?"
-                        className="accent-rose-500"
-                        checked={checkLines[i] || false}
-                        onChange={(e) =>
-                          setCheckLines((prev) => [
-                            ...prev.slice(0, i),
-                            e.target.checked,
-                            ...prev.slice(i + 1),
-                          ])
-                        }
-                      />
-                    )}
+
                     <TrashButton />
                   </div>
                 ))}
@@ -405,16 +344,6 @@ export const QuestionEditor = () => {
               </button>
             </div>
           )}
-
-          <div className="space-y-1.5 pt-4">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-              Explicação (Feedback Positivo)
-            </label>
-            <textarea
-              className="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border-none h-20 text-sm italic"
-              placeholder="Por que esta resposta está correta?"
-            />
-          </div>
         </div>
 
         <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex justify-end gap-3">
@@ -456,6 +385,7 @@ export const QuestionEditor = () => {
                 <Feedback
                   status={feedback}
                   respostaCorreta={defineQuestion(type).correctAnswer}
+                  explanation={defineQuestion(type).explanation}
                 />
               )}
               <button
@@ -469,6 +399,23 @@ export const QuestionEditor = () => {
           </div>
         </div>
       </div>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          success: {
+            style: {
+              background: "#80EF80",
+            },
+          },
+          error: {
+            style: {
+              background: "#ff746c",
+              color: "#fff",
+            },
+          },
+        }}
+      />
     </div>
   );
 };
