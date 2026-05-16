@@ -82,6 +82,7 @@ export const mapDatabaseToQuestion = (q: QuestionDatabase): Question => {
     explanation: q.explanation || "",
     correctAnswer: q.correctAnswer,
     info: q.info || defaultInfo,
+    language: q.language || "pt-BR",
   };
 
   const metadata = q.metadata || {};

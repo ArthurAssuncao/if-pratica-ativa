@@ -94,7 +94,10 @@ export const RearrangeQuestion = createQuestion<
                     {index + 1}
                   </span>
                   {/* Indentação Dinâmica */}
-                  <SyntaxHighlighterCustom showLineNumbers={false}>
+                  <SyntaxHighlighterCustom
+                    showLineNumbers={false}
+                    language={data.language}
+                  >
                     {linhaIdentada}
                   </SyntaxHighlighterCustom>
                 </div>
@@ -136,7 +139,10 @@ export const RearrangeQuestion = createQuestion<
                 bg-white border-slate-200 hover:border-blue-500 text-slate-700 dark:text-blue-300
                 dark:bg-slate-800 dark:border-slate-700 dark:hover:border-blue-400 "
                 >
-                  <SyntaxHighlighterCustom showLineNumbers={false}>
+                  <SyntaxHighlighterCustom
+                    showLineNumbers={false}
+                    language={data.language}
+                  >
                     {linha.text}
                   </SyntaxHighlighterCustom>
                 </button>

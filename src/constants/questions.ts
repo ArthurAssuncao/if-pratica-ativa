@@ -16,6 +16,7 @@ export const QUESTION_MULTIPLE_CHOICE_EMPTY: QuestionMultipleChoice = {
     status: "pendente",
     attemptCount: 0,
   },
+  language: "pt-br",
 };
 
 export const QUESTION_CLICK_ON_ERROR_EMPTY: QuestionClickOnError = {
@@ -30,7 +31,8 @@ export const QUESTION_CLICK_ON_ERROR_EMPTY: QuestionClickOnError = {
     status: "pendente",
     attemptCount: 0,
   },
-  rows: [],
+  rows: [{ text: "", identationLevel: 0 }],
+  language: "python",
 };
 
 export const QUESTION_TRUE_FALSE_EMPTY: QuestionMultipleChoice = {
@@ -46,4 +48,5 @@ export const QUESTION_TRUE_FALSE_EMPTY: QuestionMultipleChoice = {
     status: "pendente",
     attemptCount: 0,
   },
+  language: "pt-br",
 };

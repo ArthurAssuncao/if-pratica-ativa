@@ -3,3 +3,10 @@
 @import-normalize;
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+p {
+  -webkit-hyphens: auto; /* Safari/Chrome */
+  -ms-hyphens: auto; /* IE/Edge */
+  hyphens: auto; /* Padrão moderno */
+  overflow-wrap: break-word;
+}

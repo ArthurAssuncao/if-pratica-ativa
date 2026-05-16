@@ -6,22 +6,26 @@ import SyntaxHighlighter, {
 import { nnfx, nord } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 interface SyntaxHighlighterCustomProps extends SyntaxHighlighterProps {
-  language?: string;
+  language: string;
   theme?: "dark" | "light";
   showLineNumbers?: boolean;
   padding?: number;
+  paddingLeft?: number;
   children: string | string[];
   highlightLines?: number[];
+  displayLanguage?: boolean;
 }
 
 export const SyntaxHighlighterCustom = ({
-  language = "python",
+  language,
   theme,
   showLineNumbers = true,
-  padding,
+  padding = 8,
+  paddingLeft = 0,
   children,
   highlightLines,
   syntaxHighlighterProps,
+  displayLanguage = false,
 }: SyntaxHighlighterCustomProps) => {
   const [appTheme, setAppTheme] = useState<"dark" | "light">(() => {
     if (theme) return theme;
@@ -60,49 +64,59 @@ export const SyntaxHighlighterCustom = ({
     : children?.replaceAll("  ", " ");
 
   return (
-    <SyntaxHighlighter
-      language={language}
-      style={appTheme === "dark" ? nord : nnfx}
-      customStyle={{
-        background: "trasnparent",
-        paddingLeft: "0px",
-        padding: padding ? `${padding}px !important` : "0px !important",
-        fontSize: "0.9rem",
-      }}
-      showLineNumbers={showLineNumbers}
-      lineNumberContainerStyle={{
-        borderRight: "1px solid #ccc",
-      }}
-      wrapLines
-      lineProps={(lineNumber) => {
-        const isHighlighted = highlightLines?.includes(lineNumber);
-        const style: React.CSSProperties = {
-          display: "block",
-          width: "100%",
-          transition: "all 0.3s ease",
-        };
+    <div className="flex flex-col">
+      {displayLanguage && (
+        <span className="text-[10px] bg-blue-50 text-blue-600 dark:bg-blue-900 dark:text-blue-100 px-2 py-1 rounded-t-lg font-bold ">
+          {language}
+        </span>
+      )}
+      <SyntaxHighlighter
+        language={language}
+        style={appTheme === "dark" ? nord : nnfx}
+        customStyle={{
+          background: "transparent",
+          padding:
+            padding >= 0
+              ? `${padding}px ${padding}px ${padding}px ${paddingLeft}px`
+              : "0px",
+          fontSize: "0.9rem",
+        }}
+        useInlineStyles={true}
+        showLineNumbers={showLineNumbers}
+        lineNumberContainerStyle={{
+          borderRight: "1px solid #ccc",
+        }}
+        wrapLines
+        lineProps={(lineNumber) => {
+          const isHighlighted = highlightLines?.includes(lineNumber);
+          const style: React.CSSProperties = {
+            display: "block",
+            width: "100%",
+            transition: "all 0.3s ease",
+          };
 
-        if (isHighlighted) {
-          style.backgroundColor =
-            appTheme === "dark"
-              ? "rgba(59, 130, 246, 0.25)" // Azul sutil no Dark
-              : "rgba(59, 130, 246, 0.15)"; // Azul sutil no Light
-          style.borderLeft = "4px solid #3b82f6";
-          style.marginLeft = "-4px"; // Ajuste para a borda não empurrar o texto
-        }
+          if (isHighlighted) {
+            style.backgroundColor =
+              appTheme === "dark"
+                ? "rgba(59, 130, 246, 0.25)" // Azul sutil no Dark
+                : "rgba(59, 130, 246, 0.15)"; // Azul sutil no Light
+            style.borderLeft = "4px solid #3b82f6";
+            style.marginLeft = "-4px"; // Ajuste para a borda não empurrar o texto
+          }
 
-        return { style };
-      }}
-      lineNumberStyle={{
-        minWidth: "2.5em",
-        paddingRight: "1em",
-        color: appTheme === "dark" ? "#4c566a" : "#94a3b8",
-        textAlign: "right",
-        userSelect: "none",
-      }}
-      {...syntaxHighlighterProps}
-    >
-      {isMobile ? textoReduzidoEspacos : children}
-    </SyntaxHighlighter>
+          return { style };
+        }}
+        lineNumberStyle={{
+          minWidth: "2.5em",
+          paddingRight: "1em",
+          color: appTheme === "dark" ? "#4c566a" : "#94a3b8",
+          textAlign: "right",
+          userSelect: "none",
+        }}
+        {...syntaxHighlighterProps}
+      >
+        {isMobile ? textoReduzidoEspacos : children}
+      </SyntaxHighlighter>
+    </div>
   );
 };

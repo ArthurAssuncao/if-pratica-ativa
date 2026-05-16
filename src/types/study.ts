@@ -1,3 +1,5 @@
+import type { LANGUAGES } from "../constants/code";
+
 export type Level = "iniciante" | "intermediário" | "avançado";
 
 export type QuestionType =
@@ -12,6 +14,8 @@ export type QuestionType =
   | "teste_mesa";
 
 export type RearrangeRow = { text: string; identationLevel: number };
+
+export type Languages = (typeof LANGUAGES)[number];
 
 export type FlowchartNode = {
   id: string;
@@ -59,6 +63,7 @@ export interface BaseQuestion {
   explanation: string;
   correctAnswer: CorrectAnswer;
   info: QuestionInfo;
+  language: Languages;
 }
 
 export interface QuestionDeskCheck extends BaseQuestion {
@@ -72,6 +77,7 @@ export interface QuestionClickOnError extends BaseQuestion {
 
 export interface QuestionFill extends BaseQuestion {
   code: string;
+  language: Languages;
 }
 
 export interface QuestionMultipleChoice extends BaseQuestion {

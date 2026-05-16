@@ -85,6 +85,7 @@ export const DeskCheckingQuestion = createQuestion<
               </p>
               <SyntaxHighlighterCustom
                 highlightLines={[...activeCheckpoint.lineReference]}
+                language={data.language}
               >
                 {data.code}
               </SyntaxHighlighterCustom>

@@ -80,6 +80,7 @@ export const StudyService = {
             explanation: content.explanation || "",
             correctAnswer: content.correct_answer,
             metadata: content.metadata,
+            language: content.language,
             info: { status: "pendente", attemptCount: 0 },
           };
           currentContent.questions.push(

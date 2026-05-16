@@ -30,8 +30,8 @@ const handler: Handler = async (event: HandlerEvent) => {
           };
 
         const data = await sql`
-          SELECT * FROM contents 
-          WHERE discipline_id = ${disciplineId} 
+          SELECT * FROM contents
+          WHERE discipline_id = ${disciplineId}
           ORDER BY "order" ASC
         `;
         return { statusCode: 200, headers, body: JSON.stringify(data) };
@@ -45,7 +45,7 @@ const handler: Handler = async (event: HandlerEvent) => {
           };
 
         const data = await sql`
-            SELECT 
+            SELECT
               c.id,
               c.name as content_name,
               c.level as content_level,
@@ -58,10 +58,11 @@ const handler: Handler = async (event: HandlerEvent) => {
               q.question_text,
               q.correct_answer,
               q.explanation,
+              q.language,
               q.type
           FROM contents c
           LEFT JOIN questions as q ON q.content_id = c.id
-          WHERE c.discipline_id = ${disciplineId} 
+          WHERE c.discipline_id = ${disciplineId}
           ORDER BY c."order" ASC, q.id ASC
         `;
         return { statusCode: 200, headers, body: JSON.stringify(data) };
@@ -75,8 +76,8 @@ const handler: Handler = async (event: HandlerEvent) => {
           };
 
         const data = await sql`
-          SELECT * FROM questions 
-          WHERE content_id = ${contentId} 
+          SELECT * FROM questions
+          WHERE content_id = ${contentId}
           ORDER BY id ASC
         `;
         return { statusCode: 200, headers, body: JSON.stringify(data) };
@@ -162,14 +163,14 @@ const handler: Handler = async (event: HandlerEvent) => {
 
         // Busca o progresso do usuário para uma disciplina específica ou geral
         const data = await sql`
-    SELECT 
-      question_id, 
+    SELECT
+      question_id,
       discipline_slug,
-      attempts, 
-      is_correct, 
-      solved_at, 
+      attempts,
+      is_correct,
+      solved_at,
       last_attempt_at
-    FROM user_progress 
+    FROM user_progress
     WHERE user_id = ${userId}
     ${disciplineSlug ? sql`AND discipline_slug = ${disciplineSlug}` : sql``}
   `;
@@ -196,7 +197,7 @@ const handler: Handler = async (event: HandlerEvent) => {
         // - total_solved: Quantas questões diferentes o usuário acertou
         // - total_tries: A soma de todas as tentativas feitas (opcional, para precisão)
         const stats = await sql`
-    SELECT 
+    SELECT
       discipline_slug,
       COUNT(question_id) as total_attempted,
       COUNT(question_id) FILTER (WHERE is_correct = TRUE) as total_solved,

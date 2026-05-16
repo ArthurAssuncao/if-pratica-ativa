@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 
 import { ButtonConfirm } from "components/ui/ButtonConfirm";
 import { nodeTypes } from "components/ui/FlowNodes";
-import { QuestionHint } from "components/ui/QuestionHint";
+import { Hint } from "components/ui/Hint";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import type { BaseQuestionProps } from "types/question";
 import type { QuestionFlowchartnNew } from "types/study";
@@ -172,7 +172,9 @@ export const FlowchartNewQuestion = createQuestion<
           <div className="flex flex-col gap-2 w-full">
             <strong className="text-sm">Código base:</strong>
             <div className="bg-olive-50 dark:bg-slate-900 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-blue-300 border p-2 md:p-4 rounded-lg w-full flex flex-col gap-1">
-              <SyntaxHighlighterCustom>{data.code}</SyntaxHighlighterCustom>
+              <SyntaxHighlighterCustom language={data.language}>
+                {data.code}
+              </SyntaxHighlighterCustom>
             </div>
           </div>
         )}
@@ -193,10 +195,10 @@ export const FlowchartNewQuestion = createQuestion<
             lang="pt-br"
           />
         </div>
-        <QuestionHint>
+        <Hint>
           Para visualizar melhor, dê zoom no fluxo. Clique no retângulo que
           representa a resposta correta.
-        </QuestionHint>
+        </Hint>
 
         <ButtonConfirm
           onClick={handleConfirmar}

@@ -142,7 +142,7 @@ export const QuestionSelector = ({
         />
       )}
 
-      <h2 className=" font-bold text-gray-700 dark:text-slate-200 mb-4">
+      <h2 className=" font-bold text-gray-700 dark:text-slate-200 mb-4 hyphens-auto wrap-break-word">
         <MarkdownSyntax>{data.questionText}</MarkdownSyntax>
       </h2>
 

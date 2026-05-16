@@ -1,5 +1,5 @@
 import { ButtonConfirm } from "components/ui/ButtonConfirm";
-import { QuestionHint } from "components/ui/QuestionHint";
+import { Hint } from "components/ui/Hint";
 import { SyntaxHighlighterCustom } from "components/ui/SyntaxHighlighterCustom";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -42,7 +42,7 @@ export const OutputQuestion = createQuestion<
     return (
       <div className="flex flex-col gap-4 ">
         <div className="bg-yellow-50 dark:bg-blue-500/10 border-olive-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 p-4 rounded-lg  font-mono leading-relaxed overflow-x-auto border">
-          <SyntaxHighlighterCustom className="">
+          <SyntaxHighlighterCustom className="" language={data.language}>
             {data.code || ""}
           </SyntaxHighlighterCustom>
         </div>
@@ -53,9 +53,7 @@ export const OutputQuestion = createQuestion<
           onChange={(e) => setResposta(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleConfirmar()}
         />
-        <QuestionHint>
-          A resposta não diferencia maiúsculas de minúsculas.
-        </QuestionHint>
+        <Hint>A resposta não diferencia maiúsculas de minúsculas.</Hint>
         <ButtonConfirm
           onClick={handleConfirmar}
           disabled={!isAbleToAnswer || resposta === ""}

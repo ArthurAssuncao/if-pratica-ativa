@@ -53,6 +53,7 @@ export type ContentWithQuestionsDatabase = {
   question_text: string;
   slug: string;
   type: QuestionType;
+  language: string;
 };
 
 export interface UserProgressDatabase {

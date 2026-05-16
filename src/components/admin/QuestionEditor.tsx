@@ -32,8 +32,8 @@ import type {
 import { getTipoQuestaoPorExtenso } from "../../util/Quiz";
 import { QuestionSelector } from "../questions/QuestionSelector";
 import { Feedback } from "../ui/Feedback";
+import { Hint } from "../ui/Hint";
 import { Input } from "../ui/Input";
-import { QuestionHint } from "../ui/QuestionHint";
 import { Select, type SelectOption } from "../ui/Select";
 import { TrashButton } from "../ui/TrashButton";
 import { QuestionClickOnErrorEditor } from "./questions/QuestionClickOnErrorEditor";
@@ -62,6 +62,7 @@ export const QuestionEditor = () => {
       status: "pendente",
       attemptCount: 0,
     },
+    language: "pt-br",
   });
 
   const [questionMultipleChoice, setQuestionMultipleChoice] =
@@ -199,10 +200,10 @@ export const QuestionEditor = () => {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="flex-1 flex flex-col overflow-y-auto p-6 gap-2">
           {/* Cabeçalho Comum */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
+            <div className="">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Tipo de Questão
               </label>
@@ -326,9 +327,7 @@ export const QuestionEditor = () => {
                   </div>
                 ))}
               </div>
-              <QuestionHint>
-                Use o checkbox para marcar a linha com erro.
-              </QuestionHint>
+              <Hint>Use o checkbox para marcar a linha com erro.</Hint>
             </div>
           )}
 
