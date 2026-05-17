@@ -5,6 +5,10 @@ import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import type { BaseQuestionProps } from "types/question";
 import type { QuestionRearrange, RearrangeRow } from "types/study";
+import { shuffleArray } from "../../util/util";
+import DragDropList from "../ui/DragDropList";
+import { Hint } from "../ui/Hint";
+import { NegativeActionButton } from "../ui/NegativeActionButton";
 import { TrashButton } from "../ui/TrashButton";
 import { createQuestion } from "./QuestionFactory";
 
@@ -24,15 +28,17 @@ export const RearrangeQuestion = createQuestion<
     // Guardamos o objeto completo para ter acesso à indentação na renderização
     const [selecionadas, setSelecionadas] = useState<RearrangeRow[]>([]);
 
+    const rowsRandom = useMemo(() => shuffleArray(data.rows), [data.rows]);
+
     // Filtramos as opções comparando o texto ou ID para saber o que sobra
     const opcoesDisponiveis = useMemo(() => {
       return (
-        data.rows?.filter(
+        rowsRandom.filter(
           (linhaOriginal) =>
             !selecionadas.some((s) => s.text === linhaOriginal.text),
         ) || []
       );
-    }, [data.rows, selecionadas]);
+    }, [rowsRandom, selecionadas]);
 
     const adicionarLinha = (linha: RearrangeRow) => {
       setSelecionadas((prev) => [...prev, linha]);
@@ -64,6 +70,44 @@ export const RearrangeQuestion = createQuestion<
       onAnswer(acertou, data.id);
     };
 
+    const getRowsPlusId = (rows: RearrangeRow[]) => {
+      return rows.map((row, index) => ({ ...row, id: index }));
+    };
+
+    const handleReorder = (rows: RearrangeRow[]) => {
+      setSelecionadas(rows);
+    };
+
+    const RenderRowItem = (row: RearrangeRow & { id: number }) => {
+      const index = row.id;
+      const linhaIdentada =
+        " ".repeat((row.identationLevel || 0) * 4) + row.text;
+      return (
+        <div
+          key={`sel-${index}`}
+          className="px-2 rounded-lg border font-mono shadow-sm animate-in slide-in-from-left-2 flex items-center
+        text-slate-700 dark:text-blue-300 border-olive-400 dark:border-slate-700 bg-yellow-50 dark:bg-blue-500/10 justify-between"
+        >
+          <div className="flex items-center">
+            {" "}
+            {/* Adicionado flex para alinhar o index com o código */}
+            <span className="text-sm opacity-50 w-4 font-mono border-r border-slate-700 mr-2">
+              {index + 1}
+            </span>
+            {/* Indentação Dinâmica */}
+            <SyntaxHighlighterCustom
+              showLineNumbers={false}
+              language={data.language}
+            >
+              {linhaIdentada}
+            </SyntaxHighlighterCustom>
+          </div>
+
+          <TrashButton onClick={() => removerLinha(index)} />
+        </div>
+      );
+    };
+
     return (
       <div className="flex flex-col gap-2 w-full">
         <div
@@ -75,37 +119,13 @@ export const RearrangeQuestion = createQuestion<
               Clique nas linhas abaixo para construir o código...
             </p>
           )}
-          {selecionadas.map((linha, index) => {
-            // 1. Definição da lógica (precisa estar dentro das chaves)
-            const linhaIdentada =
-              " ".repeat((linha.identationLevel || 0) * 4) + linha.text;
 
-            // 2. OBRIGATÓRIO: usar o return para renderizar o componente
-            return (
-              <div
-                key={`sel-${index}`}
-                className="p-2 rounded border font-mono shadow-sm animate-in slide-in-from-left-2 flex items-center
-        text-slate-700 dark:text-blue-300 border-olive-400 dark:border-slate-700 bg-yellow-50 dark:bg-blue-500/10 justify-between"
-              >
-                <div className="flex items-center">
-                  {" "}
-                  {/* Adicionado flex para alinhar o index com o código */}
-                  <span className="text-sm opacity-50 w-4 font-mono border-r border-slate-700 mr-2">
-                    {index + 1}
-                  </span>
-                  {/* Indentação Dinâmica */}
-                  <SyntaxHighlighterCustom
-                    showLineNumbers={false}
-                    language={data.language}
-                  >
-                    {linhaIdentada}
-                  </SyntaxHighlighterCustom>
-                </div>
-
-                <TrashButton onClick={() => removerLinha(index)} />
-              </div>
-            ); // Fechamento do return
-          })}
+          <DragDropList<RearrangeRow & { id: number }>
+            items={getRowsPlusId(selecionadas)}
+            onReorder={handleReorder}
+            renderItem={RenderRowItem}
+            getItemId={(task) => task.id}
+          />
         </div>
 
         {/* Controles de Edição */}
@@ -114,13 +134,12 @@ export const RearrangeQuestion = createQuestion<
             onClick={removerUltima}
             disabled={selecionadas.length === 0}
           />
-          <button
+          <NegativeActionButton
             onClick={resetar}
+            text="Limpar tudo"
+            icon={<RotateCcw size={14} />}
             disabled={selecionadas.length === 0}
-            className="lg:text-sm flex items-center gap-1 text-slate-500 hover:text-orange-500 cursor-pointer disabled:opacity-30"
-          >
-            <RotateCcw size={14} /> Limpar tudo
-          </button>
+          />
         </div>
 
         {/* Opções Disponíveis */}
@@ -135,7 +154,7 @@ export const RearrangeQuestion = createQuestion<
                 <button
                   key={`opt-${index}`}
                   onClick={() => adicionarLinha(linha)}
-                  className="p-2 rounded-lg border font-mono transition-all cursor-pointer
+                  className="px-2 rounded-lg border font-mono transition-all cursor-pointer
                 bg-white border-slate-200 hover:border-blue-500 text-slate-700 dark:text-blue-300
                 dark:bg-slate-800 dark:border-slate-700 dark:hover:border-blue-400 "
                 >
@@ -153,6 +172,7 @@ export const RearrangeQuestion = createQuestion<
               </p>
             )}
           </div>
+          <Hint>Clique na linha.</Hint>
         </div>
         <ButtonConfirm
           onClick={handleConfirmar}

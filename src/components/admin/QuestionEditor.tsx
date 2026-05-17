@@ -3,12 +3,11 @@ import {
   CheckCircle2,
   GitBranch,
   GitGraph,
-  GripVertical,
   RectangleEllipsis,
   RedoDot,
+  Save,
   Search,
   Settings2,
-  Share2,
   SignalHigh,
   SignalLow,
   SignalMedium,
@@ -20,6 +19,7 @@ import { Toaster } from "react-hot-toast";
 import {
   QUESTION_CLICK_ON_ERROR_EMPTY,
   QUESTION_MULTIPLE_CHOICE_EMPTY,
+  QUESTION_REARRANGE_EMPTY,
   QUESTION_TRUE_FALSE_EMPTY,
 } from "../../constants/questions";
 import type {
@@ -27,17 +27,16 @@ import type {
   Question,
   QuestionClickOnError,
   QuestionMultipleChoice,
+  QuestionRearrange,
   QuestionType,
 } from "../../types/study";
 import { getTipoQuestaoPorExtenso } from "../../util/Quiz";
 import { QuestionSelector } from "../questions/QuestionSelector";
 import { Feedback } from "../ui/Feedback";
-import { Hint } from "../ui/Hint";
-import { Input } from "../ui/Input";
 import { Select, type SelectOption } from "../ui/Select";
-import { TrashButton } from "../ui/TrashButton";
 import { QuestionClickOnErrorEditor } from "./questions/QuestionClickOnErrorEditor";
 import { QuestionMultipleChoiceEditor } from "./questions/QuestionMultipleChoiceEditor";
+import { QuestionRearrangeEditor } from "./questions/QuestionRearrangeEditor";
 import { QuestionTrueFalseEditor } from "./questions/QuestionTrueFalse";
 
 export const QuestionEditor = () => {
@@ -74,14 +73,13 @@ export const QuestionEditor = () => {
   const [questionTrueFalse, setQuestionTrueFalse] =
     useState<QuestionMultipleChoice>(QUESTION_TRUE_FALSE_EMPTY);
 
+  const [questionRearrange, setQuestionRearrange] = useState<QuestionRearrange>(
+    QUESTION_REARRANGE_EMPTY,
+  );
+
   // Estados para os campos dinâmicos
 
-  const [rows, setRows] = useState<{ text: string; identationLevel: number }[]>(
-    [{ text: "", identationLevel: 0 }],
-  );
   const [code, setCode] = useState("");
-
-  const addRow = () => setRows([...rows, { text: "", identationLevel: 0 }]);
 
   const [feedback, setFeedback] = useState<"correto" | "errado" | null>(null);
 
@@ -160,6 +158,8 @@ export const QuestionEditor = () => {
         return questionClickOnError;
       case "verdadeiro_falso":
         return questionTrueFalse;
+      case "ordenacao":
+        return questionRearrange;
       default:
         return question;
     }
@@ -254,6 +254,13 @@ export const QuestionEditor = () => {
             />
           )}
 
+          {type === "ordenacao" && (
+            <QuestionRearrangeEditor
+              questionRearrange={questionRearrange}
+              setQuestionRearrange={setQuestionRearrange}
+            />
+          )}
+
           {/* Código / Lacuna / Predição */}
           {(type === "lacuna" ||
             type === "predicao" ||
@@ -285,52 +292,6 @@ export const QuestionEditor = () => {
             </div>
           )}
 
-          {/* Ordenação / Clique no Erro */}
-          {type === "ordenacao" && (
-            <div className="space-y-4 animate-in fade-in">
-              <div className="flex justify-between items-center">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                  Linhas de Informação
-                </label>
-                <button
-                  onClick={addRow}
-                  className="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-lg font-bold hover:cursor-pointer"
-                >
-                  + Nova Linha
-                </button>
-              </div>
-              <div className="space-y-2">
-                {rows.map((row, i) => (
-                  <div
-                    key={i}
-                    className="flex gap-2 items-center bg-slate-50 dark:bg-slate-800/40 p-2 rounded-xl border border-slate-100 dark:border-slate-800"
-                  >
-                    <GripVertical
-                      size={16}
-                      className="text-slate-300 cursor-grab"
-                    />
-                    <Input
-                      type="number"
-                      min={0}
-                      fullWidth={false}
-                      className="w-16 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-xs text-center"
-                      placeholder="Tab"
-                      title="Nível de Indentação"
-                    />
-                    <Input
-                      type="text"
-                      className="flex-1 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-sm "
-                      placeholder="Código ou texto da linha..."
-                    />
-
-                    <TrashButton />
-                  </div>
-                ))}
-              </div>
-              <Hint>Use o checkbox para marcar a linha com erro.</Hint>
-            </div>
-          )}
-
           {/* Fluxograma */}
           {type === "fluxograma_novo" && (
             <div className="p-10 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl text-center space-y-4">
@@ -346,11 +307,11 @@ export const QuestionEditor = () => {
         </div>
 
         <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex justify-end gap-3">
-          <button className="px-6 py-2.5 text-slate-500 text-sm font-bold hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl transition-all">
+          <button className="px-6 py-2.5 text-slate-500 text-sm font-bold hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl transition-all hover:cursor-pointer">
             Cancelar
           </button>
-          <button className="px-8 py-2.5 bg-blue-600 text-white text-sm font-black rounded-xl shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all flex items-center gap-2">
-            Salvar Questão <Share2 size={16} />
+          <button className="px-8 py-2.5 bg-blue-600 text-white text-sm font-black rounded-xl shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all flex items-center justify-center gap-2 hover:cursor-pointer">
+            <Save size={16} /> <span>Salvar Questão</span>
           </button>
         </div>
       </div>

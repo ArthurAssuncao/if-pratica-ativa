@@ -4,7 +4,7 @@ import { LANGUAGES } from "../../../constants/code";
 import { INDENTATION_SIZE } from "../../../constants/general";
 import type {
   Languages,
-  QuestionClickOnError,
+  QuestionRearrange,
   RearrangeRow,
 } from "../../../types/study";
 import { countIndentationLevel } from "../../../util/code";
@@ -18,17 +18,15 @@ import { Select } from "../../ui/Select";
 import { TextArea } from "../../ui/TextArea";
 import { TrashButton } from "../../ui/TrashButton";
 
-interface QuestionClickOnErrorEditorProps {
-  questionClickOnError: QuestionClickOnError;
-  setQuestionClickOnError: React.Dispatch<
-    React.SetStateAction<QuestionClickOnError>
-  >;
+interface QuestionRearrangeEditorProps {
+  questionRearrange: QuestionRearrange;
+  setQuestionRearrange: React.Dispatch<React.SetStateAction<QuestionRearrange>>;
 }
 
-export const QuestionClickOnErrorEditor = ({
-  questionClickOnError,
-  setQuestionClickOnError,
-}: QuestionClickOnErrorEditorProps) => {
+export const QuestionRearrangeEditor = ({
+  questionRearrange,
+  setQuestionRearrange,
+}: QuestionRearrangeEditorProps) => {
   const [isEditingLinePerLine, setIsEditingLinePerLine] = useState(true);
 
   const addRow = () => {
@@ -36,9 +34,9 @@ export const QuestionClickOnErrorEditor = ({
       setIsEditingLinePerLine(true);
       return;
     }
-    setQuestionClickOnError({
-      ...questionClickOnError,
-      rows: [...questionClickOnError.rows, { text: "", identationLevel: 0 }],
+    setQuestionRearrange({
+      ...questionRearrange,
+      rows: [...questionRearrange.rows, { text: "", identationLevel: 0 }],
     });
   };
 
@@ -56,8 +54,8 @@ export const QuestionClickOnErrorEditor = ({
     if (rows[rows.length - 1].text === "") {
       rows.pop();
     }
-    setQuestionClickOnError({
-      ...questionClickOnError,
+    setQuestionRearrange({
+      ...questionRearrange,
       rows: rows,
     });
   };
@@ -67,14 +65,15 @@ export const QuestionClickOnErrorEditor = ({
   };
 
   const handleReorder = (rows: RearrangeRow[]) => {
-    setQuestionClickOnError({
-      ...questionClickOnError,
+    setQuestionRearrange({
+      ...questionRearrange,
       rows: rows,
     });
   };
 
   const RenderRowItem = (row: RearrangeRow & { id: number }) => {
     const i = row.id;
+
     return (
       <div key={row.id} className="flex flex-col gap-2 w-full">
         <div className="flex gap-2 w-full items-center bg-slate-50 dark:bg-slate-800/40 p-2 rounded-lg border border-blue-200 dark:border-slate-800">
@@ -86,10 +85,10 @@ export const QuestionClickOnErrorEditor = ({
             className="w-16 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-xs text-center"
             placeholder="Tab"
             title="Nível de Indentação"
-            onChange={(e) =>
-              setQuestionClickOnError({
-                ...questionClickOnError,
-                rows: questionClickOnError.rows.map((row, index) =>
+            onChange={(e) => {
+              setQuestionRearrange({
+                ...questionRearrange,
+                rows: questionRearrange.rows.map((row, index) =>
                   index === i
                     ? {
                         ...row,
@@ -97,18 +96,19 @@ export const QuestionClickOnErrorEditor = ({
                       }
                     : row,
                 ),
-              })
-            }
+              });
+            }}
           />
           <Input
+            // ref={inputRef}
             type="text"
             className="flex-1 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-sm "
             placeholder="Código ou texto da linha..."
             value={row.text}
-            onChange={(e) =>
-              setQuestionClickOnError({
-                ...questionClickOnError,
-                rows: questionClickOnError.rows.map((row, index) =>
+            onChange={(e) => {
+              setQuestionRearrange({
+                ...questionRearrange,
+                rows: questionRearrange.rows.map((row, index) =>
                   index === i
                     ? {
                         ...row,
@@ -116,8 +116,8 @@ export const QuestionClickOnErrorEditor = ({
                       }
                     : row,
                 ),
-              })
-            }
+              });
+            }}
           />
 
           <Checkbox
@@ -126,10 +126,10 @@ export const QuestionClickOnErrorEditor = ({
             title="É a linha com erro?"
             className="accent-rose-500"
             value={row.text}
-            checked={row.text === questionClickOnError.correctAnswer || false}
+            checked={row.text === questionRearrange.correctAnswer || false}
             onChange={(e) =>
-              setQuestionClickOnError({
-                ...questionClickOnError,
+              setQuestionRearrange({
+                ...questionRearrange,
                 correctAnswer: e.target.value,
               })
             }
@@ -137,11 +137,9 @@ export const QuestionClickOnErrorEditor = ({
 
           <TrashButton
             onClick={() =>
-              setQuestionClickOnError({
-                ...questionClickOnError,
-                rows: questionClickOnError.rows.filter(
-                  (_, index) => index !== i,
-                ),
+              setQuestionRearrange({
+                ...questionRearrange,
+                rows: questionRearrange.rows.filter((_, index) => index !== i),
               })
             }
           />
@@ -158,12 +156,12 @@ export const QuestionClickOnErrorEditor = ({
             Linguagem
           </label>
           <Select
-            value={questionClickOnError.language}
+            value={questionRearrange.language}
             options={LANGUAGES}
-            defaultValue={questionClickOnError.language}
+            defaultValue={questionRearrange.language}
             onChange={(value) => {
-              setQuestionClickOnError({
-                ...questionClickOnError,
+              setQuestionRearrange({
+                ...questionRearrange,
                 language: value as Languages,
               });
             }}
@@ -199,7 +197,7 @@ export const QuestionClickOnErrorEditor = ({
           <div className="flex flex-col gap-2 items-center bg-slate-50 dark:bg-slate-800/40 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
             {isEditingLinePerLine && (
               <DragDropList<RearrangeRow & { id: number }>
-                items={getRowsPlusId(questionClickOnError.rows)}
+                items={getRowsPlusId(questionRearrange.rows)}
                 onReorder={handleReorder}
                 renderItem={RenderRowItem}
                 getItemId={(row) => row.id}
@@ -212,11 +210,11 @@ export const QuestionClickOnErrorEditor = ({
         {!isEditingLinePerLine && (
           <div className="flex flex-col gap-2 items-center bg-slate-50 dark:bg-slate-800/40 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
             <CodeEditorCustom
-              value={questionClickOnError.rows
+              value={questionRearrange.rows
                 .map((row) => row.text)
                 .join("\n")
                 .trim()}
-              language={questionClickOnError.language}
+              language={questionRearrange.language}
               displayLanguage={true}
               onChange={(evn) => {
                 setLinesByCode(evn.target.value);
@@ -238,10 +236,10 @@ export const QuestionClickOnErrorEditor = ({
         <TextArea
           className="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border-none h-20 text-sm italic"
           placeholder="Por que esta resposta está correta/incorreta?"
-          value={questionClickOnError.explanation}
+          value={questionRearrange.explanation}
           onChange={(e) =>
-            setQuestionClickOnError({
-              ...questionClickOnError,
+            setQuestionRearrange({
+              ...questionRearrange,
               explanation: e.target.value,
             })
           }

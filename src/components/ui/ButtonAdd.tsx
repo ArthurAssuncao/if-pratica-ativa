@@ -9,7 +9,7 @@ export const ButtonAdd = ({ onClick, children }: ButtonAddProps) => {
   return (
     <button
       onClick={onClick}
-      className="flex flex-row text-[10px] bg-blue-50 text-blue-600 dark:bg-blue-900 dark:text-blue-100 px-2 py-1 rounded-lg font-bold hover:cursor-pointer hover:text-blue-800"
+      className="flex flex-row text-[10px] bg-blue-50 text-blue-600 dark:bg-blue-900 dark:text-blue-100 px-2 py-1 rounded-lg font-bold hover:cursor-pointer hover:text-blue-800 hover:ring-1 ring-blue-500 transition-all"
     >
       {children}
     </button>

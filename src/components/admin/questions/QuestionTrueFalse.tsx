@@ -106,11 +106,11 @@ export const QuestionTrueFalseEditor = ({
       </div>
       <div className="space-y-1.5 pt-4">
         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-          Explicação (Feedback Positivo)
+          Explicação (Feedback)
         </label>
         <TextArea
           className="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border-none h-20 text-sm italic"
-          placeholder="Por que esta resposta está correta?"
+          placeholder="Por que esta resposta está correta/incorreta?"
           value={questionTrueFalse.explanation}
           onChange={(e) =>
             setQuestionTrueFalse({

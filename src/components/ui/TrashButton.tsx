@@ -13,7 +13,8 @@ export const TrashButton = forwardRef<HTMLButtonElement, TrashButtonProps>(
         ref={ref}
         disabled={disabled}
         className={`
-          p-1.5
+          py-1.5
+px-1.5
           text-slate-400
           rounded-lg
           transition-all duration-200
@@ -22,7 +23,7 @@ export const TrashButton = forwardRef<HTMLButtonElement, TrashButtonProps>(
           hover:ring-2 hover:ring-red-500
           hover:cursor-pointer
           focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
-          disabled:opacity-50 disabled:cursor-not-allowed
+          disabled:opacity-50 disabled:cursor-not-allowed  disabled:hover:ring-0 disabled:hover:bg-transparent disabled:text-slate-400
           ${className}
         `}
         {...props}

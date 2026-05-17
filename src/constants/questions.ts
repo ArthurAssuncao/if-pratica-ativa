@@ -1,6 +1,7 @@
 import type {
   QuestionClickOnError,
   QuestionMultipleChoice,
+  QuestionRearrange,
 } from "../types/study";
 
 export const QUESTION_MULTIPLE_CHOICE_EMPTY: QuestionMultipleChoice = {
@@ -49,4 +50,20 @@ export const QUESTION_TRUE_FALSE_EMPTY: QuestionMultipleChoice = {
     attemptCount: 0,
   },
   language: "pt-br",
+};
+
+export const QUESTION_REARRANGE_EMPTY: QuestionRearrange = {
+  id: 0,
+  type: "ordenacao",
+  level: "iniciante",
+  questionText:
+    "O enunciado da questão aparecerá aqui conforme você digita no editor...",
+  explanation: "",
+  correctAnswer: "",
+  info: {
+    status: "pendente",
+    attemptCount: 0,
+  },
+  rows: [{ text: "", identationLevel: 0 }],
+  language: "python",
 };

@@ -20,7 +20,7 @@ export const AdminDashboard = () => {
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Sidebar de Navegação */}
-      <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-6">
+      <aside className="md:flex hidden flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-6 ">
         <h2 className="text-xl font-black mb-8 text-blue-600">Painel Admin</h2>
         <nav className="space-y-2">
           <NavBtn
@@ -72,7 +72,7 @@ const NavBtn = ({ active, onClick, icon, label }: NavBtnProps) => (
     onClick={onClick}
     className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all hover:cursor-pointer ${
       active
-        ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+        ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700"
         : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
     }`}
   >
