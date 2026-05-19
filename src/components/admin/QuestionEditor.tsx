@@ -18,6 +18,7 @@ import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import {
   QUESTION_CLICK_ON_ERROR_EMPTY,
+  QUESTION_FILL_EMPTY,
   QUESTION_MULTIPLE_CHOICE_EMPTY,
   QUESTION_OUTPUT_EMPTY,
   QUESTION_REARRANGE_EMPTY,
@@ -26,6 +27,7 @@ import {
 import type {
   Level,
   QuestionClickOnError,
+  QuestionFill,
   QuestionMultipleChoice,
   QuestionOutput,
   QuestionRearrange,
@@ -37,6 +39,7 @@ import { Feedback } from "../ui/Feedback";
 import { Select, type SelectOption } from "../ui/Select";
 import { QuestionOutputEditor } from "./QuestionOutputEditor";
 import { QuestionClickOnErrorEditor } from "./questions/QuestionClickOnErrorEditor";
+import { QuestionFillEditor } from "./questions/QuestionFillEditor";
 import { QuestionMultipleChoiceEditor } from "./questions/QuestionMultipleChoiceEditor";
 import { QuestionRearrangeEditor } from "./questions/QuestionRearrangeEditor";
 import { QuestionTrueFalseEditor } from "./questions/QuestionTrueFalse";
@@ -62,6 +65,9 @@ export const QuestionEditor = () => {
   const [questionOutput, setQuestionOutput] = useState<QuestionOutput>(
     QUESTION_OUTPUT_EMPTY,
   );
+
+  const [questionFill, setQuestionFill] =
+    useState<QuestionFill>(QUESTION_FILL_EMPTY);
 
   // Estados para os campos dinâmicos
 
@@ -148,6 +154,8 @@ export const QuestionEditor = () => {
         return questionRearrange;
       case "predicao":
         return questionOutput;
+      case "lacuna":
+        return questionFill;
       default:
         return null;
     }
@@ -258,8 +266,15 @@ export const QuestionEditor = () => {
             />
           )}
 
+          {type === "lacuna" && (
+            <QuestionFillEditor
+              questionFill={questionFill}
+              setQuestionFill={setQuestionFill}
+            />
+          )}
+
           {/* Código / Lacuna / Predição */}
-          {(type === "lacuna" || type === "teste_mesa") && (
+          {type === "teste_mesa" && (
             <div className="space-y-4 animate-in fade-in">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Bloco de Código / Texto Base
@@ -267,11 +282,7 @@ export const QuestionEditor = () => {
               <div className="relative">
                 <textarea
                   className="w-full p-4 font-mono text-xs bg-slate-950 text-emerald-400 rounded-2xl h-48 focus:ring-2 focus:ring-blue-500"
-                  placeholder={
-                    type === "lacuna"
-                      ? "Use [[lacuna]] para marcar espaços"
-                      : "Insira o código aqui..."
-                  }
+                  placeholder={""}
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                 />

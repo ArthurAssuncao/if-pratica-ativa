@@ -14,6 +14,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   passwordToggle?: boolean;
   fullWidth?: boolean;
   inputSize?: "sm" | "md" | "lg";
+  readonly?: boolean;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -35,6 +36,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       type = "text",
       value,
       defaultValue,
+      readonly,
       onChange,
       id,
       ...props
@@ -93,7 +95,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               ${rightPadding} rounded-xl border h-10
               text-gray-900 placeholder:text-gray-400
               transition-all duration-200 ease-out
-              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+              ${!readonly ? "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" : "focus:outline-none focus:ring-transparent"}
               disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400
               hover:border-blue-500/70`;
     const classInputFiltered = getExclusiveClasses(classInput, className);
@@ -134,6 +136,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             onChange={handleChange}
             disabled={disabled}
             required={required}
+            readOnly={readonly}
             className={`
 
               ${classInputFiltered}

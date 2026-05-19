@@ -1,5 +1,6 @@
 import type {
   QuestionClickOnError,
+  QuestionFill,
   QuestionMultipleChoice,
   QuestionOutput,
   QuestionRearrange,
@@ -72,6 +73,22 @@ export const QUESTION_REARRANGE_EMPTY: QuestionRearrange = {
 export const QUESTION_OUTPUT_EMPTY: QuestionOutput = {
   id: 0,
   type: "predicao",
+  level: "iniciante",
+  questionText:
+    "O enunciado da questão aparecerá aqui conforme você digita no editor...",
+  explanation: "",
+  correctAnswer: { option: "" },
+  info: {
+    status: "pendente",
+    attemptCount: 0,
+  },
+  code: "",
+  language: "python",
+};
+
+export const QUESTION_FILL_EMPTY: QuestionFill = {
+  id: 0,
+  type: "lacuna",
   level: "iniciante",
   questionText:
     "O enunciado da questão aparecerá aqui conforme você digita no editor...",

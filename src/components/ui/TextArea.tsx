@@ -12,6 +12,7 @@ interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   showCharCount?: boolean;
   maxLength?: number;
   rows?: number;
+  readonly?: boolean;
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -33,6 +34,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       defaultValue,
       onChange,
       id,
+      readonly = false,
       ...props
     },
     ref,
@@ -93,13 +95,14 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             onChange={onChange}
             disabled={disabled}
             required={required}
+            readOnly={readonly}
             className={`
               ${sizeClasses[size]}
               ${widthClass}
               rounded-xl border
               text-gray-900 placeholder:text-gray-400
               transition-all duration-200 ease-out hover:border-blue-400
-              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+              ${!readonly ? "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" : "focus:outline-none focus:ring-transparent"}
               disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400
 
               resize-y
