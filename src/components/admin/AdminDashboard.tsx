@@ -5,6 +5,11 @@ import { QuestionEditor } from "./QuestionEditor";
 
 // Tipagem simplificada para o estado do componente
 type AdminTab = "disciplinas" | "conteudos" | "questoes";
+const tabLabels: Record<AdminTab, string> = {
+  disciplinas: "Disciplinas",
+  conteudos: "Conteúdos",
+  questoes: "Questões",
+};
 
 interface NavBtnProps {
   active: boolean;
@@ -27,19 +32,19 @@ export const AdminDashboard = () => {
             active={activeTab === "disciplinas"}
             onClick={() => setActiveTab("disciplinas")}
             icon={<Layout size={20} />}
-            label="Disciplinas"
+            label={tabLabels["disciplinas"]}
           />
           <NavBtn
             active={activeTab === "conteudos"}
             onClick={() => setActiveTab("conteudos")}
             icon={<BookOpen size={20} />}
-            label="Conteúdos"
+            label={tabLabels["conteudos"]}
           />
           <NavBtn
             active={activeTab === "questoes"}
             onClick={() => setActiveTab("questoes")}
             icon={<HelpCircle size={20} />}
-            label="Questões"
+            label={tabLabels["questoes"]}
           />
         </nav>
       </aside>
@@ -49,11 +54,9 @@ export const AdminDashboard = () => {
         <header className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-black dark:text-white capitalize">
-              {activeTab}
+              {tabLabels[activeTab]}
             </h1>
-            <p className="text-slate-500 text-sm">
-              Gerencie os parâmetros do sistema IF Aprenda.
-            </p>
+            <p className="text-slate-500 text-sm"></p>
           </div>
           <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all hover:cursor-pointer">
             <Plus size={18} /> Novo Registro

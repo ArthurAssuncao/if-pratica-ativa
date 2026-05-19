@@ -17,23 +17,35 @@ interface CodeComponentProps extends React.ComponentPropsWithoutRef<"code"> {
   inline?: boolean;
 }
 
+interface MarkdownRendererProps {
+  children: string;
+  className?: string;
+  insideArticle?: boolean;
+}
+
 /**
  * Componente para renderizar Markdown com suporte a Syntax Highlighting
  * usando Tailwind Typography (prose) e um componente de destaque customizado.
  */
-export default function MarkdownRenderer({ children }: MarkdownRendererProps) {
+export default function MarkdownRenderer({
+  children,
+  className,
+  insideArticle = false,
+}: MarkdownRendererProps) {
   const components: Components = {
     /**
      * Personalizamos a renderização da tag 'code' para distinguir
      * entre blocos de código (fenced code blocks) e código inline.
      */
-    code({ inline, className, children, ...props }: CodeComponentProps) {
+    code({ inline, children, ...props }: CodeComponentProps) {
       const match = /language-(\w+)/.exec(className || "");
       const { style, ...restProps } = props;
 
       // Verifica se é um bloco de código (com linguagem definida) ou código inline
       return !inline && match ? (
-        <div className="relative  rounded-lg border border-slate-300 dark:border-slate-800 shadow-md">
+        <div
+          className={`relative  rounded-lg border border-slate-300 dark:border-slate-800 shadow-md ${className}`}
+        >
           {/* Badge da linguagem no topo do bloco de código */}
           <div className="flex justify-between items-center px-4 py-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-400 text-xs font-mono">
             <span>{match[1]}</span>
@@ -65,10 +77,18 @@ export default function MarkdownRenderer({ children }: MarkdownRendererProps) {
   };
 
   return (
-    <article className="prose prose-slate dark:prose-invert max-w-full">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
-        {children}
-      </ReactMarkdown>
-    </article>
+    <>
+      {insideArticle ? (
+        <article className="prose prose-slate dark:prose-invert max-w-full">
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+            {children}
+          </ReactMarkdown>
+        </article>
+      ) : (
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+          {children}
+        </ReactMarkdown>
+      )}
+    </>
   );
 }

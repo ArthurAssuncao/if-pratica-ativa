@@ -19,14 +19,15 @@ import { Toaster } from "react-hot-toast";
 import {
   QUESTION_CLICK_ON_ERROR_EMPTY,
   QUESTION_MULTIPLE_CHOICE_EMPTY,
+  QUESTION_OUTPUT_EMPTY,
   QUESTION_REARRANGE_EMPTY,
   QUESTION_TRUE_FALSE_EMPTY,
 } from "../../constants/questions";
 import type {
   Level,
-  Question,
   QuestionClickOnError,
   QuestionMultipleChoice,
+  QuestionOutput,
   QuestionRearrange,
   QuestionType,
 } from "../../types/study";
@@ -34,6 +35,7 @@ import { getTipoQuestaoPorExtenso } from "../../util/Quiz";
 import { QuestionSelector } from "../questions/QuestionSelector";
 import { Feedback } from "../ui/Feedback";
 import { Select, type SelectOption } from "../ui/Select";
+import { QuestionOutputEditor } from "./QuestionOutputEditor";
 import { QuestionClickOnErrorEditor } from "./questions/QuestionClickOnErrorEditor";
 import { QuestionMultipleChoiceEditor } from "./questions/QuestionMultipleChoiceEditor";
 import { QuestionRearrangeEditor } from "./questions/QuestionRearrangeEditor";
@@ -42,27 +44,7 @@ import { QuestionTrueFalseEditor } from "./questions/QuestionTrueFalse";
 export const QuestionEditor = () => {
   const [view, setView] = useState<"form" | "preview">("form");
   const [type, setType] = useState<QuestionType>("multipla_escolha");
-
-  const [question, setQuestion] = useState<Question>({
-    id: 0,
-    type: "multipla_escolha",
-    level: "iniciante",
-    code: "",
-    options: [],
-    rows: [],
-    nodes: [],
-    conections: [],
-    root: "",
-    questionText:
-      "O enunciado da questão aparecerá aqui conforme você digita no editor...",
-    explanation: "",
-    correctAnswer: "",
-    info: {
-      status: "pendente",
-      attemptCount: 0,
-    },
-    language: "pt-br",
-  });
+  const [level, setLevel] = useState<Level>("iniciante");
 
   const [questionMultipleChoice, setQuestionMultipleChoice] =
     useState<QuestionMultipleChoice>(QUESTION_MULTIPLE_CHOICE_EMPTY);
@@ -75,6 +57,10 @@ export const QuestionEditor = () => {
 
   const [questionRearrange, setQuestionRearrange] = useState<QuestionRearrange>(
     QUESTION_REARRANGE_EMPTY,
+  );
+
+  const [questionOutput, setQuestionOutput] = useState<QuestionOutput>(
+    QUESTION_OUTPUT_EMPTY,
   );
 
   // Estados para os campos dinâmicos
@@ -160,8 +146,10 @@ export const QuestionEditor = () => {
         return questionTrueFalse;
       case "ordenacao":
         return questionRearrange;
+      case "predicao":
+        return questionOutput;
       default:
-        return question;
+        return null;
     }
   };
 
@@ -172,6 +160,10 @@ export const QuestionEditor = () => {
     }
     setFeedback("errado");
   };
+
+  const question = defineQuestion(type);
+
+  console.log(type, question);
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
@@ -208,11 +200,11 @@ export const QuestionEditor = () => {
                 Tipo de Questão
               </label>
               <Select
-                value={question.type}
+                value={type}
                 options={tiposQuestaoOrdenados}
                 onChange={(value) => {
                   setType(value as QuestionType);
-                  setQuestion({ ...question, type: value as QuestionType });
+                  setFeedback(null);
                 }}
               />
             </div>
@@ -221,11 +213,9 @@ export const QuestionEditor = () => {
                 Nível de Dificuldade
               </label>
               <Select
-                value={question.level}
+                value={level}
                 options={leveisOptions}
-                onChange={(value) =>
-                  setQuestion({ ...question, level: value as Level })
-                }
+                onChange={(value) => setLevel(value as Level)}
               />
             </div>
           </div>
@@ -261,10 +251,15 @@ export const QuestionEditor = () => {
             />
           )}
 
+          {type === "predicao" && (
+            <QuestionOutputEditor
+              questionOutput={questionOutput}
+              setQuestionOutput={setQuestionOutput}
+            />
+          )}
+
           {/* Código / Lacuna / Predição */}
-          {(type === "lacuna" ||
-            type === "predicao" ||
-            type === "teste_mesa") && (
+          {(type === "lacuna" || type === "teste_mesa") && (
             <div className="space-y-4 animate-in fade-in">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Bloco de Código / Texto Base
@@ -325,37 +320,40 @@ export const QuestionEditor = () => {
 
         <div className="h-full flex flex-col items-center justify-center p-12">
           <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
-            <div className="p-10 flex flex-col gap-4">
-              <div className="flex justify-between items-start">
-                <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-black uppercase tracking-tighter">
-                  {question.level}
-                </span>
-                <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-black uppercase tracking-tighter">
-                  {getTipoQuestaoPorExtenso(question.type)}
-                </span>
-              </div>
-              <QuestionSelector
-                data={defineQuestion(type)}
-                onAnswer={validateAnswer}
-                isAbleToAnswer={true}
-                disabled={feedback !== null}
-                timerEnabled={false}
-              />
-              {feedback && (
-                <Feedback
-                  status={feedback}
-                  respostaCorreta={defineQuestion(type).correctAnswer}
-                  explanation={defineQuestion(type).explanation}
+            {question && (
+              <div className="p-10 flex flex-col gap-4">
+                <div className="flex justify-between items-start">
+                  <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-black uppercase tracking-tighter">
+                    {level}
+                  </span>
+                  <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-black uppercase tracking-tighter">
+                    {getTipoQuestaoPorExtenso(type)}
+                  </span>
+                </div>
+
+                <QuestionSelector
+                  data={question}
+                  onAnswer={validateAnswer}
+                  isAbleToAnswer={true}
+                  disabled={feedback !== null}
+                  timerEnabled={false}
                 />
-              )}
-              <button
-                className="px-3 py-3 bg-blue-500 text-white font-bold rounded-lg hover:cursor-pointer hover:bg-blue-700 transition-all disabled:bg-slate-300 disabled:cursor-not-allowed"
-                disabled={feedback === null}
-                onClick={() => setFeedback(null)}
-              >
-                Resetar preview
-              </button>
-            </div>
+                {feedback && (
+                  <Feedback
+                    status={feedback}
+                    respostaCorreta={question.correctAnswer}
+                    explanation={question.explanation}
+                  />
+                )}
+                <button
+                  className="px-3 py-3 bg-blue-500 text-white font-bold rounded-lg hover:cursor-pointer hover:bg-blue-700 transition-all disabled:bg-slate-300 disabled:cursor-not-allowed"
+                  disabled={feedback === null}
+                  onClick={() => setFeedback(null)}
+                >
+                  Resetar preview
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

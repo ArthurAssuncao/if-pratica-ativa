@@ -98,7 +98,7 @@ export const FeedbackFloatingButton = () => {
                 <div className="grid grid-cols-3 gap-2">
                   {(["bug", "sugestao", "erro"] as FeedbackType[]).map((t) => (
                     <button
-                      key={t}
+                      key={t.toString()}
                       type="button"
                       onClick={() => setType(t)}
                       className={`flex flex-col items-center gap-1 p-2 rounded-xl border-2 transition-all hover:cursor-pointer ${

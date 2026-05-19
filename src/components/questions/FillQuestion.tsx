@@ -15,7 +15,8 @@ interface FillQuestionProps extends BaseQuestionProps {
 export const FillQuestion = createQuestion<FillQuestionProps, QuestionFill>({
   validateAnswer: ({ resposta, data }) => {
     const isRespostaCorreta =
-      ajustarResposta(data.correctAnswer) === ajustarResposta(resposta);
+      ajustarResposta(data.correctAnswer.option.toString()) ===
+      ajustarResposta(resposta);
     return isRespostaCorreta;
   },
 

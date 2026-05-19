@@ -64,14 +64,14 @@ export const QuestionTrueFalseEditor = ({
                 name="correct"
                 value={opt}
                 checked={
-                  questionTrueFalse.correctAnswer !== "" &&
-                  opt === questionTrueFalse.correctAnswer
+                  questionTrueFalse.correctAnswer.option !== "" &&
+                  opt === questionTrueFalse.correctAnswer.option
                 }
                 className=""
                 onChange={(e) => {
                   setQuestionTrueFalse({
                     ...questionTrueFalse,
-                    correctAnswer: e.target.value,
+                    correctAnswer: { option: e.target.value },
                   });
                   console.log(questionTrueFalse.correctAnswer);
                 }}

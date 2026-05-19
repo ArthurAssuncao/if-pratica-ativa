@@ -19,7 +19,7 @@ export const DeskCheckingQuestion = createQuestion<
   validateAnswer: ({ resposta, data }) => {
     return compareArrays(
       stringToArrayNumber(resposta),
-      stringToArrayNumber(data.correctAnswer),
+      stringToArrayNumber(data.correctAnswer.option.toString()),
     );
   },
 
@@ -98,7 +98,7 @@ export const DeskCheckingQuestion = createQuestion<
               {data.checkpoints.map((cp, idx) => {
                 return (
                   <div
-                    key={idx}
+                    key={"DeskCheckingQuestion" + idx}
                     className={`p-5 rounded-2xl border transition-all duration-300 ${"bg-white dark:bg-slate-900 border-blue-100 shadow-lg ring-1 ring-blue-500/50"}`}
                   >
                     <div className="flex items-center gap-3 mb-4">

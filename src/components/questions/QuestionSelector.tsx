@@ -24,6 +24,7 @@ import { TimeToAnswer } from "./util/TimeToAnswer";
 interface QuestionSelectorProps extends BaseQuestionProps {
   data: Question;
   timerEnabled?: boolean;
+  randomOption?: boolean;
 }
 
 export const QuestionSelector = ({
@@ -31,6 +32,7 @@ export const QuestionSelector = ({
   disabled,
   timerEnabled = true,
   isAbleToAnswer: isAbleToAnswerProp,
+  randomOption = true,
   onAnswer,
 }: QuestionSelectorProps) => {
   const [isAbleToAnswer, setisAbleToAnswer] =
@@ -58,6 +60,15 @@ export const QuestionSelector = ({
   ) => {
     switch (data.type) {
       case "multipla_escolha":
+        return (
+          <MultipleChoiceQuestion
+            data={data as QuestionMultipleChoice}
+            onAnswer={onAnswer}
+            isAbleToAnswer={isAbleToAnswer}
+            disabled={isAnswered}
+            randomOption={randomOption}
+          />
+        );
       case "verdadeiro_falso":
         return (
           <MultipleChoiceQuestion
@@ -65,6 +76,7 @@ export const QuestionSelector = ({
             onAnswer={onAnswer}
             isAbleToAnswer={isAbleToAnswer}
             disabled={isAnswered}
+            randomOption={false}
           />
         );
       case "lacuna":
@@ -92,6 +104,7 @@ export const QuestionSelector = ({
             onAnswer={onAnswer}
             isAbleToAnswer={isAbleToAnswer}
             disabled={isAnswered}
+            randomOption={randomOption}
           />
         );
       case "clique_erro":

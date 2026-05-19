@@ -48,53 +48,56 @@ export const QuestionMultipleChoiceEditor = ({
         </ButtonAdd>
       </div>
       <div className="space-y-2">
-        {questionMultipleChoice.options.map((opt, i) => (
-          <div key={i} className="flex gap-2 group">
-            <div className="w-10 h-10 flex items-center justify-center  bg-slate-100 dark:bg-slate-800 rounded-xl ">
-              <Radio
-                type="radio"
-                name="correct"
+        {questionMultipleChoice.options.map((opt, i) => {
+          const key = `questionMultipleChoice-${i}`;
+          return (
+            <div key={key} className="flex gap-2 group">
+              <div className="w-10 h-10 flex items-center justify-center  bg-slate-100 dark:bg-slate-800 rounded-xl ">
+                <Radio
+                  type="radio"
+                  name="correct"
+                  value={opt}
+                  checked={
+                    questionMultipleChoice.correctAnswer.option !== "" &&
+                    opt === questionMultipleChoice.correctAnswer.option
+                  }
+                  className=""
+                  onChange={(e) => {
+                    setQuestionMultipleChoice({
+                      ...questionMultipleChoice,
+                      correctAnswer: { option: e.target.value },
+                    });
+                    console.log(questionMultipleChoice.correctAnswer);
+                  }}
+                />
+              </div>
+              <Input
+                type="text"
+                className="flex-1 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-sm "
+                placeholder={`Alternativa ${i + 1}`}
                 value={opt}
-                checked={
-                  questionMultipleChoice.correctAnswer !== "" &&
-                  opt === questionMultipleChoice.correctAnswer
-                }
-                className=""
                 onChange={(e) => {
+                  const newOptions = [...questionMultipleChoice.options];
+                  newOptions[i] = e.target.value;
                   setQuestionMultipleChoice({
                     ...questionMultipleChoice,
-                    correctAnswer: e.target.value,
+                    options: newOptions,
                   });
-                  console.log(questionMultipleChoice.correctAnswer);
                 }}
               />
+              <TrashButton
+                onClick={() =>
+                  setQuestionMultipleChoice({
+                    ...questionMultipleChoice,
+                    options: questionMultipleChoice.options.filter(
+                      (_, index) => index !== i,
+                    ),
+                  })
+                }
+              />
             </div>
-            <Input
-              type="text"
-              className="flex-1 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-sm "
-              placeholder={`Alternativa ${i + 1}`}
-              value={opt}
-              onChange={(e) => {
-                const newOptions = [...questionMultipleChoice.options];
-                newOptions[i] = e.target.value;
-                setQuestionMultipleChoice({
-                  ...questionMultipleChoice,
-                  options: newOptions,
-                });
-              }}
-            />
-            <TrashButton
-              onClick={() =>
-                setQuestionMultipleChoice({
-                  ...questionMultipleChoice,
-                  options: questionMultipleChoice.options.filter(
-                    (_, index) => index !== i,
-                  ),
-                })
-              }
-            />
-          </div>
-        ))}
+          );
+        })}
       </div>
       <div className="space-y-1.5 pt-4">
         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">

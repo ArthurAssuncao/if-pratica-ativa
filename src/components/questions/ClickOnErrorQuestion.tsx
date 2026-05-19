@@ -17,7 +17,10 @@ export const ClickOnErrorQuestion = createQuestion<
   QuestionClickOnError
 >({
   validateAnswer: ({ resposta, data }) => {
-    return resposta === data.correctAnswer.toString();
+    if ("text" in data.correctAnswer && data.correctAnswer.text) {
+      return resposta === data.correctAnswer.text.toString();
+    }
+    return resposta === data.correctAnswer.option.toString();
   },
 
   Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
@@ -50,7 +53,7 @@ export const ClickOnErrorQuestion = createQuestion<
           <div className="bg-yellow-50 dark:bg-blue-500/10 flex flex-col gap-0 p-2">
             {data.rows?.map((row, index) => (
               <button
-                key={index}
+                key={"ClickOnErrorQuestion" + index}
                 onClick={() => handleClick(index)}
                 className={`text-slate-700 dark:text-blue-300 w-full text-left px-2 leading-10 border border-dashed border-slate-200 hover:bg-green-500/20 hover:text-red-400 hover:cursor-pointer ${
                   opcaoSelecionada === row.text

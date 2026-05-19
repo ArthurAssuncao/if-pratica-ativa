@@ -1,5 +1,5 @@
 import { Code, ListPlus, Rows3 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LANGUAGES } from "../../../constants/code";
 import { INDENTATION_SIZE } from "../../../constants/general";
 import type {
@@ -7,16 +7,18 @@ import type {
   QuestionRearrange,
   RearrangeRow,
 } from "../../../types/study";
+import {
+  clickOnErrorEditorDefineId,
+  rearrangeAnswer,
+} from "../../../util/answer";
 import { countIndentationLevel } from "../../../util/code";
 import { ButtonAdd } from "../../ui/ButtonAdd";
-import { Checkbox } from "../../ui/Checkbox";
 import { CodeEditorCustom } from "../../ui/CodeEditorCustom";
 import DragDropList from "../../ui/DragDropList";
 import { Hint } from "../../ui/Hint";
-import { Input } from "../../ui/Input";
 import { Select } from "../../ui/Select";
 import { TextArea } from "../../ui/TextArea";
-import { TrashButton } from "../../ui/TrashButton";
+import { RearrangeRenderRowItem } from "./QuestionRearrangeEditorComponents/RearrangeRenderRowItem";
 
 interface QuestionRearrangeEditorProps {
   questionRearrange: QuestionRearrange;
@@ -29,6 +31,10 @@ export const QuestionRearrangeEditor = ({
 }: QuestionRearrangeEditorProps) => {
   const [isEditingLinePerLine, setIsEditingLinePerLine] = useState(true);
 
+  const [stableIds, setStableIds] = useState(() =>
+    questionRearrange.rows.map(() => crypto.randomUUID()),
+  );
+
   const addRow = () => {
     if (!isEditingLinePerLine) {
       setIsEditingLinePerLine(true);
@@ -38,6 +44,7 @@ export const QuestionRearrangeEditor = ({
       ...questionRearrange,
       rows: [...questionRearrange.rows, { text: "", identationLevel: 0 }],
     });
+    setStableIds((prev) => [...prev, crypto.randomUUID()]);
   };
 
   const setLinesByCode = (code: string) => {
@@ -61,7 +68,10 @@ export const QuestionRearrangeEditor = ({
   };
 
   const getRowsPlusId = (rows: RearrangeRow[]) => {
-    return rows.map((row, index) => ({ ...row, id: index }));
+    return rows.map((row, index) => ({
+      ...row,
+      id: clickOnErrorEditorDefineId(stableIds, index).toString(),
+    }));
   };
 
   const handleReorder = (rows: RearrangeRow[]) => {
@@ -71,82 +81,16 @@ export const QuestionRearrangeEditor = ({
     });
   };
 
-  const RenderRowItem = (row: RearrangeRow & { id: number }) => {
-    const i = row.id;
-
-    return (
-      <div key={row.id} className="flex flex-col gap-2 w-full">
-        <div className="flex gap-2 w-full items-center bg-slate-50 dark:bg-slate-800/40 p-2 rounded-lg border border-blue-200 dark:border-slate-800">
-          <Input
-            type="number"
-            min={0}
-            value={row.identationLevel}
-            fullWidth={false}
-            className="w-16 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-xs text-center"
-            placeholder="Tab"
-            title="Nível de Indentação"
-            onChange={(e) => {
-              setQuestionRearrange({
-                ...questionRearrange,
-                rows: questionRearrange.rows.map((row, index) =>
-                  index === i
-                    ? {
-                        ...row,
-                        identationLevel: Number(e.target.value),
-                      }
-                    : row,
-                ),
-              });
-            }}
-          />
-          <Input
-            // ref={inputRef}
-            type="text"
-            className="flex-1 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-sm "
-            placeholder="Código ou texto da linha..."
-            value={row.text}
-            onChange={(e) => {
-              setQuestionRearrange({
-                ...questionRearrange,
-                rows: questionRearrange.rows.map((row, index) =>
-                  index === i
-                    ? {
-                        ...row,
-                        text: e.target.value,
-                      }
-                    : row,
-                ),
-              });
-            }}
-          />
-
-          <Checkbox
-            type="checkbox"
-            checkboxSize="xl"
-            title="É a linha com erro?"
-            className="accent-rose-500"
-            value={row.text}
-            checked={row.text === questionRearrange.correctAnswer || false}
-            onChange={(e) =>
-              setQuestionRearrange({
-                ...questionRearrange,
-                correctAnswer: e.target.value,
-              })
-            }
-          />
-
-          <TrashButton
-            onClick={() =>
-              setQuestionRearrange({
-                ...questionRearrange,
-                rows: questionRearrange.rows.filter((_, index) => index !== i),
-              })
-            }
-          />
-        </div>
-      </div>
-    );
-  };
+  useEffect(() => {
+    setQuestionRearrange({
+      ...questionRearrange,
+      correctAnswer: {
+        option: rearrangeAnswer(questionRearrange.rows),
+        text: rearrangeAnswer(questionRearrange.rows),
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionRearrange.rows, setQuestionRearrange]);
 
   return (
     <div className="flex flex-col gap-4 animate-in fade-in">
@@ -196,11 +140,19 @@ export const QuestionRearrangeEditor = ({
         {isEditingLinePerLine && (
           <div className="flex flex-col gap-2 items-center bg-slate-50 dark:bg-slate-800/40 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
             {isEditingLinePerLine && (
-              <DragDropList<RearrangeRow & { id: number }>
+              <DragDropList<RearrangeRow & { id: string }>
+                key={questionRearrange.rows.length}
                 items={getRowsPlusId(questionRearrange.rows)}
                 onReorder={handleReorder}
-                renderItem={RenderRowItem}
-                getItemId={(row) => row.id}
+                renderItem={(row, index) => (
+                  <RearrangeRenderRowItem
+                    indexRow={index}
+                    row={row}
+                    questionRearrange={questionRearrange}
+                    setQuestionRearrange={setQuestionRearrange}
+                    stableIds={stableIds}
+                  />
+                )}
               />
             )}
             <Hint>Indique o nível de indentação no primeiro campo.</Hint>

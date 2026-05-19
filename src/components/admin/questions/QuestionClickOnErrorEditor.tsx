@@ -7,16 +7,15 @@ import type {
   QuestionClickOnError,
   RearrangeRow,
 } from "../../../types/study";
+import { clickOnErrorEditorDefineId } from "../../../util/answer";
 import { countIndentationLevel } from "../../../util/code";
 import { ButtonAdd } from "../../ui/ButtonAdd";
-import { Checkbox } from "../../ui/Checkbox";
 import { CodeEditorCustom } from "../../ui/CodeEditorCustom";
 import DragDropList from "../../ui/DragDropList";
 import { Hint } from "../../ui/Hint";
-import { Input } from "../../ui/Input";
 import { Select } from "../../ui/Select";
 import { TextArea } from "../../ui/TextArea";
-import { TrashButton } from "../../ui/TrashButton";
+import { ClickOnErrorRenderRowItem } from "./QuestionClickOnErrorEditorComponents/ClickOnErrorRenderRowItem";
 
 interface QuestionClickOnErrorEditorProps {
   questionClickOnError: QuestionClickOnError;
@@ -31,6 +30,10 @@ export const QuestionClickOnErrorEditor = ({
 }: QuestionClickOnErrorEditorProps) => {
   const [isEditingLinePerLine, setIsEditingLinePerLine] = useState(true);
 
+  const [stableIds, setStableIds] = useState(() =>
+    questionClickOnError.rows.map(() => crypto.randomUUID()),
+  );
+
   const addRow = () => {
     if (!isEditingLinePerLine) {
       setIsEditingLinePerLine(true);
@@ -40,6 +43,7 @@ export const QuestionClickOnErrorEditor = ({
       ...questionClickOnError,
       rows: [...questionClickOnError.rows, { text: "", identationLevel: 0 }],
     });
+    setStableIds((prev) => [...prev, crypto.randomUUID()]);
   };
 
   const setLinesByCode = (code: string) => {
@@ -63,7 +67,10 @@ export const QuestionClickOnErrorEditor = ({
   };
 
   const getRowsPlusId = (rows: RearrangeRow[]) => {
-    return rows.map((row, index) => ({ ...row, id: index }));
+    return rows.map((row, index) => ({
+      ...row,
+      id: clickOnErrorEditorDefineId(stableIds, index).toString(),
+    }));
   };
 
   const handleReorder = (rows: RearrangeRow[]) => {
@@ -71,83 +78,6 @@ export const QuestionClickOnErrorEditor = ({
       ...questionClickOnError,
       rows: rows,
     });
-  };
-
-  const RenderRowItem = (row: RearrangeRow & { id: number }) => {
-    const i = row.id;
-    return (
-      <div key={row.id} className="flex flex-col gap-2 w-full">
-        <div className="flex gap-2 w-full items-center bg-slate-50 dark:bg-slate-800/40 p-2 rounded-lg border border-blue-200 dark:border-slate-800">
-          <Input
-            type="number"
-            min={0}
-            value={row.identationLevel}
-            fullWidth={false}
-            className="w-16 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-xs text-center"
-            placeholder="Tab"
-            title="Nível de Indentação"
-            onChange={(e) =>
-              setQuestionClickOnError({
-                ...questionClickOnError,
-                rows: questionClickOnError.rows.map((row, index) =>
-                  index === i
-                    ? {
-                        ...row,
-                        identationLevel: Number(e.target.value),
-                      }
-                    : row,
-                ),
-              })
-            }
-          />
-          <Input
-            type="text"
-            className="flex-1 p-1.5 bg-white dark:bg-slate-900 rounded-lg text-sm "
-            placeholder="Código ou texto da linha..."
-            value={row.text}
-            onChange={(e) =>
-              setQuestionClickOnError({
-                ...questionClickOnError,
-                rows: questionClickOnError.rows.map((row, index) =>
-                  index === i
-                    ? {
-                        ...row,
-                        text: e.target.value,
-                      }
-                    : row,
-                ),
-              })
-            }
-          />
-
-          <Checkbox
-            type="checkbox"
-            checkboxSize="xl"
-            title="É a linha com erro?"
-            className="accent-rose-500"
-            value={row.text}
-            checked={row.text === questionClickOnError.correctAnswer || false}
-            onChange={(e) =>
-              setQuestionClickOnError({
-                ...questionClickOnError,
-                correctAnswer: e.target.value,
-              })
-            }
-          />
-
-          <TrashButton
-            onClick={() =>
-              setQuestionClickOnError({
-                ...questionClickOnError,
-                rows: questionClickOnError.rows.filter(
-                  (_, index) => index !== i,
-                ),
-              })
-            }
-          />
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -198,11 +128,19 @@ export const QuestionClickOnErrorEditor = ({
         {isEditingLinePerLine && (
           <div className="flex flex-col gap-2 items-center bg-slate-50 dark:bg-slate-800/40 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
             {isEditingLinePerLine && (
-              <DragDropList<RearrangeRow & { id: number }>
+              <DragDropList<RearrangeRow & { id: string }>
+                key={questionClickOnError.rows.length}
                 items={getRowsPlusId(questionClickOnError.rows)}
                 onReorder={handleReorder}
-                renderItem={RenderRowItem}
-                getItemId={(row) => row.id}
+                renderItem={(row, index) => (
+                  <ClickOnErrorRenderRowItem
+                    indexRow={index}
+                    row={row}
+                    questionClickOnError={questionClickOnError}
+                    setQuestionClickOnError={setQuestionClickOnError}
+                    stableIds={stableIds}
+                  />
+                )}
               />
             )}
             <Hint>Indique o nível de indentação no primeiro campo.</Hint>

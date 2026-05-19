@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import type { BaseQuestionProps } from "types/question";
 import type { QuestionRearrange, RearrangeRow } from "types/study";
+import { rearrangeAnswer } from "../../util/answer";
 import { shuffleArray } from "../../util/util";
 import DragDropList from "../ui/DragDropList";
 import { Hint } from "../ui/Hint";
@@ -14,6 +15,7 @@ import { createQuestion } from "./QuestionFactory";
 
 interface RearrangeQuestionProps extends BaseQuestionProps {
   data: QuestionRearrange;
+  randomOption?: boolean;
 }
 
 export const RearrangeQuestion = createQuestion<
@@ -21,14 +23,27 @@ export const RearrangeQuestion = createQuestion<
   QuestionRearrange
 >({
   validateAnswer: ({ resposta, data }) => {
-    return resposta === data.correctAnswer.toString();
+    console.log("resposta", resposta);
+    console.log("resposta-correta", data.correctAnswer.option.toString());
+    return resposta === data.correctAnswer.option.toString();
   },
 
-  Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {
+  Component: ({
+    data,
+    onAnswer,
+    isAbleToAnswer,
+    validateAnswer,
+    randomOption,
+  }) => {
     // Guardamos o objeto completo para ter acesso à indentação na renderização
     const [selecionadas, setSelecionadas] = useState<RearrangeRow[]>([]);
 
-    const rowsRandom = useMemo(() => shuffleArray(data.rows), [data.rows]);
+    const rowsRandom = useMemo(() => {
+      if (!randomOption) {
+        return data.rows;
+      }
+      return shuffleArray(data.rows);
+    }, [data.rows, randomOption]);
 
     // Filtramos as opções comparando o texto ou ID para saber o que sobra
     const opcoesDisponiveis = useMemo(() => {
@@ -60,7 +75,7 @@ export const RearrangeQuestion = createQuestion<
         return;
       }
 
-      const respostaFinal = selecionadas.map((s) => s.text).join("\n");
+      const respostaFinal = rearrangeAnswer(selecionadas);
 
       const acertou = validateAnswer({
         resposta: respostaFinal,
@@ -84,7 +99,7 @@ export const RearrangeQuestion = createQuestion<
         " ".repeat((row.identationLevel || 0) * 4) + row.text;
       return (
         <div
-          key={`sel-${index}`}
+          key={`RearrangeQuestion-Row-${index}`}
           className="px-2 rounded-lg border font-mono shadow-sm animate-in slide-in-from-left-2 flex items-center
         text-slate-700 dark:text-blue-300 border-olive-400 dark:border-slate-700 bg-yellow-50 dark:bg-blue-500/10 justify-between"
         >
@@ -152,7 +167,7 @@ export const RearrangeQuestion = createQuestion<
             {opcoesDisponiveis.length > 0 &&
               opcoesDisponiveis.map((linha, index) => (
                 <button
-                  key={`opt-${index}`}
+                  key={`RearrangeQuestion-${index}`}
                   onClick={() => adicionarLinha(linha)}
                   className="px-2 rounded-lg border font-mono transition-all cursor-pointer
                 bg-white border-slate-200 hover:border-blue-500 text-slate-700 dark:text-blue-300

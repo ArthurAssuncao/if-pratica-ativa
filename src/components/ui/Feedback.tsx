@@ -1,7 +1,10 @@
 import { CheckCircle2, XCircle } from "lucide-react";
+import { INDENTATION_SIZE } from "../../constants/general";
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../../constants/messages";
 import type { CorrectAnswer } from "../../types/study";
+import { getAnswer } from "../../util/answer";
 import { generateRandomIndex } from "../../util/util";
+import MarkdownRenderer from "../lesson/MarkdownRender";
 
 interface FeedbackProps {
   status: "correto" | "errado";
@@ -36,13 +39,15 @@ export const Feedback = ({
             ? SUCCESS_MESSAGES[randomIndexSuccess]
             : ERROR_MESSAGES[randomIndexError]}
         </p>
-        <p className="text-sm opacity-80 text-slate-700 dark:text-slate-200">
+        <p className="text-sm opacity-80 text-slate-700 dark:text-slate-200 flex gap-2 flex-col">
           Resposta correta:{" "}
-          <span className="font-mono font-bold">
-            {Array.isArray(respostaCorreta)
-              ? respostaCorreta.join(" e ")
-              : respostaCorreta}
-          </span>
+          <div className="border border-slate-200 p-2 rounded-lg bg-yellow-50">
+            <MarkdownRenderer insideArticle={false}>
+              {getAnswer(respostaCorreta)
+                .replaceAll("\n", "\n\r")
+                .replaceAll("\t", "&nbsp;".repeat(INDENTATION_SIZE))}
+            </MarkdownRenderer>
+          </div>
         </p>
         {explanation && (
           <p className="text-sm opacity-80 text-slate-700 dark:text-slate-200">

@@ -27,7 +27,7 @@ export const FlowchartNewQuestion = createQuestion<
   QuestionFlowchartnNew
 >({
   validateAnswer: ({ resposta, data }) => {
-    return resposta === data.correctAnswer.toString();
+    return resposta === data.correctAnswer.option.toString();
   },
 
   Component: ({ data, onAnswer, isAbleToAnswer, validateAnswer }) => {

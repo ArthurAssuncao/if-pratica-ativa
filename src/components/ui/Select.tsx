@@ -199,7 +199,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                 aria-labelledby={selectId}
               >
                 {normalizedOptions.map((option, index) => (
-                  <li key={option.value}>
+                  <li key={option.value + index}>
                     <button
                       type="button"
                       onClick={() => handleSelect(option.value)}

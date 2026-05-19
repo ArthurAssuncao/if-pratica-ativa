@@ -34,7 +34,7 @@ export const CodeEditorCustom = ({
         </span>
       )}
       <CodeEditor
-        value={value}
+        value={value.trim()}
         language={language}
         placeholder={computedPlaceholder}
         onChange={onChange}

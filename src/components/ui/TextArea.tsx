@@ -123,26 +123,29 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         </div>
 
         {/* Mensagens de erro e hint */}
-        <div className="min-h-5">
-          {error && (
-            <div
-              className="flex items-center gap-1.5 text-sm text-red-500 animate-in fade-in slide-in-from-top-1 duration-200"
-              id={`${textareaId}-error`}
-            >
-              <AlertCircle size={14} className="shrink-0" />
-              <span>{error}</span>
+        {error ||
+          (hint && (
+            <div className="min-h-5">
+              {error && (
+                <div
+                  className="flex items-center gap-1.5 text-sm text-red-500 animate-in fade-in slide-in-from-top-1 duration-200"
+                  id={`${textareaId}-error`}
+                >
+                  <AlertCircle size={14} className="shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+              {!error && hint && (
+                <div
+                  className="flex items-center gap-1.5 text-xs text-gray-400"
+                  id={`${textareaId}-hint`}
+                >
+                  <span className="inline-block w-1 h-1 rounded-full bg-gray-300" />
+                  <span>{hint}</span>
+                </div>
+              )}
             </div>
-          )}
-          {!error && hint && (
-            <div
-              className="flex items-center gap-1.5 text-xs text-gray-400"
-              id={`${textareaId}-hint`}
-            >
-              <span className="inline-block w-1 h-1 rounded-full bg-gray-300" />
-              <span>{hint}</span>
-            </div>
-          )}
-        </div>
+          ))}
       </div>
     );
   },

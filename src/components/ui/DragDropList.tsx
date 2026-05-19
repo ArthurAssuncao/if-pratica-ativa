@@ -12,7 +12,6 @@ const DragDropList = <T extends { id?: string | number }>({
   items,
   onReorder,
   renderItem,
-  getItemId,
 }: DragDropListProps<T>) => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -26,13 +25,6 @@ const DragDropList = <T extends { id?: string | number }>({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setListItems(items);
   }, [items]);
-
-  // Função auxiliar para obter ID do item
-  const getItemKey = (item: T, index: number): string | number => {
-    if (getItemId) return getItemId(item, index);
-    if (item.id !== undefined) return item.id;
-    return index;
-  };
 
   // Eventos de mouse (Desktop)
   const handleDragStart = (
@@ -169,7 +161,7 @@ const DragDropList = <T extends { id?: string | number }>({
       <div className="w-full flex flex-col gap-2 md:gap-2.5">
         {listItems.map((item, index) => (
           <div
-            key={getItemKey(item, index)}
+            key={item.id}
             ref={index === draggedIndex ? dragItemRef : null}
             draggable={true}
             onDragStart={(e) => handleDragStart(e, index)}

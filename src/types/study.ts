@@ -53,7 +53,10 @@ export interface QuestionInfo {
   attemptCount: number;
 }
 
-export type CorrectAnswer = string | number;
+export type CorrectAnswer = {
+  option: number | string | string[] | number[];
+  text?: string;
+};
 
 export interface BaseQuestion {
   id: number;
