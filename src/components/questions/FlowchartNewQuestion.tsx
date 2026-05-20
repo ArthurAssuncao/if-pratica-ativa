@@ -98,7 +98,7 @@ export const FlowchartNewQuestion = createQuestion<
         });
 
         const conexoesSaindo =
-          data.conections?.filter((c) => c.from === noId) || [];
+          data.connections?.filter((c) => c.from === noId) || [];
 
         conexoesSaindo.forEach((conexao) => {
           let multiplicadorX = 0;

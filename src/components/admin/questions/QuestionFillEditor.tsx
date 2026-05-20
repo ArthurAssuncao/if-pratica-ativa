@@ -1,3 +1,4 @@
+import { QUESTION_TITLE_EMPTY } from "../../../constants/questions";
 import type { QuestionFill } from "../../../types/study";
 import { CodeEditorCustom } from "../../ui/CodeEditorCustom";
 import { Hint } from "../../ui/Hint";
@@ -31,6 +32,11 @@ export const QuestionFillEditor = ({
         </label>
         <TextArea
           className="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800  h-24 text-sm focus:ring-2 focus:ring-blue-500"
+          value={
+            questionFill.questionText === QUESTION_TITLE_EMPTY
+              ? ""
+              : questionFill.questionText
+          }
           placeholder="Descreva o que o aluno deve fazer..."
           onChange={(e) =>
             setQuestionFill({

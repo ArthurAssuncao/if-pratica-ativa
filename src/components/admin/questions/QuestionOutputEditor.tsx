@@ -1,6 +1,6 @@
-import type { QuestionOutput } from "../../types/study";
-import { CodeEditorCustom } from "../ui/CodeEditorCustom";
-import { TextArea } from "../ui/TextArea";
+import type { QuestionOutput } from "../../../types/study";
+import { CodeEditorCustom } from "../../ui/CodeEditorCustom";
+import { TextArea } from "../../ui/TextArea";
 
 interface QuestionOutputEditorProps {
   questionOutput: QuestionOutput;

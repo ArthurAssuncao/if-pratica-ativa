@@ -67,7 +67,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     const currentSize = checkboxSizeClasses[checkboxSize];
 
-    const classInput = `inline-flex items-start gap-3 cursor-pointer transition-opacity duration-200`;
+    const classInput = `inline-flex items-start gap-3  transition-opacity duration-200`;
     const classInputFiltered = getExclusiveClasses(classInput, className);
 
     const roundedClasses: Record<CheckboxSize, string> = {
@@ -105,13 +105,14 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             className={`
               ${currentSize.wrapper}
               ${roundedClasses[checkboxSize]} border-2 transition-all duration-200
-              flex items-center justify-center hover:border-blue-500
+              flex items-center justify-center
               ${
                 checked
                   ? "bg-blue-500 border-blue-500"
                   : "bg-white border-gray-300"
               }
-              ${!disabled && "group-hover:border-gray-400"}
+              ${!disabled && "group-hover:border-gray-400 hover:border-blue-500 cursor-pointer"}
+              ${disabled && "bg-slate-300"}
               ${error && !checked ? "border-red-500" : ""}
             `}
           >

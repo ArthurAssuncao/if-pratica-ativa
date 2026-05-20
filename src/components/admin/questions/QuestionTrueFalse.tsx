@@ -73,7 +73,6 @@ export const QuestionTrueFalseEditor = ({
                     ...questionTrueFalse,
                     correctAnswer: { option: e.target.value },
                   });
-                  console.log(questionTrueFalse.correctAnswer);
                 }}
               />
             </div>

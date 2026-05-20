@@ -23,8 +23,6 @@ export const RearrangeQuestion = createQuestion<
   QuestionRearrange
 >({
   validateAnswer: ({ resposta, data }) => {
-    console.log("resposta", resposta);
-    console.log("resposta-correta", data.correctAnswer.option.toString());
     return resposta === data.correctAnswer.option.toString();
   },
 

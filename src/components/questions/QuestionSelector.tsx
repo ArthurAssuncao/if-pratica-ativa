@@ -13,6 +13,7 @@ import type {
 } from "types/study";
 import { ClickOnErrorQuestion } from "./ClickOnErrorQuestion";
 
+import { QUESTION_TITLE_EMPTY } from "../../constants/questions";
 import { DeskCheckingQuestion } from "./DeskCheckingQuestion";
 import { FillQuestion } from "./FillQuestion";
 import { FlowchartNewQuestion } from "./FlowchartNewQuestion";
@@ -156,7 +157,9 @@ export const QuestionSelector = ({
       )}
 
       <h2 className=" font-bold text-gray-700 dark:text-slate-200 mb-4 hyphens-auto wrap-break-word">
-        <MarkdownSyntax>{data.questionText}</MarkdownSyntax>
+        <MarkdownSyntax>
+          {data.questionText == "" ? QUESTION_TITLE_EMPTY : data.questionText}
+        </MarkdownSyntax>
       </h2>
 
       {/* Container do componente */}

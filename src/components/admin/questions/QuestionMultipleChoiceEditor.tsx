@@ -67,7 +67,6 @@ export const QuestionMultipleChoiceEditor = ({
                       ...questionMultipleChoice,
                       correctAnswer: { option: e.target.value },
                     });
-                    console.log(questionMultipleChoice.correctAnswer);
                   }}
                 />
               </div>

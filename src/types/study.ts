@@ -17,12 +17,13 @@ export type RearrangeRow = { text: string; identationLevel: number };
 
 export type Languages = (typeof LANGUAGES)[number];
 
+export type FlowchartNodeType = "processo" | "terminal" | "decisao";
+
 export type FlowchartNode = {
   id: string;
   label?: string;
-  isCorrect?: boolean;
-  type?: "terminal" | "decisao";
-  text?: string;
+  type: FlowchartNodeType;
+  text: string;
 };
 
 export type ConectionNode = {
@@ -99,7 +100,7 @@ export interface QuestionFlowchartnNew extends BaseQuestion {
   code: string;
   root: string;
   nodes: FlowchartNode[];
-  conections: ConectionNode[];
+  connections: ConectionNode[];
 }
 
 export type Question =

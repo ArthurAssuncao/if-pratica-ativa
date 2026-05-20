@@ -2,7 +2,6 @@ import {
   ArrowUpAZ,
   CheckCircle2,
   GitBranch,
-  GitGraph,
   RectangleEllipsis,
   RedoDot,
   Save,
@@ -19,6 +18,7 @@ import { Toaster } from "react-hot-toast";
 import {
   QUESTION_CLICK_ON_ERROR_EMPTY,
   QUESTION_FILL_EMPTY,
+  QUESTION_FLOWCHART_EMPTY,
   QUESTION_MULTIPLE_CHOICE_EMPTY,
   QUESTION_OUTPUT_EMPTY,
   QUESTION_REARRANGE_EMPTY,
@@ -28,6 +28,7 @@ import type {
   Level,
   QuestionClickOnError,
   QuestionFill,
+  QuestionFlowchartnNew,
   QuestionMultipleChoice,
   QuestionOutput,
   QuestionRearrange,
@@ -37,10 +38,11 @@ import { getTipoQuestaoPorExtenso } from "../../util/Quiz";
 import { QuestionSelector } from "../questions/QuestionSelector";
 import { Feedback } from "../ui/Feedback";
 import { Select, type SelectOption } from "../ui/Select";
-import { QuestionOutputEditor } from "./QuestionOutputEditor";
 import { QuestionClickOnErrorEditor } from "./questions/QuestionClickOnErrorEditor";
 import { QuestionFillEditor } from "./questions/QuestionFillEditor";
+import { QuestionFlowchartEditor } from "./questions/QuestionFlowchartEditor";
 import { QuestionMultipleChoiceEditor } from "./questions/QuestionMultipleChoiceEditor";
+import { QuestionOutputEditor } from "./questions/QuestionOutputEditor";
 import { QuestionRearrangeEditor } from "./questions/QuestionRearrangeEditor";
 import { QuestionTrueFalseEditor } from "./questions/QuestionTrueFalse";
 
@@ -68,6 +70,9 @@ export const QuestionEditor = () => {
 
   const [questionFill, setQuestionFill] =
     useState<QuestionFill>(QUESTION_FILL_EMPTY);
+
+  const [questionFlowchart, setQuestionFlowchart] =
+    useState<QuestionFlowchartnNew>(QUESTION_FLOWCHART_EMPTY);
 
   // Estados para os campos dinâmicos
 
@@ -156,6 +161,8 @@ export const QuestionEditor = () => {
         return questionOutput;
       case "lacuna":
         return questionFill;
+      case "fluxograma_novo":
+        return questionFlowchart;
       default:
         return null;
     }
@@ -171,12 +178,10 @@ export const QuestionEditor = () => {
 
   const question = defineQuestion(type);
 
-  console.log(type, question);
-
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
       {/* Coluna 1: Formulário */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col h-[calc(100vh-150px)]">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col h-[calc(100vh-150px)] min-h-160">
         <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
           <div className="flex items-center gap-2">
             <Settings2 size={18} className="text-blue-600" />
@@ -273,6 +278,13 @@ export const QuestionEditor = () => {
             />
           )}
 
+          {type === "fluxograma_novo" && (
+            <QuestionFlowchartEditor
+              questionFlowchart={questionFlowchart}
+              setQuestionFlowchart={setQuestionFlowchart}
+            />
+          )}
+
           {/* Código / Lacuna / Predição */}
           {type === "teste_mesa" && (
             <div className="space-y-4 animate-in fade-in">
@@ -295,19 +307,6 @@ export const QuestionEditor = () => {
                   + Configurar Checkpoints do Rastreio
                 </button>
               )}
-            </div>
-          )}
-
-          {/* Fluxograma */}
-          {type === "fluxograma_novo" && (
-            <div className="p-10 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl text-center space-y-4">
-              <GitGraph className="mx-auto text-slate-300" size={48} />
-              <p className="text-xs text-slate-500 font-medium">
-                O editor de fluxograma utiliza interface visual externa.
-              </p>
-              <button className="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl">
-                Abrir Canvas de Desenho
-              </button>
             </div>
           )}
         </div>

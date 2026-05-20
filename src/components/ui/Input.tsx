@@ -82,7 +82,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     // Classes de largura
-    const widthClass = fullWidth ? "w-full" : "w-auto";
+    const widthClass = fullWidth ? "w-full h-full" : "w-auto h-auto";
 
     // Padding ajustado para ícones
     const leftPadding = leftIcon ? "pl-10" : "";

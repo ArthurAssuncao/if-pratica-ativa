@@ -164,7 +164,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
             }
             className={`
               w-full flex items-center justify-between
-              rounded-lg border bg-white px-4 py-2.5
+              rounded-lg border bg-white px-3 py-2.5
               text-gray-900
               transition-all duration-200
               focus:outline-none focus:ring-2 focus:ring-blue-500 hover:cursor-pointer hover:border-blue-400
@@ -192,7 +192,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
           {/* Dropdown menu */}
           {isOpen && !disabled && (
-            <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+            <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100 min-w-60">
               <ul
                 className="max-h-60 overflow-y-auto py-1"
                 role="listbox"
@@ -215,7 +215,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                     >
                       {/* Ícone opcional */}
                       {option.icon && (
-                        <span className="shrink-0 text-gray-400">
+                        <span className="shrink-0 text-gray-400 ">
                           {option.icon}
                         </span>
                       )}
@@ -224,13 +224,13 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                       <div className="flex-1">
                         <div
                           className={
-                            currentValue === option.value ? "font-medium" : ""
+                            currentValue === option.value ? "font-medium " : ""
                           }
                         >
                           {option.label}
                         </div>
                         {option.description && (
-                          <div className="text-xs text-gray-400">
+                          <div className="text-xs text-gray-400 ">
                             {option.description}
                           </div>
                         )}

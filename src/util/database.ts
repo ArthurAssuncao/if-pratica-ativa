@@ -55,7 +55,7 @@ const QuestionMappers: Partial<
       code: (meta as QuestionMetadata).code || "",
       root: meta.root || "",
       nodes: meta.nodes || [],
-      conections: meta.connections || [], // Normalização de connections -> conections
+      connections: meta.connections || [], // Normalização de connections -> conections
     }) as QuestionFlowchartnNew,
   teste_mesa: (base, meta) =>
     ({

@@ -53,7 +53,7 @@ export const QuestionClickOnErrorEditor = ({
         text: line.trim(),
         identationLevel: countIndentationLevel(line),
       } as RearrangeRow;
-      console.log(row);
+
       return row;
     });
     // remove a ultiam linha se for vazia
