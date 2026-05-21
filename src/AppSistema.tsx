@@ -17,12 +17,9 @@ import { CookieConsent } from "./legal/CookieConsent";
 import markdownPrivacy from "./legal/privacy.md?raw";
 
 if (typeof window !== "undefined") {
-  localStorage.setItem(
-    "netlifySiteURL",
-    "https://if-pratica-ativa.netlify.app",
-  );
+  localStorage.setItem("netlifySiteURL", "https://aprenda.ifsudestemg.dev");
   netlifyIdentity.init({
-    APIUrl: isLocalhost ? "https://if-pratica-ativa.netlify.app" : undefined,
+    APIUrl: isLocalhost ? "https://aprenda.ifsudestemg.dev" : undefined,
     locale: "pt-br",
   });
 }
