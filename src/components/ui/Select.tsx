@@ -192,7 +192,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
           {/* Dropdown menu */}
           {isOpen && !disabled && (
-            <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100 min-w-60">
+            <div className="absolute z-9999 w-full mt-1  bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100 min-w-60">
               <ul
                 className="max-h-60 overflow-y-auto py-1"
                 role="listbox"

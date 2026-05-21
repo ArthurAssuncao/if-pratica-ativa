@@ -77,10 +77,13 @@ export const DeskCheckingQuestion = createQuestion<
                 <PlayCircle size={18} className="shrink-0" />
                 <span>
                   Foque:{" "}
-                  <strong>
-                    Linha {activeCheckpoint.lineReference.length > 1 ? "s" : ""}{" "}
-                    {activeCheckpoint.lineReference.join(" e ")}
-                  </strong>
+                  {activeCheckpoint && (
+                    <strong>
+                      Linha{" "}
+                      {activeCheckpoint.lineReference.length > 1 ? "s" : ""}{" "}
+                      {activeCheckpoint.lineReference.join(" e ")}
+                    </strong>
+                  )}
                 </span>
               </p>
               <SyntaxHighlighterCustom

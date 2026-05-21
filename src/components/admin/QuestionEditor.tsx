@@ -17,6 +17,7 @@ import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import {
   QUESTION_CLICK_ON_ERROR_EMPTY,
+  QUESTION_DESK_CHECKING_EMPTY,
   QUESTION_FILL_EMPTY,
   QUESTION_FLOWCHART_EMPTY,
   QUESTION_MULTIPLE_CHOICE_EMPTY,
@@ -27,6 +28,7 @@ import {
 import type {
   Level,
   QuestionClickOnError,
+  QuestionDeskCheck,
   QuestionFill,
   QuestionFlowchartnNew,
   QuestionMultipleChoice,
@@ -39,6 +41,7 @@ import { QuestionSelector } from "../questions/QuestionSelector";
 import { Feedback } from "../ui/Feedback";
 import { Select, type SelectOption } from "../ui/Select";
 import { QuestionClickOnErrorEditor } from "./questions/QuestionClickOnErrorEditor";
+import { QuestionDeskCheckingEditor } from "./questions/QuestionDeskCheckingEditor";
 import { QuestionFillEditor } from "./questions/QuestionFillEditor";
 import { QuestionFlowchartEditor } from "./questions/QuestionFlowchartEditor";
 import { QuestionMultipleChoiceEditor } from "./questions/QuestionMultipleChoiceEditor";
@@ -74,9 +77,8 @@ export const QuestionEditor = () => {
   const [questionFlowchart, setQuestionFlowchart] =
     useState<QuestionFlowchartnNew>(QUESTION_FLOWCHART_EMPTY);
 
-  // Estados para os campos dinâmicos
-
-  const [code, setCode] = useState("");
+  const [questionDeskChecking, setQuestionDeskChecking] =
+    useState<QuestionDeskCheck>(QUESTION_DESK_CHECKING_EMPTY);
 
   const [feedback, setFeedback] = useState<"correto" | "errado" | null>(null);
 
@@ -163,6 +165,8 @@ export const QuestionEditor = () => {
         return questionFill;
       case "fluxograma_novo":
         return questionFlowchart;
+      case "teste_mesa":
+        return questionDeskChecking;
       default:
         return null;
     }
@@ -285,29 +289,11 @@ export const QuestionEditor = () => {
             />
           )}
 
-          {/* Código / Lacuna / Predição */}
           {type === "teste_mesa" && (
-            <div className="space-y-4 animate-in fade-in">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                Bloco de Código / Texto Base
-              </label>
-              <div className="relative">
-                <textarea
-                  className="w-full p-4 font-mono text-xs bg-slate-950 text-emerald-400 rounded-2xl h-48 focus:ring-2 focus:ring-blue-500"
-                  placeholder={""}
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                />
-                <div className="absolute top-3 right-3 text-[10px] font-bold text-slate-600 bg-black/20 px-2 py-1 rounded">
-                  Editor de Código
-                </div>
-              </div>
-              {type === "teste_mesa" && (
-                <button className="w-full py-3 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-400 hover:border-blue-500 hover:text-blue-500 transition-all">
-                  + Configurar Checkpoints do Rastreio
-                </button>
-              )}
-            </div>
+            <QuestionDeskCheckingEditor
+              questionDeskChecking={questionDeskChecking}
+              setQuestionDeskChecking={setQuestionDeskChecking}
+            />
           )}
         </div>
 

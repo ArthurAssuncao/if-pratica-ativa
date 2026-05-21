@@ -1,5 +1,6 @@
 import type {
   QuestionClickOnError,
+  QuestionDeskCheck,
   QuestionFill,
   QuestionFlowchartnNew,
   QuestionMultipleChoice,
@@ -161,6 +162,37 @@ export const QUESTION_FLOWCHART_EMPTY: QuestionFlowchartnNew = {
       to: "reprovado",
       from: "decisao_2",
       label: "Não",
+    },
+  ],
+};
+
+export const QUESTION_DESK_CHECKING_EMPTY: QuestionDeskCheck = {
+  id: 0,
+  type: "teste_mesa",
+  level: "iniciante",
+  language: "python",
+  questionText: QUESTION_TITLE_EMPTY,
+  explanation: "",
+  correctAnswer: { option: "" },
+  info: {
+    status: "pendente",
+    attemptCount: 0,
+  },
+  code: "",
+  checkpoints: [
+    {
+      step: 1,
+      description: "",
+      lineReference: [],
+      iteration: undefined,
+      slots: [
+        {
+          id: "slot_1",
+          label: "",
+          type: "BOOLEAN",
+          expected: "",
+        },
+      ],
     },
   ],
 };
