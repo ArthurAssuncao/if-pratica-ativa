@@ -3,6 +3,7 @@ import type {
   Checkpoint,
   ConectionNode,
   Content,
+  CorrectAnswer,
   Discipline,
   FlowchartNode,
   Level,
@@ -43,7 +44,7 @@ export type ContentWithQuestionsDatabase = {
   id: string;
   content_level: Level;
   content_name: string;
-  correct_answer: string;
+  correct_answer: CorrectAnswer;
   discipline_id: string;
   explanation?: string;
   metadata: QuestionMetadata;

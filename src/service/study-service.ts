@@ -7,7 +7,7 @@ import type {
 } from "types/database";
 import type { Lesson } from "types/lesson";
 import type { UserStatsResponse } from "types/stats";
-import type { Content, CorrectAnswer, Discipline, Question } from "types/study";
+import type { Content, Discipline, Question } from "types/study";
 import type { UserProgress } from "types/user";
 import { mapDatabaseToQuestion } from "util/database";
 
@@ -78,7 +78,7 @@ export const StudyService = {
             level: content.question_level,
             questionText: content.question_text,
             explanation: content.explanation || "",
-            correctAnswer: JSON.parse(content.correct_answer) as CorrectAnswer,
+            correctAnswer: content.correct_answer,
             metadata: content.metadata,
             language: content.language,
             info: { status: "pendente", attemptCount: 0 },

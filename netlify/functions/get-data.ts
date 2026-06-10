@@ -65,6 +65,7 @@ const handler: Handler = async (event: HandlerEvent) => {
           WHERE c.discipline_id = ${disciplineId}
           ORDER BY c."order" ASC, q.id ASC
         `;
+
         return { statusCode: 200, headers, body: JSON.stringify(data) };
       }
 
@@ -80,6 +81,7 @@ const handler: Handler = async (event: HandlerEvent) => {
           WHERE content_id = ${contentId}
           ORDER BY id ASC
         `;
+
         return { statusCode: 200, headers, body: JSON.stringify(data) };
       }
 
