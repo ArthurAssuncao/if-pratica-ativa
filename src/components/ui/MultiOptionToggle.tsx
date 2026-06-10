@@ -28,10 +28,18 @@ export function MultiOptionToggle<T>({
 
     // Se clicar em "Todos"
     if (option === allOptionValue) {
-      const isAllSelected = selectedValues.length === options.length;
+      const isAllSelected =
+        selectedValues.length === options.length ||
+        (selectedValues.length == 1 && selectedValues.includes(allOptionValue));
+
+      if (isAllSelected) {
+        onChange([]);
+      } else {
+        onChange([allOptionValue]);
+      }
       // Se já estava tudo marcado, desmarca tudo (ou mantém apenas 'Todos', conforme preferência)
       // Aqui vamos seguir a lógica: se clicar em todos, marca o array inteiro
-      onChange(isAllSelected ? [allOptionValue] : [...options]);
+      // onChange(isAllSelected ? [allOptionValue] : [...options]);
       return;
     }
 

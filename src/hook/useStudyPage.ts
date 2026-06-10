@@ -22,6 +22,8 @@ export const MOCK_PROGRESS: SavedProgress = {
   remaining: 12,
 };
 
+export const QUESTION_TYPE_ALL_VALUE = "Todos";
+
 export function useStudyPage() {
   const [config, setConfig] = useState<QuizConfig>({
     disciplineId: null,

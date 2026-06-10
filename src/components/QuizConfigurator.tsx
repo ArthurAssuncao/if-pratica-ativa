@@ -1,7 +1,8 @@
 import { BarChart3, Play, Settings2, Tally5, Type } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { Amount, QuizConfig } from "types/quiz";
 import type { Level, Question, QuestionType } from "types/study";
+import { QUESTION_TYPE_ALL_VALUE } from "../hook/useStudyPage";
 import { rangeStartEnd } from "../util/util";
 import { MultiOptionToggle } from "./ui/MultiOptionToggle";
 import { OptionSlider } from "./ui/OptionSlider";
@@ -30,6 +31,7 @@ export function QuizConfigurator({
     totalQuestions > 0
       ? rangeStartEnd(minQuestionsCount, totalQuestions, minQuestionsCount)
       : [];
+  const [multiOptionInit, setMultiOptionInit] = useState<boolean>(false);
 
   const questionTypes: Array<QuestionType> = Array.from(
     new Set(questions.map((q) => q.type)).values(),
@@ -78,18 +80,21 @@ export function QuizConfigurator({
         <label className="flex items-center gap-2 text-sm font-bold text-slate-500 uppercase tracking-tighter mb-3">
           <Type size={14} /> Tipo de questão
         </label>
-        <MultiOptionToggle<QuestionType | "Todos">
-          options={[...questionTypes, "Todos"]}
-          allOptionValue="Todos"
+        <MultiOptionToggle<QuestionType | typeof QUESTION_TYPE_ALL_VALUE>
+          options={[...questionTypes, QUESTION_TYPE_ALL_VALUE]}
+          allOptionValue={QUESTION_TYPE_ALL_VALUE}
           exclude={["fluxograma"]}
           selectedValues={
             config.questionsType && config.questionsType.length > 0
               ? config.questionsType
-              : [...questionTypes, "Todos"]
+              : !multiOptionInit
+                ? [QUESTION_TYPE_ALL_VALUE]
+                : []
           }
-          onChange={(value) =>
-            onConfigChange({ questionsType: value as QuestionType[] })
-          }
+          onChange={(value) => {
+            onConfigChange({ questionsType: value as QuestionType[] });
+            setMultiOptionInit(true);
+          }}
         />
       </div>
 
