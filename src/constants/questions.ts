@@ -173,7 +173,7 @@ export const QUESTION_DESK_CHECKING_EMPTY: QuestionDeskCheck = {
   language: "python",
   questionText: QUESTION_TITLE_EMPTY,
   explanation: "",
-  correctAnswer: { option: "" },
+  correctAnswer: { option: [] },
   info: {
     status: "pendente",
     attemptCount: 0,

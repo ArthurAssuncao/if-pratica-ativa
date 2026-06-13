@@ -1,5 +1,6 @@
-import { BookOpen, HelpCircle, Layout, Plus } from "lucide-react";
+import { BookOpen, HelpCircle, Layout } from "lucide-react";
 import { useState } from "react";
+import { adminAuth } from "../../service/adminAuth";
 import { DisciplineEditor } from "./DisciplineEditor";
 import { QuestionEditor } from "./QuestionEditor";
 
@@ -20,13 +21,17 @@ interface NavBtnProps {
 
 export const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>("questoes");
+
+  const user = adminAuth.getUser();
+
   // const [search, setSearch] = useState("");
 
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Sidebar de Navegação */}
       <aside className="md:flex hidden flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-6 ">
-        <h2 className="text-xl font-black mb-8 text-blue-600">Painel Admin</h2>
+        <h2 className="text-xl font-black mb-2 text-blue-600">Painel Admin</h2>
+        <h3 className=" mb-4">Bem vindo, {user?.full_name}</h3>
         <nav className="space-y-2">
           <NavBtn
             active={activeTab === "disciplinas"}
@@ -51,18 +56,6 @@ export const AdminDashboard = () => {
 
       {/* Área Principal */}
       <main className="flex-1 p-8">
-        <header className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-black dark:text-white capitalize">
-              {tabLabels[activeTab]}
-            </h1>
-            <p className="text-slate-500 text-sm"></p>
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all hover:cursor-pointer">
-            <Plus size={18} /> Novo Registro
-          </button>
-        </header>
-
         {activeTab === "questoes" && <QuestionEditor />}
         {activeTab === "disciplinas" && <DisciplineEditor />}
       </main>

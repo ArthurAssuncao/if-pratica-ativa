@@ -3,8 +3,9 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import type { BaseQuestionProps } from "../../types/question";
 import type { QuestionDeskCheck } from "../../types/study";
-import { compareArrays, stringToArrayNumber } from "../../util/util";
+import { compareArrays } from "../../util/util";
 import { ButtonConfirm } from "../ui/ButtonConfirm";
+import { Input } from "../ui/Input";
 import { SyntaxHighlighterCustom } from "../ui/SyntaxHighlighterCustom";
 import { createQuestion } from "./QuestionFactory";
 
@@ -17,9 +18,10 @@ export const DeskCheckingQuestion = createQuestion<
   QuestionDeskCheck
 >({
   validateAnswer: ({ resposta, data }) => {
+    console.log(JSON.parse(resposta), data.correctAnswer.option);
     return compareArrays(
-      stringToArrayNumber(resposta),
-      stringToArrayNumber(data.correctAnswer.option.toString()),
+      JSON.parse(resposta) as (string | number | boolean)[],
+      data.correctAnswer.option as (string | number | boolean)[],
     );
   },
 
@@ -79,9 +81,11 @@ export const DeskCheckingQuestion = createQuestion<
                   Foque:{" "}
                   {activeCheckpoint && (
                     <strong>
-                      Linha{" "}
-                      {activeCheckpoint.lineReference.length > 1 ? "s" : ""}{" "}
-                      {activeCheckpoint.lineReference.join(" e ")}
+                      Linha
+                      {activeCheckpoint.lineReference.length > 1
+                        ? "s"
+                        : ""}{" "}
+                      {activeCheckpoint.lineReference.sort().join(" e ")}
                     </strong>
                   )}
                 </span>
@@ -111,7 +115,7 @@ export const DeskCheckingQuestion = createQuestion<
                         </h4>
                         {cp.iteration && (
                           <span className="text-[10px] bg-blue-100 dark:bg-blue-900/30 text-blue-600 px-2 py-0.5 rounded uppercase font-black">
-                            Volta {cp.iteration}
+                            Volta {cp.iteration} do loop
                           </span>
                         )}
                       </div>
@@ -144,7 +148,7 @@ export const DeskCheckingQuestion = createQuestion<
                             </div>
                           ) : (
                             <div className="relative">
-                              <input
+                              <Input
                                 type="text"
                                 value={answers[index] || ""}
                                 onChange={(e) =>

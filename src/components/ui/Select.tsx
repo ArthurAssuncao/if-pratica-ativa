@@ -24,6 +24,8 @@ interface SelectProps {
   onBlur?: () => void;
   name?: string;
   id?: string;
+  position?: "left" | "center" | "right";
+  textSize?: "sm" | "base";
 }
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(
@@ -43,6 +45,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       onBlur,
       name,
       id,
+      position = "left",
+      textSize = "sm",
     },
     ref,
   ) => {
@@ -179,7 +183,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
               <span className="shrink-0 text-gray-400">
                 {selectedOption?.icon && selectedOption?.icon}
               </span>
-              {selectedOption?.label || placeholder}
+              <span
+                className={`${textSize == "base" ? "text-base" : "text-sm"}`}
+              >
+                {selectedOption?.label || placeholder}
+              </span>
             </span>
             <ChevronDown
               size={18}
@@ -192,7 +200,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
           {/* Dropdown menu */}
           {isOpen && !disabled && (
-            <div className="absolute z-9999 w-full mt-1  bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100 min-w-60">
+            <div
+              className={`absolute z-9999 w-full mt-1  bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200  min-w-60 ${position === "center" ? "left-1/2 -translate-x-1/2" : position === "right" ? "right-2 translate-x-1/2" : ""} ${textSize == "base" ? "text-base" : "text-sm"}`}
+            >
               <ul
                 className="max-h-60 overflow-y-auto py-1"
                 role="listbox"

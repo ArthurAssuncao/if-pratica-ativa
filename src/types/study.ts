@@ -55,7 +55,7 @@ export interface QuestionInfo {
 }
 
 export type CorrectAnswer = {
-  option: number | string | string[] | number[];
+  option: number | string | boolean | (string | number | boolean)[];
   text?: string;
 };
 

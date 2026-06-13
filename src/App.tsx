@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 // Importe seu componente do sistema atual (que agora chamaremos de AppSistema)
 import AppSistema from "./AppSistema";
-import { AdminDashboard } from "./components/admin/AdminDashboard";
+import { AdminPage } from "./components/admin/AdminPage";
 import NotFound from "./components/NotFound";
 import { Home } from "./Home";
 
@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/app" element={<AppSistema />} />
 
         {/* Rota Administrativa */}
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminPage />} />
 
         {/* Rota 404 (Opcional): Caso o usuário digite algo errado */}
         <Route path="*" element={<NotFound />} />

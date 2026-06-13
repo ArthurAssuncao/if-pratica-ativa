@@ -1,17 +1,54 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { Plus } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
-import { LUCIDE_ICONS } from "../../constants/icons";
-import { lucidIconNameToIconComponent } from "../../util/icons";
+import { createPortal } from "react-dom";
+import { ICONIFY_DATA_FILTERED } from "../../data/iconify-data-filtered";
+import {
+  ICONIFY_ICONS_SET,
+  type IconifyCategories,
+} from "../../data/iconify_data/iconify-icons-set";
+import { iconifyIconNameToIconComponent } from "../../util/iconify-icons";
 import { Input } from "../ui/Input";
 
-import { createPortal } from "react-dom";
+const COLLECTIONS = Object.keys(ICONIFY_ICONS_SET) as string[];
+
+// Função para extrair a lista de ícones de uma coleção
+const getIconsList = (collection: {
+  uncategorized?: string[];
+  categories?: IconifyCategories;
+}): string[] => {
+  if (!collection) return [];
+
+  const allIcons: string[] = [];
+
+  // Adiciona ícones não categorizados
+  if (Array.isArray(collection.uncategorized)) {
+    allIcons.push(...collection.uncategorized);
+  }
+
+  // Adiciona ícones de todas as categorias
+  if (collection.categories) {
+    for (const category in collection.categories) {
+      const icons = collection.categories[category as keyof IconifyCategories];
+      if (Array.isArray(icons)) {
+        allIcons.push(...icons);
+      }
+    }
+  }
+
+  const uniqueIcons = [...new Set(allIcons)];
+
+  return uniqueIcons;
+};
 
 const IconButton = ({
   name,
+  prefix,
   isSelected,
   onSelect,
 }: {
   name: string;
+  prefix: string;
   isSelected: boolean;
   onSelect: () => void;
 }) => {
@@ -22,10 +59,12 @@ const IconButton = ({
     if (!btnRef.current) return;
     const rect = btnRef.current.getBoundingClientRect();
     setTooltip({
-      x: rect.left + rect.width / 2, // centralizado no botão
-      y: rect.top - 8, // acima do botão
+      x: rect.left + rect.width / 2,
+      y: rect.top - 8,
     });
   };
+
+  const iconFullName = `${prefix}:${name}`;
 
   return (
     <>
@@ -37,13 +76,12 @@ const IconButton = ({
         className={`p-3 rounded-lg flex items-center justify-center transition-all hover:cursor-pointer ${
           isSelected
             ? "bg-blue-600 text-white"
-            : "bg-slate-100 dark:bg-slate-800 hover:bg-slate-200"
+            : "bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700"
         }`}
       >
-        {lucidIconNameToIconComponent(name, 20)}
+        {iconifyIconNameToIconComponent(iconFullName, 20)}
       </button>
 
-      {/* Renderiza o tooltip direto no body, fora de qualquer container */}
       {tooltip &&
         createPortal(
           <span
@@ -55,9 +93,9 @@ const IconButton = ({
               pointerEvents: "none",
               zIndex: 9999,
             }}
-            className="text-xs text-white bg-slate-700 px-2 py-1 rounded-lg whitespace-nowrap shadow-md"
+            className="text-xs text-white bg-slate-700 px-2 py-1 rounded-lg whitespace-nowrap shadow-md font-mono"
           >
-            {name}
+            {iconFullName}
           </span>,
           document.body,
         )}
@@ -66,27 +104,134 @@ const IconButton = ({
 };
 
 const COLUMNS = 5;
-const ROW_HEIGHT = 56; // px — altura de cada linha do grid
+const ROW_HEIGHT = 56;
+
+// Componente de abas
+const TabBar = ({
+  activeTab,
+  onTabChange,
+  collections,
+  iconsCount,
+}: {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+  collections: string[];
+  iconsCount: Record<string, number>;
+}) => {
+  return (
+    <div className="flex gap-2 border-slate-200 dark:border-slate-700 mb-4 flex-wrap pb-1">
+      <button
+        onClick={() => onTabChange("all")}
+        className={`px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap hover:cursor-pointer ${
+          activeTab === "all"
+            ? "bg-blue-600 text-white"
+            : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+        }`}
+      >
+        Todos ({Object.values(iconsCount).reduce((a, b) => a + b, 0)})
+      </button>
+      {collections.map((collection, index) => (
+        <button
+          key={`${collection}-${index}`}
+          onClick={() => onTabChange(collection)}
+          className={`px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap capitalize hover:cursor-pointer ${
+            activeTab === collection
+              ? "bg-blue-600 text-white"
+              : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
+          }`}
+        >
+          {ICONIFY_DATA_FILTERED[collection].name} (
+          {iconsCount[collection] || 0})
+        </button>
+      ))}
+    </div>
+  );
+};
 
 export const DisciplineEditor = () => {
-  "use no memo";
-  const [selectedIcon, setSelectedIcon] = useState("Book");
+  const [selectedIcon, setSelectedIcon] = useState<{
+    prefix: string;
+    name: string;
+  }>({
+    prefix: "mdi",
+    name: "home",
+  });
   const [searchValue, setSearchValue] = useState("");
+  const [activeTab, setActiveTab] = useState<string>("all");
   const parentRef = useRef<HTMLDivElement>(null);
 
-  const filteredIconNames = useMemo(
-    () => LUCIDE_ICONS.filter((item) => item.includes(searchValue)),
-    [searchValue],
-  );
+  // Pré-calcular a lista de ícones por coleção
+  const collectionIconsMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    for (const collection of COLLECTIONS) {
+      const data = ICONIFY_ICONS_SET[collection];
+      map[collection] = getIconsList(data);
+    }
+    return map;
+  }, []);
+
+  // Contagem de ícones por coleção
+  const iconsCount = useMemo(() => {
+    const count: Record<string, number> = {};
+    for (const collection of COLLECTIONS) {
+      count[collection] = collectionIconsMap[collection]?.length || 0;
+    }
+    return count;
+  }, [collectionIconsMap]);
+
+  // Obter todos os ícones de todas as coleções (para a aba "Todos")
+  const allIcons = useMemo(() => {
+    const icons: Array<{ prefix: string; name: string; fullName: string }> = [];
+    for (const collection of COLLECTIONS) {
+      const iconsList = collectionIconsMap[collection] || [];
+      for (const iconName of iconsList) {
+        icons.push({
+          prefix: collection,
+          name: iconName,
+          fullName: `${collection}:${iconName}`,
+        });
+      }
+    }
+    return icons;
+  }, [collectionIconsMap]);
+
+  // Filtrar ícones baseado na aba ativa e busca
+  const filteredIcons = useMemo(() => {
+    let icons: Array<{ prefix: string; name: string; fullName: string }> = [];
+
+    if (activeTab === "all") {
+      icons = [...allIcons];
+    } else {
+      const iconsList = collectionIconsMap[activeTab] || [];
+      icons = iconsList.map((iconName: string) => ({
+        prefix: activeTab,
+        name: iconName,
+        fullName: `${activeTab}:${iconName}`,
+      }));
+    }
+
+    if (searchValue.trim()) {
+      const searchLower = searchValue.toLowerCase();
+      icons = icons.filter(
+        (icon) =>
+          icon.name.toLowerCase().includes(searchLower) ||
+          icon.fullName.toLowerCase().includes(searchLower),
+      );
+    }
+
+    return icons;
+  }, [activeTab, searchValue, allIcons, collectionIconsMap]);
 
   // Agrupa os ícones em linhas de COLUMNS itens cada
   const rows = useMemo(() => {
-    const result: string[][] = [];
-    for (let i = 0; i < filteredIconNames.length; i += COLUMNS) {
-      result.push(filteredIconNames.slice(i, i + COLUMNS));
+    const result: Array<
+      Array<{ prefix: string; name: string; fullName: string }>
+    > = [];
+    for (let i = 0; i < filteredIcons.length; i += COLUMNS) {
+      result.push(filteredIcons.slice(i, i + COLUMNS));
     }
     return result;
-  }, [filteredIconNames]);
+  }, [filteredIcons]);
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
@@ -96,47 +241,92 @@ export const DisciplineEditor = () => {
     overscan: 3,
   });
 
-  return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="space-y-4">
-          <label className="block text-sm font-bold text-slate-400 uppercase">
-            Nome da Disciplina
-          </label>
-          <Input
-            type="text"
-            className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 "
-            placeholder="Ex: Algoritmos I"
-          />
+  const selectedIconFullName = `${selectedIcon.prefix}:${selectedIcon.name}`;
 
-          <label className="block text-sm font-bold text-slate-400 uppercase">
-            Ícone Selecionado
-          </label>
-          <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl">
-            {lucidIconNameToIconComponent(selectedIcon, 32, "text-blue-600")}
-            <span className="font-mono text-sm">{selectedIcon}</span>
+  const handleClick = () => {
+    console.log("Clicked!");
+  };
+
+  return (
+    <div>
+      <header className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-black dark:text-white capitalize">
+            Disciplina
+          </h1>
+          <p className="text-slate-500 text-sm"></p>
+        </div>
+        <button
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all hover:cursor-pointer"
+          onClick={handleClick}
+        >
+          <Plus size={16} /> Cadastrar Disciplina
+        </button>
+      </header>
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Coluna da esquerda - Informações da disciplina */}
+          <div className="flex flex-col gap-2">
+            <label className="block text-sm font-bold text-slate-400 uppercase">
+              Nome da Disciplina
+            </label>
+            <div>
+              <Input
+                type="text"
+                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800"
+                placeholder="Ex: Algoritmos I"
+              />
+            </div>
+          </div>
+
+          {/* Coluna da direita - Seletor de ícones */}
+          <div className="flex flex-col gap-2">
+            <label className="block text-sm font-bold text-slate-400 uppercase">
+              Ícone Selecionado
+            </label>
+            <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl">
+              {iconifyIconNameToIconComponent(
+                selectedIconFullName,
+                32,
+                "text-blue-600",
+              )}
+              <span className="font-mono text-sm">{selectedIconFullName}</span>
+            </div>
           </div>
         </div>
-
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <label className="block text-sm font-bold text-slate-400 uppercase">
             Escolha um Ícone
           </label>
-          <Input
-            type="search"
-            placeholder="Buscar ícone..."
-            onChange={(e) => setSearchValue(e.target.value)}
+
+          {/* Busca */}
+          <div>
+            <Input
+              type="search"
+              placeholder="Buscar ícone..."
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+          </div>
+
+          {/* Abas */}
+          <TabBar
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            collections={COLLECTIONS as unknown as string[]}
+            iconsCount={iconsCount}
           />
 
-          {/* Container com scroll — ref obrigatória para o virtualizer */}
+          {/* Container com scroll */}
           <div
             ref={parentRef}
-            className="h-100 overflow-y-auto p-2 border border-slate-100 dark:border-slate-800 rounded-xl"
+            className="h-100 overflow-y-auto p-2 border border-slate-100 dark:border-slate-800 rounded-xl "
           >
-            {virtualizer.getTotalSize() == 0 && (
-              <span className="text-center">Nenhum ícone encontrado.</span>
+            {virtualizer.getTotalSize() === 0 && filteredIcons.length === 0 && (
+              <div className="text-center py-8 text-slate-500">
+                🔍 Nenhum ícone encontrado.
+              </div>
             )}
-            {/* Div interna com a altura total real de todas as linhas */}
             {virtualizer.getTotalSize() > 0 && (
               <div
                 style={{
@@ -160,12 +350,18 @@ export const DisciplineEditor = () => {
                       alignItems: "center",
                     }}
                   >
-                    {rows[virtualRow.index].map((name) => (
+                    {rows[virtualRow.index]?.map((icon) => (
                       <IconButton
-                        key={name}
-                        name={name}
-                        isSelected={selectedIcon === name}
-                        onSelect={() => setSelectedIcon(name)}
+                        key={`${icon.fullName}`}
+                        name={icon.name}
+                        prefix={icon.prefix}
+                        isSelected={selectedIconFullName === icon.fullName}
+                        onSelect={() =>
+                          setSelectedIcon({
+                            prefix: icon.prefix,
+                            name: icon.name,
+                          })
+                        }
                       />
                     ))}
                   </div>

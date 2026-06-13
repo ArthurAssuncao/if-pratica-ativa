@@ -68,9 +68,12 @@ export const stringToArrayNumber = (str: string | number) => {
 };
 
 export const compareArrays = (
-  a: string[] | number[],
-  b: string[] | number[],
+  a: (string | number | boolean)[],
+  b: (string | number | boolean)[],
 ) => {
+  if (!Array.isArray(a) || !Array.isArray(b)) {
+    return false;
+  }
   if (a.length !== b.length) return false;
   return a.every((v, i) => v === b[i]);
 };

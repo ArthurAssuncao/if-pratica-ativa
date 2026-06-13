@@ -39,8 +39,8 @@ export const Feedback = ({
             ? SUCCESS_MESSAGES[randomIndexSuccess]
             : ERROR_MESSAGES[randomIndexError]}
         </p>
-        <p className="text-sm opacity-80 text-slate-700 dark:text-slate-200 flex gap-2 flex-col">
-          Resposta correta:{" "}
+        <div className="text-sm opacity-80 text-slate-700 dark:text-slate-200 flex gap-2 flex-col">
+          <span>Resposta correta: </span>
           <div className="border border-slate-200 p-2 rounded-lg bg-yellow-50">
             <MarkdownRenderer insideArticle={false}>
               {getAnswer(respostaCorreta)
@@ -48,7 +48,7 @@ export const Feedback = ({
                 .replaceAll("\t", "&nbsp;".repeat(INDENTATION_SIZE))}
             </MarkdownRenderer>
           </div>
-        </p>
+        </div>
         {explanation && (
           <p className="text-sm opacity-80 text-slate-700 dark:text-slate-200">
             Explicação: <span className="">{explanation}</span>

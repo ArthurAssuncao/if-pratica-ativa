@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LANGUAGES } from "../../../constants/code";
 import { QUESTION_TITLE_EMPTY } from "../../../constants/questions";
 import type {
@@ -133,10 +133,35 @@ export const QuestionDeskCheckingEditor = ({
       ...checkpoint,
       slots: updatedSlots,
     };
+    const newOption = [
+      ...(questionDeskChecking.correctAnswer.option as (
+        | string
+        | number
+        | boolean
+      )[]),
+    ];
+    if (updates.expected) {
+      if (
+        questionDeskChecking.checkpoints[checkpointIndex].slots[slotIndex]
+          .type === "BOOLEAN"
+      ) {
+        newOption[slotIndex] = updates.expected === "true";
+      } else if (
+        questionDeskChecking.checkpoints[checkpointIndex].slots[slotIndex]
+          .type === "NUMBER"
+      ) {
+        newOption[slotIndex] = parseInt(updates.expected);
+      } else {
+        newOption[slotIndex] = updates.expected;
+      }
+    }
 
     setQuestionDeskChecking({
       ...questionDeskChecking,
       checkpoints: updatedCheckpoints,
+      correctAnswer: {
+        option: updates.expected ? newOption : [],
+      },
     });
   };
 
@@ -149,10 +174,16 @@ export const QuestionDeskCheckingEditor = ({
       ...checkpoint,
       slots: updatedSlots,
     };
+    const newOption = (
+      questionDeskChecking.correctAnswer.option as (string | number | boolean)[]
+    ).filter((_, i) => i !== slotIndex);
 
     setQuestionDeskChecking({
       ...questionDeskChecking,
       checkpoints: updatedCheckpoints,
+      correctAnswer: {
+        option: newOption,
+      },
     });
 
     if (
@@ -191,6 +222,10 @@ export const QuestionDeskCheckingEditor = ({
     );
     updateCheckpoint(checkpointIndex, { lineReference: newLineReferences });
   };
+
+  useEffect(() => {
+    console.log(questionDeskChecking.correctAnswer.option);
+  }, [questionDeskChecking.correctAnswer.option]);
 
   return (
     <div className="space-y-4 animate-in fade-in slide-in-from-top-2">
@@ -281,10 +316,11 @@ export const QuestionDeskCheckingEditor = ({
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                      Step {checkpoint.step}
+                      Passo {checkpoint.step}
                     </span>
                     <span className="text-xs text-slate-500">
-                      {checkpoint.slots.length} slot(s)
+                      {checkpoint.slots.length} passo
+                      {checkpoint.slots.length > 1 && "s"}
                     </span>
                   </div>
                   <TrashButton
@@ -323,28 +359,40 @@ export const QuestionDeskCheckingEditor = ({
                     </ButtonAdd>
                   </div>
                   <div className="space-y-2">
-                    {checkpoint.lineReference.map((line, lineIndex) => (
-                      <div key={lineIndex} className="flex gap-2 items-center">
-                        <Input
-                          type="number"
-                          placeholder="Número da linha"
-                          value={line || ""}
-                          onChange={(e) =>
-                            updateLineReference(
-                              checkpointIndex,
-                              lineIndex,
-                              parseInt(e.target.value) || 0,
-                            )
-                          }
-                          className="flex-1 p-2 bg-white dark:bg-slate-900 rounded-lg text-sm"
-                        />
-                        <TrashButton
-                          onClick={() =>
-                            removeLineReference(checkpointIndex, lineIndex)
-                          }
-                        />
-                      </div>
-                    ))}
+                    {checkpoint.lineReference.map((line, lineIndex) => {
+                      const maxLines = questionDeskChecking.code
+                        .trim()
+                        .split("\n").length;
+                      return (
+                        <div
+                          key={lineIndex}
+                          className="flex gap-2 items-center"
+                        >
+                          <Input
+                            type="number"
+                            placeholder="Número da linha"
+                            value={line || ""}
+                            min={1}
+                            max={maxLines}
+                            onChange={(e) =>
+                              updateLineReference(
+                                checkpointIndex,
+                                lineIndex,
+                                (parseInt(e.target.value) || 0) > maxLines
+                                  ? maxLines
+                                  : parseInt(e.target.value) || 0,
+                              )
+                            }
+                            className="flex-1 p-2 bg-white dark:bg-slate-900 rounded-lg text-sm"
+                          />
+                          <TrashButton
+                            onClick={() =>
+                              removeLineReference(checkpointIndex, lineIndex)
+                            }
+                          />
+                        </div>
+                      );
+                    })}
                     {checkpoint.lineReference.length === 0 && (
                       <div className="text-xs text-slate-400 italic">
                         Nenhuma linha referenciada. Adicione as linhas onde este
@@ -409,7 +457,7 @@ export const QuestionDeskCheckingEditor = ({
                       >
                         <div className="flex gap-2 mb-2">
                           <div className="flex-1">
-                            <label className="text-[9px] font-semibold text-slate-500">
+                            <label className="text-xs font-semibold text-slate-500">
                               Rótulo do Slot
                             </label>
                             <Input
@@ -421,16 +469,17 @@ export const QuestionDeskCheckingEditor = ({
                                   label: e.target.value,
                                 })
                               }
-                              className="w-full p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm"
+                              className="w-full p-2 bg-white dark:bg-slate-800 rounded-lg text-sm"
                             />
                           </div>
                           <div className="w-32">
-                            <label className="text-[9px] font-semibold text-slate-500">
+                            <label className="text-xs font-semibold text-slate-500">
                               Tipo
                             </label>
                             <Select
                               value={slot.type}
                               options={SLOT_TYPES}
+                              position="center"
                               onChange={(value) =>
                                 updateSlot(checkpointIndex, slotIndex, {
                                   type: value as Slot["type"],
@@ -448,7 +497,7 @@ export const QuestionDeskCheckingEditor = ({
                           </div>
                         </div>
                         <div>
-                          <label className="text-[9px] font-semibold text-slate-500">
+                          <label className="text-xs font-semibold text-slate-500">
                             Valor Esperado
                           </label>
                           {slot.type === "BOOLEAN" ? (
@@ -458,12 +507,12 @@ export const QuestionDeskCheckingEditor = ({
                                 { value: "true", label: "true" },
                                 { value: "false", label: "false" },
                               ]}
-                              onChange={(value) =>
+                              onChange={(value) => {
                                 updateSlot(checkpointIndex, slotIndex, {
                                   expected: value,
-                                })
-                              }
-                              containerClassName="w-full"
+                                });
+                              }}
+                              containerClassName="w-full "
                             />
                           ) : slot.type === "NUMBER" ? (
                             <Input
@@ -475,7 +524,7 @@ export const QuestionDeskCheckingEditor = ({
                                   expected: e.target.value,
                                 })
                               }
-                              className="w-full p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm"
+                              className="w-full p-2 bg-white dark:bg-slate-800 rounded-lg text-sm"
                             />
                           ) : (
                             <Input
@@ -487,7 +536,7 @@ export const QuestionDeskCheckingEditor = ({
                                   expected: e.target.value,
                                 })
                               }
-                              className="w-full p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm"
+                              className="w-full p-2 bg-white dark:bg-slate-800 rounded-lg text-sm"
                             />
                           )}
                         </div>
