@@ -2,11 +2,14 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { Plus } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import toast from "react-hot-toast";
 import { ICONIFY_DATA_FILTERED } from "../../data/iconify-data-filtered";
 import {
   ICONIFY_ICONS_SET,
   type IconifyCategories,
 } from "../../data/iconify_data/iconify-icons-set";
+import { disciplineService } from "../../service/disciplineService";
+import type { Discipline } from "../../types/study";
 import { iconifyIconNameToIconComponent } from "../../util/iconify-icons";
 import { Input } from "../ui/Input";
 
@@ -103,7 +106,7 @@ const IconButton = ({
   );
 };
 
-const COLUMNS = 5;
+const COLUMNS = 9;
 const ROW_HEIGHT = 56;
 
 // Componente de abas
@@ -158,6 +161,7 @@ export const DisciplineEditor = () => {
   });
   const [searchValue, setSearchValue] = useState("");
   const [activeTab, setActiveTab] = useState<string>("all");
+  const [discipline, setDiscipline] = useState({} as Discipline);
   const parentRef = useRef<HTMLDivElement>(null);
 
   // Pré-calcular a lista de ícones por coleção
@@ -243,8 +247,19 @@ export const DisciplineEditor = () => {
 
   const selectedIconFullName = `${selectedIcon.prefix}:${selectedIcon.name}`;
 
-  const handleClick = () => {
-    console.log("Clicked!");
+  const handleClick = async () => {
+    if (!discipline.name) {
+      toast.error("Por favor, insira o nome da disciplina");
+      return;
+    }
+
+    const disciplineResponse =
+      await disciplineService.createDiscipline(discipline);
+    if (disciplineResponse.id && disciplineResponse.created_at) {
+      toast.success(
+        `Disciplina ${discipline.name} com ícone ${selectedIconFullName} criada com sucesso`,
+      );
+    }
   };
 
   return (
@@ -263,7 +278,7 @@ export const DisciplineEditor = () => {
           <Plus size={16} /> Cadastrar Disciplina
         </button>
       </header>
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm gap-4 flex flex-col">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Coluna da esquerda - Informações da disciplina */}
           <div className="flex flex-col gap-2">
@@ -275,7 +290,24 @@ export const DisciplineEditor = () => {
                 type="text"
                 className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800"
                 placeholder="Ex: Algoritmos I"
+                value={discipline.name}
+                onChange={(ev) => {
+                  setDiscipline({
+                    ...discipline,
+                    id: ev.target.value.toLowerCase().replace(/\s/g, "-"),
+                    name: ev.target.value,
+                  });
+                }}
               />
+            </div>
+            <div>
+              {discipline.id ? (
+                <span className="bg-slate-50 dark:bg-slate-800 rounded-xl flex px-4 py-2 text-sm text-slate-700 dark:text-slate-300">
+                  ID: {discipline.id}
+                </span>
+              ) : (
+                <span>&nbsp;</span>
+              )}
             </div>
           </div>
 
@@ -287,7 +319,7 @@ export const DisciplineEditor = () => {
             <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl">
               {iconifyIconNameToIconComponent(
                 selectedIconFullName,
-                32,
+                50,
                 "text-blue-600",
               )}
               <span className="font-mono text-sm">{selectedIconFullName}</span>
@@ -356,12 +388,16 @@ export const DisciplineEditor = () => {
                         name={icon.name}
                         prefix={icon.prefix}
                         isSelected={selectedIconFullName === icon.fullName}
-                        onSelect={() =>
+                        onSelect={() => {
                           setSelectedIcon({
                             prefix: icon.prefix,
                             name: icon.name,
-                          })
-                        }
+                          });
+                          setDiscipline({
+                            ...discipline,
+                            iconSlug: icon.fullName,
+                          });
+                        }}
                       />
                     ))}
                   </div>
