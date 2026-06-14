@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { disciplineService } from "../../service/disciplineService";
 
+import { Icon } from "@iconify/react";
 import { contentService } from "../../service/contentService";
 import type { Content, Discipline, Level } from "../../types/study";
 import { generateIDSlugFromString } from "../../util/util";
 import { Input } from "../ui/Input";
+import { ListView } from "../ui/ListView";
 import { Select, type SelectOption } from "../ui/Select";
 
 // Níveis disponíveis
@@ -36,6 +38,7 @@ export const ContentEditor = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [disciplineSelected, setDisciplineSelected] =
     useState<Discipline | null>(null);
+  const [disciplineContents, setDisciplineContents] = useState<Content[]>([]);
 
   // Carregar disciplinas do banco
   useEffect(() => {
@@ -53,6 +56,37 @@ export const ContentEditor = () => {
 
     loadDisciplines();
   }, []);
+
+  // Carregar conteúdos da disciplina
+  useEffect(() => {
+    const loadDisciplineContents = async () => {
+      if (!disciplineSelected) return;
+      try {
+        const contents = (
+          await contentService.getContentsByDisciplineId(disciplineSelected?.id)
+        ).data;
+        console.log("Conteúdos da disciplina:", contents);
+        setDisciplineContents(contents);
+      } catch (error) {
+        console.error("Erro ao carregar conteúdos da disciplina:", error);
+        toast.error("Erro ao carregar conteúdos da disciplina");
+      }
+    };
+
+    loadDisciplineContents();
+  }, [disciplineSelected]);
+
+  const disciplineContentsListItems = disciplineContents.map((content) => ({
+    id: content.id,
+    label: content.name,
+    badge: content.level,
+    description: `Order de exibição ${content.order} `,
+  }));
+
+  const minOrder =
+    disciplineContents && disciplineContents.length > 0
+      ? Math.max(...disciplineContents.map((c) => c.order ?? 0)) + 1
+      : 1;
 
   // Gerar ID e slug a partir do nome
   const generateId = (name: string) => {
@@ -89,6 +123,7 @@ export const ContentEditor = () => {
   const disciplineOptions = disciplines.map((d) => ({
     value: d.name,
     label: d.name,
+    icon: <Icon icon={d.iconSlug} />,
   }));
 
   const handleSubmit = async () => {
@@ -191,6 +226,14 @@ export const ContentEditor = () => {
                 />
               )}
             </div>
+            <div>
+              {disciplineSelected && (
+                <ListView
+                  title={`Conteúdos da disciplina ${disciplineSelected?.name}`}
+                  items={disciplineContentsListItems}
+                />
+              )}
+            </div>
           </div>
 
           {/* Coluna da direita */}
@@ -218,6 +261,7 @@ export const ContentEditor = () => {
                 className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800"
                 placeholder="Ordem de exibição"
                 value={content.order || ""}
+                min={minOrder}
                 onChange={(ev) =>
                   setContent({
                     ...content,
@@ -228,6 +272,11 @@ export const ContentEditor = () => {
               <p className="text-xs text-slate-400 mt-1">
                 Define a ordem de exibição dentro da disciplina (menor =
                 primeiro)
+              </p>
+              <p className="text-xs text-slate-400 mt-1">
+                {minOrder > 1
+                  ? `Ordem de exibição mínima: ${minOrder}, pois há conteúdos com ordens menores`
+                  : ""}
               </p>
             </div>
           </div>
