@@ -33,6 +33,28 @@ class DisciplineService {
 
     return result.data;
   }
+
+  async getDisciplines(): Promise<Discipline[]> {
+    const token =
+      localStorage.getItem("admin_token") ||
+      sessionStorage.getItem("admin_token");
+
+    const response = await fetch(this.apiUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Erro ao carregar disciplinas");
+    }
+
+    return result.data;
+  }
 }
 
 export const disciplineService = new DisciplineService();

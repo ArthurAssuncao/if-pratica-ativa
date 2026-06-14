@@ -1,3 +1,4 @@
+// netlify/functions/admin-disciplines.ts
 import { neon } from "@neondatabase/serverless";
 import type {
   Handler,
@@ -25,7 +26,7 @@ const defaultHeaders = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
 };
 
 const handler: Handler = async (
@@ -40,15 +41,102 @@ const handler: Handler = async (
     };
   }
 
-  // Só aceita POST
-  if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      headers: defaultHeaders,
-      body: JSON.stringify({ error: "Método não permitido" }),
-    };
+  // GET - Buscar disciplinas (público ou autenticado)
+  if (event.httpMethod === "GET") {
+    return await handleGetDisciplines(event);
   }
 
+  // POST - Criar nova disciplina (requer autenticação)
+  if (event.httpMethod === "POST") {
+    return await handlePostDiscipline(event);
+  }
+
+  // Outros métodos não permitidos
+  return {
+    statusCode: 405,
+    headers: defaultHeaders,
+    body: JSON.stringify({ error: "Método não permitido" }),
+  };
+};
+
+// Handler para GET (listar disciplinas)
+async function handleGetDisciplines(
+  event: HandlerEvent,
+): Promise<HandlerResponse> {
+  try {
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl) throw new Error("DATABASE_URL não configurada.");
+    const sql = neon(databaseUrl);
+
+    // Parâmetros de consulta
+    const { search } = event.queryStringParameters || {};
+
+    // Verifica se é uma requisição admin (tem token)
+    let isAdmin = false;
+    const authHeader = event.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      try {
+        const token = authHeader.split(" ")[1];
+        const jwtSecret = process.env.JWT_SECRET;
+        if (jwtSecret) {
+          const decoded = jwt.verify(token, jwtSecret) as JWTPayload;
+          isAdmin = decoded.role === "admin" || decoded.role === "super_admin";
+        }
+      } catch (error) {
+        // Token inválido, continua como não admin
+        console.error("Erro ao validar token:", error);
+      }
+    }
+
+    // Monta a query
+    let query = sql`
+      SELECT
+        id,
+        name,
+        icon_slug as "iconSlug",
+        created_at
+      FROM disciplines
+      WHERE 1=1
+    `;
+
+    // Filtro por ativo/inativo (se tiver campo is_active)
+    // Se não tiver o campo is_active, ignore esta parte
+
+    // Busca por nome
+    if (search) {
+      query = sql`${query} AND name ILIKE ${`%${search}%`}`;
+    }
+
+    // Ordenação
+    query = sql`${query} ORDER BY name ASC`;
+
+    const disciplines = await query;
+
+    return {
+      statusCode: 200,
+      headers: defaultHeaders,
+      body: JSON.stringify({
+        success: true,
+        data: disciplines,
+        isAdmin, // útil para saber se o usuário pode editar
+      }),
+    };
+  } catch (error) {
+    console.error("Erro ao buscar disciplinas:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Erro interno";
+    return {
+      statusCode: 500,
+      headers: defaultHeaders,
+      body: JSON.stringify({ error: "Erro interno", message: errorMessage }),
+    };
+  }
+}
+
+// Handler para POST (criar disciplina)
+async function handlePostDiscipline(
+  event: HandlerEvent,
+): Promise<HandlerResponse> {
   try {
     // 1. Valida o token JWT
     const authHeader = event.headers.authorization;
@@ -115,10 +203,13 @@ const handler: Handler = async (
       };
     }
 
-    // 6. Verifica se já existe disciplina com mesmo nome ou slug
+    // Gera o ID a partir do nome se não foi fornecido
+    const id = body.id || body.name.toLowerCase().replace(/\s+/g, "-");
+
+    // 6. Verifica se já existe disciplina com mesmo id ou nome
     const existingDiscipline = await sql`
-      SELECT id, name, icon_slug FROM disciplines
-      WHERE id = ${body.id} OR name = ${body.name}
+      SELECT id, name FROM disciplines
+      WHERE id = ${id} OR name = ${body.name}
     `;
 
     if (existingDiscipline.length > 0) {
@@ -137,14 +228,16 @@ const handler: Handler = async (
         id,
         name,
         icon_slug,
-        created_at
+        created_at,
+        updated_at
       ) VALUES (
-        ${body.id},
+        ${id},
         ${body.name},
         ${body.iconSlug},
+        NOW(),
         NOW()
       )
-      RETURNING id, name, icon_slug, created_at
+      RETURNING id, name, icon_slug as "iconSlug", created_at
     `;
 
     // 8. Retorna a disciplina criada
@@ -167,6 +260,6 @@ const handler: Handler = async (
       body: JSON.stringify({ error: "Erro interno", message: errorMessage }),
     };
   }
-};
+}
 
 export { handler };

@@ -131,7 +131,7 @@ export const QuestionEditor = () => {
     a.label.localeCompare(b.label),
   );
 
-  const leveisOptions: SelectOption[] = [
+  const levelsOptions: SelectOption[] = [
     {
       value: "iniciante",
       label: "Iniciante",
@@ -231,7 +231,7 @@ export const QuestionEditor = () => {
               </label>
               <Select
                 value={level}
-                options={leveisOptions}
+                options={levelsOptions}
                 onChange={(value) => setLevel(value as Level)}
               />
             </div>

@@ -11,6 +11,7 @@ import {
 import { disciplineService } from "../../service/disciplineService";
 import type { Discipline } from "../../types/study";
 import { iconifyIconNameToIconComponent } from "../../util/iconify-icons";
+import { generateIDSlugFromString } from "../../util/util";
 import { Input } from "../ui/Input";
 
 const COLLECTIONS = Object.keys(ICONIFY_ICONS_SET) as string[];
@@ -294,20 +295,23 @@ export const DisciplineEditor = () => {
                 onChange={(ev) => {
                   setDiscipline({
                     ...discipline,
-                    id: ev.target.value.toLowerCase().replace(/\s/g, "-"),
+                    id: generateIDSlugFromString(ev.target.value),
                     name: ev.target.value,
                   });
                 }}
               />
             </div>
             <div>
-              {discipline.id ? (
-                <span className="bg-slate-50 dark:bg-slate-800 rounded-xl flex px-4 py-2 text-sm text-slate-700 dark:text-slate-300">
-                  ID: {discipline.id}
-                </span>
-              ) : (
-                <span>&nbsp;</span>
-              )}
+              <label className="block text-sm font-bold text-slate-400 uppercase mb-1">
+                ID / Slug
+              </label>
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 text-sm text-slate-700 dark:text-slate-300 font-mono">
+                {discipline.id ||
+                  "Será gerado automaticamente a partir do nome"}
+              </div>
+              <p className="text-xs text-slate-400 mt-1">
+                Usado como identificador
+              </p>
             </div>
           </div>
 

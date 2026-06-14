@@ -2,6 +2,7 @@ import { BookOpen, HelpCircle, Layout } from "lucide-react";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { adminAuth } from "../../service/adminAuth";
+import { ContentEditor } from "./ContentEditor.";
 import { DisciplineEditor } from "./DisciplineEditor";
 import { QuestionEditor } from "./QuestionEditor";
 
@@ -57,8 +58,9 @@ export const AdminDashboard = () => {
 
       {/* Área Principal */}
       <main className="flex-1 p-8">
-        {activeTab === "questoes" && <QuestionEditor />}
         {activeTab === "disciplinas" && <DisciplineEditor />}
+        {activeTab === "conteudos" && <ContentEditor />}
+        {activeTab === "questoes" && <QuestionEditor />}
       </main>
       <Toaster position="top-center" />
     </div>

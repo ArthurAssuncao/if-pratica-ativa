@@ -116,6 +116,9 @@ export interface Content {
   name: string;
   level: Level;
   questions: Question[];
+  slug?: string;
+  order?: number;
+  disciplineId?: string;
 }
 
 export interface Discipline {
