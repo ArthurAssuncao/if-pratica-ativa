@@ -4,6 +4,7 @@ import { useAuth } from "hook/useAuth";
 import { useBreakpoints } from "hook/useBreakpoints";
 import { LogIn, Menu } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { APP_NAME } from "../../constants/app";
 import { ThemeToggle } from "./ThemeToggle";
 import { default as ICON } from "/assets/icon.svg";
@@ -14,9 +15,11 @@ export const Navbar = () => {
   const isTablet = useBreakpoints().isTablet;
 
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
     setIsAuthModalOpen(false);
+    navigate("/app");
   };
 
   return (
