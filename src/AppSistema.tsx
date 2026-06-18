@@ -39,7 +39,11 @@ export default function App() {
         const result = await handleAuthCallback();
         if (result) {
           console.log("Login via callback processado:", result.user?.email);
-          window.history.replaceState(null, "", window.location.pathname);
+          window.history.replaceState(
+            null,
+            "",
+            window.location.pathname + "#/app",
+          );
         }
 
         // 2. Busca o usuário atual (Sessão persistente)
