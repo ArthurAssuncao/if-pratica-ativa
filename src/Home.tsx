@@ -11,6 +11,7 @@ import {
   Split,
   Terminal,
 } from "lucide-react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Footer } from "./components/ui/Footer";
 import { InstitutionalNotice } from "./components/ui/InstitutionalNotice";
@@ -64,16 +65,22 @@ export const Home = () => {
   const user = useAuth().user;
   const navigate = useNavigate();
 
-  if (user) {
-    console.log("Usuário já logado");
-    // armazena no localStorage com nome de usuário e horário se não existir
-    if (!localStorage.getItem("userLoginTime")) {
-      console.log("Armazenando usuário logado");
-      localStorage.setItem("userLoginTime", new Date().toISOString());
-      window.history.replaceState(null, "", window.location.pathname + "#/app");
-      navigate("/app");
+  useEffect(() => {
+    if (user) {
+      console.log("Usuário já logado");
+      // armazena no localStorage com nome de usuário e horário se não existir
+      if (!localStorage.getItem("userLoginTime")) {
+        console.log("Armazenando usuário logado");
+        localStorage.setItem("userLoginTime", new Date().toISOString());
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname + "#/app",
+        );
+        navigate("/app");
+      }
     }
-  }
+  }, [navigate, user]);
 
   const secoes: HomeSection[] = [
     {
