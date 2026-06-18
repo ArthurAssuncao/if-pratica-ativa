@@ -52,6 +52,7 @@ export default function AuthModal({
       // oauthLogin("google");
 
       netlifyIdentity.open("login");
+      window.history.replaceState(null, "", window.location.pathname + "#/app");
     } catch (err) {
       console.error("Erro durante o login OAuth:", err);
     } finally {
