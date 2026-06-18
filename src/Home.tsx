@@ -65,9 +65,12 @@ export const Home = () => {
   const navigate = useNavigate();
 
   if (user) {
+    console.log("Usuário já logado");
     // armazena no localStorage com nome de usuário e horário se não existir
     if (!localStorage.getItem("userLoginTime")) {
+      console.log("Armazenando usuário logado");
       localStorage.setItem("userLoginTime", new Date().toISOString());
+      window.history.replaceState(null, "", window.location.pathname + "#/app");
       navigate("/app");
     }
   }
