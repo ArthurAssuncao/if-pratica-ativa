@@ -158,7 +158,12 @@ export const QuestionSelector = ({
 
       <h2 className=" font-bold text-gray-700 dark:text-slate-200 mb-4 hyphens-auto wrap-break-word">
         <MarkdownSyntax>
-          {data.questionText == "" ? QUESTION_TITLE_EMPTY : data.questionText}
+          {data.questionText == ""
+            ? QUESTION_TITLE_EMPTY
+            : data.questionText
+                .replaceAll(/\\n/g, "\n")
+                .replace(/```/g, "\n```")
+                .replace(/```/, `\`\`\`${data.language}`)}
         </MarkdownSyntax>
       </h2>
 

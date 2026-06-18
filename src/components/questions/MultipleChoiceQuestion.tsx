@@ -48,6 +48,7 @@ export const MultipleChoiceQuestion = createQuestion<
       });
 
       onAnswer(acertou, data.id);
+      setOptionSelected("");
     };
 
     return (

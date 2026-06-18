@@ -65,6 +65,7 @@ const handler: Handler = async (event: HandlerEvent) => {
           WHERE c.discipline_id = ${disciplineId}
           ORDER BY c."order" ASC, q.id ASC
         `;
+        console.log(data);
 
         return { statusCode: 200, headers, body: JSON.stringify(data) };
       }
