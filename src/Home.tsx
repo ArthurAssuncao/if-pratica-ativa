@@ -64,7 +64,7 @@ export const Home = () => {
   const user = useAuth().user;
   const navigate = useNavigate();
 
-  if (!user) {
+  if (user) {
     // armazena no localStorage com nome de usuário e horário se não existir
     if (!localStorage.getItem("userLoginTime")) {
       localStorage.setItem("userLoginTime", new Date().toISOString());
