@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 // Importe seu componente do sistema atual (que agora chamaremos de AppSistema)
 import AppSistema from "./AppSistema";
 import { AdminPage } from "./components/admin/AdminPage";
@@ -8,7 +8,7 @@ import { Home } from "./Home";
 // 2. Configuração Principal
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         {/* Rota Raiz: Home Simples */}
         <Route path="/" element={<Home />} />
@@ -22,6 +22,6 @@ export default function App() {
         {/* Rota 404 (Opcional): Caso o usuário digite algo errado */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
