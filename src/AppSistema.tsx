@@ -17,9 +17,12 @@ import { CookieConsent } from "./legal/CookieConsent";
 import markdownPrivacy from "./legal/privacy.md?raw";
 
 if (typeof window !== "undefined") {
-  localStorage.setItem("netlifySiteURL", "https://aprenda.ifsudestemg.dev/app");
+  localStorage.setItem(
+    "netlifySiteURL",
+    "https://aprenda.ifsudestemg.dev/#/app",
+  );
   netlifyIdentity.init({
-    APIUrl: isLocalhost ? "https://aprenda.ifsudestemg.dev/app" : undefined,
+    APIUrl: isLocalhost ? "https://aprenda.ifsudestemg.dev/#/app" : undefined,
     locale: "pt-br",
   });
 }
@@ -28,6 +31,10 @@ const queryClient = new QueryClient();
 
 export default function App() {
   const [isModalPrivacyOpen, setIsModalPrivacyOpen] = useState(false);
+
+  useEffect(() => {
+    console.log(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     const initAuth = async () => {
