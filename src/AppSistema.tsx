@@ -17,9 +17,9 @@ import { CookieConsent } from "./legal/CookieConsent";
 import markdownPrivacy from "./legal/privacy.md?raw";
 
 if (typeof window !== "undefined") {
-  localStorage.setItem("netlifySiteURL", "https://aprenda.ifsudestemg.dev");
+  localStorage.setItem("netlifySiteURL", "https://aprenda.ifsudestemg.dev/app");
   netlifyIdentity.init({
-    APIUrl: isLocalhost ? "https://aprenda.ifsudestemg.dev" : undefined,
+    APIUrl: isLocalhost ? "https://aprenda.ifsudestemg.dev/app" : undefined,
     locale: "pt-br",
   });
 }
