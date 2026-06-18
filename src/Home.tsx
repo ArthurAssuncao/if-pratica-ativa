@@ -11,9 +11,10 @@ import {
   Split,
   Terminal,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Footer } from "./components/ui/Footer";
 import { InstitutionalNotice } from "./components/ui/InstitutionalNotice";
+import { useAuth } from "./hook/useAuth";
 import { useIsMobile } from "./hook/useIsMobile";
 import { default as IMG_CLICK_ERROR } from "/assets/img/exemplo-tipos-questao/mobile/encontre-erro.png";
 import { default as IMG_FLOWCHART } from "/assets/img/exemplo-tipos-questao/mobile/fluxograma.png";
@@ -60,6 +61,16 @@ const HOME_SECTION_ICON_SIZE_MOBILE = 32;
 
 export const Home = () => {
   const isMobile = useIsMobile();
+  const user = useAuth().user;
+  const navigate = useNavigate();
+
+  if (!user) {
+    // armazena no localStorage com nome de usuário e horário se não existir
+    if (!localStorage.getItem("userLoginTime")) {
+      localStorage.setItem("userLoginTime", new Date().toISOString());
+      navigate("/app");
+    }
+  }
 
   const secoes: HomeSection[] = [
     {
