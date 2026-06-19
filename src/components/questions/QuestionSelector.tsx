@@ -144,6 +144,8 @@ export const QuestionSelector = ({
 
   const componente = getQuestionComponent(data, onAnswer);
 
+  console.log(data.questionText);
+
   if (!componente) return null;
 
   return (
@@ -163,7 +165,7 @@ export const QuestionSelector = ({
             : data.questionText
                 .replaceAll(/\\n/g, "\n")
                 .replace(/```/g, "\n```")
-                .replace(/```/, `\`\`\`${data.language}`)}
+                .replace(/```/, `\`\`\`${data.language}\n`)}
         </MarkdownSyntax>
       </h2>
 
